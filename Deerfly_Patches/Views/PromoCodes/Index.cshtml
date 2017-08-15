@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Deerfly_Patches.Models.PromoCode>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PromotionalItem.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WithPurchaseOf.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PromotionalItemPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinimumQualifyingPurchase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PercentOffItem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PercentOffOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SpecialPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CodeStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CodeEnd)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PromotionalItem.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WithPurchaseOf.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PromotionalItemPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinimumQualifyingPurchase)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PercentOffItem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PercentOffOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SpecialPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodeStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodeEnd)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PromoCodeId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PromoCodeId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PromoCodeId })
+        </td>
+    </tr>
+}
+
+</table>

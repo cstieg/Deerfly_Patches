@@ -1,0 +1,15 @@
+﻿@model Deerfly_Patches.Models.PromoCode
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    @Html.Partial("DetailPartial")
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PromoCodeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
