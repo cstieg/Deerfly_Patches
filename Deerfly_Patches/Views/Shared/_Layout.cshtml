@@ -35,6 +35,7 @@
         <footer>
             <p>&copy; @DateTime.Now.Year - Detex</p>
         </footer>
+        <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

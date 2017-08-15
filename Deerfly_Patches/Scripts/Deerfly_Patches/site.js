@@ -2,7 +2,10 @@
 $(function () {
     // Add emphasis on mouseover product items on order view
     $('.product-item img').mouseenter(function () {
-        $(this).pulsate();
+        $(this).animate({ height: '+=5', width: '+=5' })
+            .animate({ height: '-=5', width: '-=5' });
+        // TODO: Use JQueryUI to animate
+        // $(this).effect("pulsate");
     });
 
 
@@ -27,11 +30,12 @@ function addToShoppingCart(id) {
         __RequestVerificationToken: antiForgeryToken(),
         ID: id
     };
-    $.post({
+    $.ajax({
+        type: 'POST',
         url: '/OrderDetails/AddOrderDetailToShoppingCart/',
         data: postData,
         dataType: 'json',
-        success: function(returnval) {
+        success: function (returnval) {
             alert('Success!');          
         },
         error: function (returnval) {
