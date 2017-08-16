@@ -75,10 +75,27 @@
     </div>
     <div class="hidden col-md-6"></div>
 
+
+
+
+    <span id='lippButton'></span>
+    <script src='https://www.paypalobjects.com/js/external.api.js'></script>
+    <script>
+        paypal.use(['login'], function (login) {
+            login.render({
+                "appid": "AaLYEqNuR4sUTr6y7l7riLn6GhJDv6YY-1LrWwlyRHrRmXOlQjGscB8MQTUY_9unYy4SRSzhdVvRQ9_m",
+                "authend": "sandbox",
+                "scopes": "openid profile address",
+                "containerid": "lippbutton",
+                "locale": "en-us",
+                "returnurl": "http://www.deerflypatches.com"
+            });
+        });
+    </script>
+
+
+
     <div class="row" id="paypal-button" onload="renderPayPal();"></div>
-
-
-    <div id="paypal-button"></div>
 
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 

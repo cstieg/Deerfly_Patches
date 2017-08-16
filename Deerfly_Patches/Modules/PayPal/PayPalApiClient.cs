@@ -1,15 +1,13 @@
-﻿using DeerflyPatches.Models;
-using DeerflyPatches.ViewModels;
-using DeerflyPatches.Modules;
+﻿using Deerfly_Patches.Models;
+using Deerfly_Patches.ViewModels;
+using Deerfly_Patches.Modules;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DeerflyPatches.Modules.PayPal
 {
@@ -35,12 +33,13 @@ namespace DeerflyPatches.Modules.PayPal
                 var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 client.DefaultRequestHeaders.Authorization = header;
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/oauth2/token");
-                request.Content = new FormUrlEncodedContent(new[]
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/oauth2/token")
                 {
-                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                });
-
+                    Content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                    })
+                };
                 var response = await client.SendAsync(request);
                 var result = response.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<AccessToken>(result);
@@ -73,13 +72,13 @@ namespace DeerflyPatches.Modules.PayPal
                         },
                         payee = new
                         {
-                            email = shoppingCart.payeeEmail
+                            email = shoppingCart.PayeeEmail
                         },
                         description = "Order from Detex, manufacturer of Deerfly Patches",
                         item_list = new
                         {
-                            items = getPayPalItems(shoppingCart),
-                            shipping_address = getPayPalAddress(shoppingCart.GetOrder().ShipTo)
+                            items = GetPayPalItems(shoppingCart),
+                            shipping_address = GetPayPalAddress(shoppingCart.GetOrder().ShipToAddress)
                         }
                     }
                 },
@@ -100,8 +99,10 @@ namespace DeerflyPatches.Modules.PayPal
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/payments/payment");
-                request.Content = new StringContent(data, Encoding.UTF8, "application/json");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/payments/payment")
+                {
+                    Content = new StringContent(data, Encoding.UTF8, "application/json")
+                };
                 var response = await client.SendAsync(request);
                 result = response.Content.ReadAsStringAsync().Result;
                 if (!response.IsSuccessStatusCode)
@@ -113,7 +114,7 @@ namespace DeerflyPatches.Modules.PayPal
             return result;
         }
 
-        private object getPayPalAddress(Address address)
+        private object GetPayPalAddress(Address address)
         {
             return new
             {
@@ -128,26 +129,26 @@ namespace DeerflyPatches.Modules.PayPal
             };
         }
 
-        private object getPayPalItem(OrderDetail orderDetail)
+        private object GetPayPalItem(OrderDetail orderDetail)
         {
             return new
             {
-                name = orderDetail.Item.Name,
+                name = orderDetail.Product.Name,
                 quantity = orderDetail.Quantity,
                 price = orderDetail.ExtendedPrice,
-                sku = orderDetail.Item.ID,
+                sku = orderDetail.Product.ProductId,
                 currency = "USD"
             };
         }
 
-        private List<object> getPayPalItems(ShoppingCart shoppingCart)
+        private List<object> GetPayPalItems(ShoppingCart shoppingCart)
         {
             List<object> items = new List<object>();
             List<OrderDetail> shoppingCartItems = shoppingCart.GetItems();
 
             for (int i = 0; i < shoppingCartItems.Count; i++)
             {
-                items.Add(getPayPalItem(shoppingCartItems[i]));
+                items.Add(GetPayPalItem(shoppingCartItems[i]));
             }
             return items;
         }

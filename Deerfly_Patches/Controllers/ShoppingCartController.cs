@@ -19,15 +19,17 @@ namespace Deerfly_Patches.Controllers
         public ActionResult UpdateShippingAddress()
         {
 
-            Address shippingAddress = new Address();
-            shippingAddress.Recipient = Request.Form["ship-to"];
-            shippingAddress.Address1 = Request.Form["address1"];
-            shippingAddress.Address2 = Request.Form["address2"];
-            shippingAddress.City = Request.Form["city"];
-            shippingAddress.State = Request.Form["state"];
-            shippingAddress.Zip = Request.Form["zip"];
-            shippingAddress.Country = Request.Form["country"];
-            shippingAddress.Phone = Request.Form["phone"];
+            Address shippingAddress = new Address()
+            {
+                Recipient = Request.Form["ship-to"],
+                Address1 = Request.Form["address1"],
+                Address2 = Request.Form["address2"],
+                City = Request.Form["city"],
+                State = Request.Form["state"],
+                Zip = Request.Form["zip"],
+                Country = Request.Form["country"],
+                Phone = Request.Form["phone"]
+            };
 
             // Get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
