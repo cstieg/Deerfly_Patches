@@ -16,15 +16,15 @@
     <hr />
 @if (Model != null)
 {
-    @foreach (var item in Model.GetItems())
+    foreach (var item in Model.GetItems())
     {
-        <div class="row item-detail-line" id="item-@item.Item.ID">
-            <div class="col-xs-6 col-md-3 item-name">@item.Item.Name</div>
+        <div class="row item-detail-line" id="item-@item.Product.ProductId">
+            <div class="col-xs-6 col-md-3 item-name">@item.Product.Name</div>
             <div class="hidden-xs col-md-2 item-unit-price">$@item.UnitPrice</div>
             <div class="col-xs-2 col-md-1 item-quantity">
-                <button onclick="decrementItemInShoppingCart(@item.Item.ID)">-</button>
-                <span class="item-qty-ct" id="qty-@item.Item.ID">@item.Quantity</span>
-                <button onclick="incrementItemInShoppingCart(@item.Item.ID)">+</button>
+                <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
+                <span class="item-qty-ct" id="qty-@item.Product.ProductId">@item.Quantity</span>
+                <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
             </div>
             <div class="hidden-xs col-md-2 item-extended-price">$@item.ExtendedPrice</div>
             <div class="hidden-xs col-md-2 item-shipping">$@item.Shipping</div>
