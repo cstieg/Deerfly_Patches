@@ -22,8 +22,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Order", "Index", "Order")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Order", "Index", "Order")</li>
+                    <li>
+                        <a href="/shoppingcart"><span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart</a>
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

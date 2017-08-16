@@ -48,6 +48,11 @@
     margin: auto;
 } 
 
+/* Shopping Cart Icon Fix */
+.glyphicon {
+    position: inherit;
+    margin-right: 8px;
+}
 
 
 /* Order Page */
