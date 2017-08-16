@@ -49,7 +49,8 @@ function incrementItemInShoppingCart(id) {
         __RequestVerificationToken: antiForgeryToken(),
         ID: id
     };
-    $.post({
+    $.ajax({
+        type: 'POST',
         url: '/Order/AddOrderDetailToShoppingCart/',
         data: postData,
         dataType: 'json',
@@ -82,7 +83,8 @@ function decrementItemInShoppingCart(id) {
         return;
     }
 
-    $.post({
+    $.ajax({
+        type: 'POST',
         url: '/Order/DecrementItemInShoppingCart/',
         data: postData,
         dataType: 'json',
@@ -101,7 +103,8 @@ function removeProductInShoppingCart(id) {
         __RequestVerificationToken: antiForgeryToken(),
         ID: id
     };
-    $.post({
+    $.ajax({
+        type: 'POST',
         url: '/Order/RemoveProductInShoppingCart/',
         data: postData,
         dataType: 'json',
@@ -148,8 +151,9 @@ function recalculate() {
 
 function updateShippingAddress() {
     var formdata = $('#shipping-address').serializeArray();
-    $.post({
-        url: '/Addresses/UpdateShippingAddress',
+    $.ajax({
+        type: 'POST',
+        url: '/ShoppingCart/UpdateShippingAddress',
         data: formdata,
         dataType: 'json',
         success: function(result, data) {
