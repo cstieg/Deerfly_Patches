@@ -1,0 +1,128 @@
+﻿@model Deerfly_Patches.ViewModels.ShoppingCart
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container">
+    <div class="row item-detail-header">
+        <div class="col-xs-6 col-md-3 item-name">Product</div>
+        <div class="hidden-xs col-md-2 item-unit-price">Unit Price</div>
+        <div class="col-xs-2 col-md-1 item-quantity">Quantity</div>
+        <div class="hidden-xs col-md-2 item-extended-price">Price</div>
+        <div class="hidden-xs col-md-2 item-shipping">Shipping</div>
+        <div class="col-xs-4 col-md-2 item-total-price">Total Price</div>
+    </div>
+    <hr />
+@if (Model != null)
+{
+    @foreach (var item in Model.GetItems())
+    {
+        <div class="row item-detail-line" id="item-@item.Item.ID">
+            <div class="col-xs-6 col-md-3 item-name">@item.Item.Name</div>
+            <div class="hidden-xs col-md-2 item-unit-price">$@item.UnitPrice</div>
+            <div class="col-xs-2 col-md-1 item-quantity">
+                <button onclick="decrementItemInShoppingCart(@item.Item.ID)">-</button>
+                <span class="item-qty-ct" id="qty-@item.Item.ID">@item.Quantity</span>
+                <button onclick="incrementItemInShoppingCart(@item.Item.ID)">+</button>
+            </div>
+            <div class="hidden-xs col-md-2 item-extended-price">$@item.ExtendedPrice</div>
+            <div class="hidden-xs col-md-2 item-shipping">$@item.Shipping</div>
+            <div class="col-xs-4 col-md-2 item-total-price">$@item.TotalPrice</div>
+        </div>
+    }
+
+    <hr />
+    <div class="row item-detail-total">
+        <div class="col-xs-6 col-md-3 item-name">TOTAL:</div>
+        <div class="hidden-xs col-md-2 item-unit-price"></div>
+        <div class="col-xs-2 col-md-1 item-quantity"></div>
+        <div class="hidden-xs col-md-2 item-extended-price">$@Model.TotalExtendedPrice</div>
+        <div class="hidden-xs col-md-2 item-shipping">$@Model.TotalShipping</div>
+        <div class="col-xs-4 col-md-2 item-total-price">$@Model.GrandTotal</div>
+    </div>
+
+    <hr />
+    <div class="col-xs-12 col-md-10 col-lg-6">
+        <form id="shipping-address" class="centered">
+            <label for="ship-to">Ship To:</label>
+            <input name="ship-to" type="text" />
+            <br />
+            <label for="address1">Address line 1</label>
+            <input name="address1" type="text" />
+            <br />
+            <label for="address2">Address line 2</label>
+            <input name="address2" type="text" />
+            <br />
+            <label for="city">City</label>
+            <input name="city" type="text" />
+            <br />
+            <label for="state">State/Province</label>
+            <input name="state" type="text" />
+            <br />
+            <label for="zip">Zip/Postal Code</label>
+            <input name="zip" type="text" />
+            <br />
+            <label for="country">Country</label>
+            <input name="country" type="text" />
+            <br />
+            <label for="phone">Phone</label>
+            <input name="phone" type="text" />
+
+            <button onclick="updateShippingAddress()">Save Shipping Address</button>
+        </form>
+
+    </div>
+    <div class="hidden col-md-6"></div>
+
+    <div class="row" id="paypal-button" onload="renderPayPal();"></div>
+
+
+    <div id="paypal-button"></div>
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <script>
+        var CREATE_PAYMENT_URL ='/paypal/createOrder';
+        var EXECUTE_PAYMENT_URL = '/paypal/executePayment';
+
+        paypal.Button.render({
+
+            env: 'sandbox', // Or 'sandbox' / production
+
+            commit: true, // Show a 'Pay Now' button
+
+            payment: function () {
+                return paypal.request.post(CREATE_PAYMENT_URL).then(function (data) {
+                    return data.id; 
+                });
+            },
+
+            onAuthorize: function (data) {
+                return paypal.request.post(EXECUTE_PAYMENT_URL, {
+                    paymentID: data.paymentID,
+                    payerID: data.payerID
+                }).then(function (data) {
+                    debugger;
+                    // The payment is complete!
+                    // You can now show a confirmation message to the customer
+                });
+            }
+
+        }, '#paypal-button');
+    </script>
+}
+else
+{
+        <div class="row">
+            <h3>No Items in Shopping Cart</h3>
+            <p>Go back to <a href="/home/order">orders</a></p>
+        </div>
+}
+
+
+
+
+
+    
+</div>
