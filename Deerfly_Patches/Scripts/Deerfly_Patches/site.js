@@ -32,7 +32,7 @@ function addToShoppingCart(id) {
     };
     $.ajax({
         type: 'POST',
-        url: '/OrderDetails/AddOrderDetailToShoppingCart/',
+        url: '/Order/AddOrderDetailToShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
@@ -50,7 +50,7 @@ function incrementItemInShoppingCart(id) {
         ID: id
     };
     $.post({
-        url: '/OrderDetails/AddOrderDetailToShoppingCart/',
+        url: '/Order/AddOrderDetailToShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
@@ -83,7 +83,7 @@ function decrementItemInShoppingCart(id) {
     }
 
     $.post({
-        url: '/OrderDetails/DecrementItemInShoppingCart/',
+        url: '/Order/DecrementItemInShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
@@ -102,7 +102,7 @@ function removeProductInShoppingCart(id) {
         ID: id
     };
     $.post({
-        url: '/OrderDetails/RemoveProductInShoppingCart/',
+        url: '/Order/RemoveProductInShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
