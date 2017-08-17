@@ -153,7 +153,7 @@ function updateShippingAddress() {
     var formdata = $('#shipping-address').serializeArray();
     $.ajax({
         type: 'POST',
-        url: '/ShoppingCart/UpdateShippingAddress',
+        url: '/Checkout/UpdateShippingAddress',
         data: formdata,
         dataType: 'json',
         success: function(result, data) {
