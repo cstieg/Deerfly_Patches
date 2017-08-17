@@ -43,52 +43,22 @@
     </div>
 
     <hr />
-    <div class="col-xs-12 col-md-10 col-lg-6">
-        <form id="shipping-address" class="centered">
-            <label for="ship-to">Ship To:</label>
-            <input name="ship-to" type="text" />
-            <br />
-            <label for="address1">Address line 1</label>
-            <input name="address1" type="text" />
-            <br />
-            <label for="address2">Address line 2</label>
-            <input name="address2" type="text" />
-            <br />
-            <label for="city">City</label>
-            <input name="city" type="text" />
-            <br />
-            <label for="state">State/Province</label>
-            <input name="state" type="text" />
-            <br />
-            <label for="zip">Zip/Postal Code</label>
-            <input name="zip" type="text" />
-            <br />
-            <label for="country">Country</label>
-            <input name="country" type="text" />
-            <br />
-            <label for="phone">Phone</label>
-            <input name="phone" type="text" />
-
-            <button onclick="updateShippingAddress()">Save Shipping Address</button>
-        </form>
-
-    </div>
     <div class="hidden col-md-6"></div>
 
 
 
 
     <span id='lippButton'></span>
-    <script src='https://www.paypalobjects.com/js/external.api.js'></script>
+    <script src='https://www.paypalobjects.com/js/external/api.js'></script>
     <script>
         paypal.use(['login'], function (login) {
             login.render({
-                "appid": "AaLYEqNuR4sUTr6y7l7riLn6GhJDv6YY-1LrWwlyRHrRmXOlQjGscB8MQTUY_9unYy4SRSzhdVvRQ9_m",
+                "appid": "AaLYEqNuR4sUTr6y7l7riLn6GhJDv6YY-1LrWwIyRHrRmXOlQjGscB8MQTUY_9unYy4SRSzhdVvRQ9_m",
                 "authend": "sandbox",
                 "scopes": "openid profile address",
-                "containerid": "lippbutton",
+                "containerid": "lippButton",
                 "locale": "en-us",
-                "returnurl": "http://www.deerflypatches.com"
+                "returnurl": "http://www.mysite.com/checkout"
             });
         });
     </script>
@@ -136,10 +106,6 @@ else
             <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
         </div>
 }
-
-
-
-
 
     
 </div>

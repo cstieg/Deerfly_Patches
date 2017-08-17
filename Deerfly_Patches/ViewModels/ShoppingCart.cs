@@ -7,8 +7,8 @@ namespace Deerfly_Patches.ViewModels
 {
     public class ShoppingCart
     {
-        private Order _order;
-        private List<OrderDetail> _shoppingCart { get; set; }
+        public Order _order;
+        public List<OrderDetail> _shoppingCart { get; set; }
         public string PayeeEmail { get; set; }
         public decimal TotalExtendedPrice
         {
