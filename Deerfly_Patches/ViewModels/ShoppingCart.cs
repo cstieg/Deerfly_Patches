@@ -59,7 +59,7 @@ namespace Deerfly_Patches.ViewModels
 
         public void AddProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product == product);
+            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
             if (orderDetail == null)
             {
                 orderDetail = new OrderDetail()
@@ -80,7 +80,7 @@ namespace Deerfly_Patches.ViewModels
 
         public void DecrementProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product == product);
+            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null) && orderDetail.Quantity > 0)
             {
                 orderDetail.Quantity--;
@@ -93,7 +93,7 @@ namespace Deerfly_Patches.ViewModels
 
         public void RemoveProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product == product);
+            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null))
             {
                 _shoppingCart.Remove(orderDetail);

@@ -77,3 +77,9 @@
 .image-wrapper {
     width: 100%;
 }
+
+/* Order detail page */
+.item-detail-header *,
+.item-detail-total * {
+    font-weight: bold;
+}
