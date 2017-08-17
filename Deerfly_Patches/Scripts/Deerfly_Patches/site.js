@@ -44,6 +44,25 @@ function addToShoppingCart(id) {
     });
 }
 
+function buyNow(id) {
+    var postData = {
+        __RequestVerificationToken: antiForgeryToken(),
+        ID: id
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/Order/AddOrderDetailToShoppingCart/',
+        data: postData,
+        dataType: 'json',
+        success: function (returnval) {
+            window.location = "/shoppingCart";
+        },
+        error: function (returnval) {
+            alert('Error adding item to shopping cart :( ');
+        }
+    });
+}
+
 function incrementItemInShoppingCart(id) {
     var postData = {
         __RequestVerificationToken: antiForgeryToken(),
@@ -98,19 +117,22 @@ function decrementItemInShoppingCart(id) {
     });
 }
 
-function removeProductInShoppingCart(id) {
+function removeItemInShoppingCart(id) {
     var postData = {
         __RequestVerificationToken: antiForgeryToken(),
         ID: id
     };
     $.ajax({
         type: 'POST',
-        url: '/Order/RemoveProductInShoppingCart/',
+        url: '/Order/RemoveItemInShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
             var $item = $('#item-' + id)[0];
             $item.remove();
+            if (itemsInDetailCount() == 0) {
+                location.reload();
+            }
             recalculate();
         },
         error: function (returnval) {
@@ -163,4 +185,9 @@ function updateShippingAddress() {
             debugger;
         }
     });
+}
+
+function itemsInDetailCount() {
+    var $itemDetailLines = $(".item-detail-line");
+    return $itemDetailLines.length;
 }
