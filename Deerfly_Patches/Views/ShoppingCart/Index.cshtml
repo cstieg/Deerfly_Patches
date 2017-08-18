@@ -82,12 +82,12 @@
     <script>
         paypal.use(['login'], function (login) {
             login.render({
-                "appid": "AaLYEqNuR4sUTr6y7l7riLn6GhJDv6YY-1LrWwIyRHrRmXOlQjGscB8MQTUY_9unYy4SRSzhdVvRQ9_m",
-                "authend": "sandbox",
+                "appid": "@ViewBag.ClientInfo.ClientId",
+                "authend": "@ViewBag.ClientInfo.Mode",
                 "scopes": "openid profile address",
                 "containerid": "lippButton",
                 "locale": "en-us",
-                "returnurl": "http://www.mysite.com/checkout"
+                "returnurl": "@ViewBag.ClientInfo.ReturnUrl"
             });
         });
     </script>

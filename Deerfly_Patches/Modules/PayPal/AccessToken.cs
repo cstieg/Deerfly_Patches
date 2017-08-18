@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DeerflyPatches.Modules.PayPal
+namespace Deerfly_Patches.Modules.PayPal
 {
     [DataContract]
     public class AccessToken

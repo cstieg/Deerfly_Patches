@@ -1,6 +1,5 @@
 ﻿using Deerfly_Patches.Models;
 using Deerfly_Patches.ViewModels;
-using Deerfly_Patches.Modules;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 
-namespace DeerflyPatches.Modules.PayPal
+namespace Deerfly_Patches.Modules.PayPal
 {
     public class PayPalApiClient
     {
-        public ClientInfo GetClientSecrets(string path)
+        public ClientInfo GetClientSecrets()
         {
-            string file = System.IO.Path.Combine(path, "PayPal.json");
+            string file = HostingEnvironment.MapPath("/PayPal.json");
             string json = System.IO.File.ReadAllText(file);
             ClientInfo paypalSecrets = JsonConvert.DeserializeObject<ClientInfo>(json);
             return paypalSecrets;

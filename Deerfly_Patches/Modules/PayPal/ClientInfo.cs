@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DeerflyPatches.Modules.PayPal
+namespace Deerfly_Patches.Modules.PayPal
 {
     [DataContract]
     public class ClientInfo
@@ -13,5 +13,11 @@ namespace DeerflyPatches.Modules.PayPal
 
         [DataMember(Name = "client_secret")]
         public string ClientSecret { get; set; }
+
+        [DataMember(Name = "return_url")]
+        public string ReturnUrl { get; set; }
+
+        [DataMember(Name = "mode")]
+        public string Mode { get; set; }
     }
 }
