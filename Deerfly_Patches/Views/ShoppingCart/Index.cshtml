@@ -32,6 +32,7 @@
             </div>
             <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
             <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@item.Shipping</div>
+            <div class="item-shipping-saved hidden">@item.Shipping</div>
             <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@item.TotalPrice</div>
             <div class="col-xs-1">
                 <button onclick="removeItemInShoppingCart(@item.Product.ProductId)">x</button>
@@ -56,9 +57,9 @@
 
 
     <div id="country-select" class="row">
-        <form onchange="toggleCountry()">
-            <input type="radio" name="country" value="US" />US
-            <input type="radio" name="country" value="International" checked/>International
+        <form onchange="countryChange()">
+            <input type="radio" name="country" value="US" checked/>US
+            <input type="radio" name="country" value="International" />International
         </form>
     </div>
 

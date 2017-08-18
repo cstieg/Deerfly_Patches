@@ -154,11 +154,14 @@ function recalculate() {
         var $itemTotalPrice = $(this).find('.item-total-price')[0];
 
         var itemExtendedPrice = 1.0 * linePrice * lineQty;
-        var itemShipping = parseFloat($itemShipping.innerText.slice(1));
+        var itemShipping = parseFloat($itemShipping.innerText.slice(1)) || 0;
         var itemTotalPrice = 1.0 * itemExtendedPrice + itemShipping;
 
         $itemExtendedPrice.innerHTML = '$' + itemExtendedPrice.toFixed(2);
         $itemShipping.innerHTML = '$' + itemShipping.toFixed(2);
+        if (itemShipping === 0) {
+            $itemShipping.innerHTML = 'FREE';
+        }
         $itemTotalPrice.innerHTML = '$' + itemTotalPrice.toFixed(2);
 
         extendedPriceTotal += itemExtendedPrice;
@@ -203,9 +206,20 @@ function setCountry() {
         else {
             $countrySelect.find('input[value="International"]').attr('checked', 'checked');
         }
+        countryChange();
     });
+    countryChange();
 }
 
-function toggleCountry() {
-    debugger;
+function countryChange() {
+    var isUS = $('#country-select input[value="US"]')[0].checked;
+    if (isUS) {
+        $('.item-detail-line .item-shipping').text('FREE');
+    }
+    else {
+        $('.item-detail-line .item-shipping').each(function (i, elem) {
+            elem.innerHTML = '$' + elem.nextElementSibling.innerHTML;
+        });
+    }
+    recalculate();
 }
