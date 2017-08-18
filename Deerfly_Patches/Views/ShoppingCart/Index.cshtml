@@ -4,6 +4,9 @@
     ViewData["Title"] = "Shopping Cart";
 }
 
+<h1>Shopping Cart</h1>
+<hr />
+
 <div class="container">
     <div class="row item-detail-header">
         <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">Product</div>
@@ -52,8 +55,28 @@
 
 
 
+    <div id="country-select" class="row">
+        <form onchange="toggleCountry()">
+            <input type="radio" name="country" value="US" />US
+            <input type="radio" name="country" value="International" checked/>International
+        </form>
+    </div>
 
-    <span id='lippButton'></span>
+    <script>
+        window.onload = function () {
+            setCountry();
+        };
+    </script>
+
+
+    <div id="proceed-to-confirmation-page-link" class="text-right">
+        <span id="lippButton">Sign in</span>
+        <p>Please sign in with PayPal to autofill shipping address</p>
+        <p><a href="/checkout">Or fill it in yourself</a></p>
+    </div>
+
+
+    
     <script src='https://www.paypalobjects.com/js/external/api.js'></script>
     <script>
         paypal.use(['login'], function (login) {

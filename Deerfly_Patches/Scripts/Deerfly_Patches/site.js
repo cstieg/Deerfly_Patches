@@ -188,6 +188,30 @@ function updateShippingAddress() {
 }
 
 function itemsInDetailCount() {
-    var $itemDetailLines = $(".item-detail-line");
+    var $itemDetailLines = $('.item-detail-line');
     return $itemDetailLines.length;
+}
+
+
+function setCountry() {
+    var country = 'US';
+    /*
+    $.getJSON('http://freegeoip.net/json/', function (data) {
+        debugger;
+        var country = data.country_name;
+       */
+        var $countrySelect = $('#country-select');
+        if (country === 'US') {
+            $countrySelect.find('input[value="US"]').attr('checked', 'checked');
+        }
+        else {
+            $countrySelect.find('input[value="International"]').attr('checked', 'checked');
+    }
+/*
+});
+    */
+}
+
+function toggleCountry() {
+    debugger;
 }
