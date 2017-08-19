@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using System.Web;
 using System.IO;
+using Deerfly_Patches.Modules;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -58,7 +59,7 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = SaveImage(imageFile, product);
+                string urlPath = new FileStorage().SaveImage(imageFile);
                 if (urlPath != "")
                 {
                     product.ImageURL = urlPath;
@@ -100,7 +101,7 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = SaveImage(imageFile, product);
+                string urlPath = new FileStorage().SaveImage(imageFile);
                 if (urlPath != "")
                 {
                     product.ImageURL = urlPath;
@@ -169,17 +170,5 @@ namespace Deerfly_Patches.Controllers
             return imageFile;
         }
 
-        private string SaveImage(HttpPostedFileBase imageFile, Product product)
-        {
-            // Save image to disk and store filepath in model
-            if (imageFile != null && imageFile.ContentLength != 0)
-            {
-                var imagePath = Path.Combine(RouteConfig.productImagesPath, imageFile.FileName);
-                var imageUrl = RouteConfig.productImagesFolder + "/" + imageFile.FileName;
-                imageFile.SaveAs(imagePath);
-                return imageUrl;
-            }
-            return "";
-        }
     }
 }
