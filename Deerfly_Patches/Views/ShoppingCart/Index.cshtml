@@ -54,8 +54,6 @@
     <hr />
     <div class="hidden col-md-6"></div>
 
-
-
     <div id="country-select" class="row">
         <form onchange="countryChange()">
             <input type="radio" name="country" value="US" checked/>US
@@ -69,14 +67,11 @@
         };
     </script>
 
-
     <div id="proceed-to-confirmation-page-link" class="text-right">
-        <span id="lippButton">Sign in</span>
+        <span id="lippButton"></span>
         <p>Please sign in with PayPal to autofill shipping address</p>
         <p><a href="/checkout">Or fill it in yourself</a></p>
     </div>
-
-
     
     <script src='https://www.paypalobjects.com/js/external/api.js'></script>
     <script>

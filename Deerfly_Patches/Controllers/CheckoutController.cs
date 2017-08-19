@@ -11,7 +11,7 @@ namespace Deerfly_Patches.Controllers
         // GET: Checkout
         public ActionResult Index()
         {
-            ViewBag.session = Session.Contents;
+            ViewBag.session = Session;
             return View();
         }
 

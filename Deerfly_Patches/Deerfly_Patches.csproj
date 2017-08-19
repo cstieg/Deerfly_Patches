@@ -250,6 +250,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PayPal.json" />
+    <None Include="Properties\PublishProfiles\DeerflyPatches - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Deerfly_Patches\site.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -337,6 +338,10 @@
     <Content Include="Views\PromoCodes\ModifyPartial.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\Checkout\Index.cshtml" />
+    <Content Include="Views\Customers\DetailPartial.cshtml" />
+    <Content Include="Views\Customers\ModifyPartial.cshtml" />
+    <Content Include="Views\Addresses\DetailPartial.cshtml" />
+    <Content Include="Views\Addresses\ModifyPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
