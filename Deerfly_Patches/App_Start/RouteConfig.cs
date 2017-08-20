@@ -14,6 +14,8 @@ namespace Deerfly_Patches
         public static string imagesPath = HostingEnvironment.MapPath("~" + imagesFolder);
         public static string productImagesFolder = imagesFolder + "/products";
         public static string productImagesPath = imagesPath + "/products";
+        public static Boolean storeInCloud = true;
+        
 
         public static void RegisterRoutes(RouteCollection routes)
         {
