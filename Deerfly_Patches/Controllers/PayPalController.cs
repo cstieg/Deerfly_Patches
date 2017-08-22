@@ -13,9 +13,33 @@ namespace DeerflyPatches.Controllers
 {
     public class PayPalController : Controller
     {
+        private PayPalApiClient _paypalClient;
+        private ClientInfo _paypalSecrets;
+
+        public PayPalController() : base()
+        {
+            _paypalClient = new PayPalApiClient();
+
+            // Get client id from paypal.json
+            _paypalSecrets = _paypalClient.GetClientSecrets();
+        }
+
+        [HttpPost]
+        public async Task<string> GetUserInfo()
+        {
+            // Get access token
+            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
+
+            // Post order to PayPal API and return order ID to front end
+            return await _paypalClient.GetUserInfo(accessToken.AccessTokenString);
+        }
+
         [HttpPost]
         public async Task<string> CreateOrder()
         {
+            // Get access token
+            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
+
             // Get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
             if (shoppingCart.GetOrder().ShipToAddress == null)
@@ -24,33 +48,20 @@ namespace DeerflyPatches.Controllers
             }
             shoppingCart.GetOrder().ShipToAddress.Country = "US";
 
-            PayPalApiClient paypalClient = new PayPalApiClient();
-
-            // Get client id from paypal.json
-            ClientInfo paypalSecrets = paypalClient.GetClientSecrets();
-
-            // Get access token
-            AccessToken accessToken = await paypalClient.GetAccessToken(paypalSecrets);
-
             // Create JSON string with order information
-            shoppingCart.PayeeEmail = paypalSecrets.ClientAccount;
-            string orderData = paypalClient.CreateOrder(shoppingCart);
+            shoppingCart.PayeeEmail = _paypalSecrets.ClientAccount;
+            string orderData = _paypalClient.CreateOrder(shoppingCart);
 
             // Post order to PayPal API and return order ID to front end
-            return await paypalClient.PostOrder(orderData, accessToken.AccessTokenString);
+            return await _paypalClient.PostOrder(orderData, accessToken.AccessTokenString);
         }
 
 
         [HttpPost]
         public async Task<ActionResult> ExecutePayment(string paymentId, FormCollection data)
         {
-            PayPalApiClient paypalClient = new PayPalApiClient();
-
-            // Get client id from paypal.json
-            ClientInfo paypalSecrets = paypalClient.GetClientSecrets();
-
             // Get access token
-            AccessToken accessToken = await paypalClient.GetAccessToken(paypalSecrets);
+            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
 
             string payerId = Request.Form["PayerID"];
 
@@ -59,6 +70,7 @@ namespace DeerflyPatches.Controllers
             {
                 payer_id = payerId
             });
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessTokenString);

@@ -12,6 +12,7 @@ namespace Deerfly_Patches.Controllers
         public ActionResult Index()
         {
             ViewBag.session = Session;
+            Session.Add("PayPalAuthorizationCode", this.Request.Params.Get("code"));
             return View();
         }
 

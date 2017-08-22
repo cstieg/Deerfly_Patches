@@ -13,6 +13,8 @@ namespace Deerfly_Patches.Modules.PayPal
 {
     public class PayPalApiClient
     {
+        private static string payPalBaseURL = "https://api.sandbox.paypal.com/v1/";
+
         public ClientInfo GetClientSecrets()
         {
             string file = HostingEnvironment.MapPath("/PayPal.json");
@@ -33,7 +35,7 @@ namespace Deerfly_Patches.Modules.PayPal
                 var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 client.DefaultRequestHeaders.Authorization = header;
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/oauth2/token")
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, payPalBaseURL + "oauth2/token")
                 {
                     Content = new FormUrlEncodedContent(new[]
                     {
@@ -44,6 +46,35 @@ namespace Deerfly_Patches.Modules.PayPal
                 var result = response.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<AccessToken>(result);
             }
+        }
+
+        public async Task<string> PayPalCall(string Url, string data, string accessToken)
+        {
+            string result;
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, Url)
+                {
+                    Content = new StringContent(data, Encoding.UTF8, "application/json")
+                };
+                var response = await client.SendAsync(request);
+                result = response.Content.ReadAsStringAsync().Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException(result.ToString());
+                }
+            }
+            return result;
+        }
+
+        public async Task<string> GetUserInfo(string accessToken)
+        {
+            string data = JsonConvert.SerializeObject(new
+            {
+                schema = "openid"
+            });
+            return await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo", data, accessToken);
         }
 
         public string CreateOrder(ShoppingCart shoppingCart)
@@ -99,7 +130,7 @@ namespace Deerfly_Patches.Modules.PayPal
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api.sandbox.paypal.com/v1/payments/payment")
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, payPalBaseURL + "payments/payment")
                 {
                     Content = new StringContent(data, Encoding.UTF8, "application/json")
                 };
