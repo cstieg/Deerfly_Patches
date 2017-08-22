@@ -214,18 +214,18 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AddressesController.cs" />
+    <Compile Include="Controllers\ModelControllers\AddressesController.cs" />
     <Compile Include="Controllers\BlobController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
-    <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\ModelControllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
-    <Compile Include="Controllers\OrderDetailsController.cs" />
-    <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\ModelControllers\OrderDetailsController.cs" />
+    <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
     <Compile Include="Controllers\PayPalController.cs" />
-    <Compile Include="Controllers\ProductsController.cs" />
-    <Compile Include="Controllers\PromoCodesController.cs" />
+    <Compile Include="Controllers\ModelControllers\ProductsController.cs" />
+    <Compile Include="Controllers\ModelControllers\PromoCodesController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -424,8 +424,6 @@
           <DevelopmentServerPort>56759</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:56759/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:56759/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
