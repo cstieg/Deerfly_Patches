@@ -3,6 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
+using Deerfly_Patches.Modules.Google;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers.ModelControllers
 {
@@ -35,7 +37,6 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         // GET: Retailers/Create
         public ActionResult Create()
         {
-            ViewBag.LatLngId = new SelectList(db.LatLngs, "LatLngId", "LatLngId");
             return View();
         }
 
@@ -44,16 +45,16 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RetailerId,Name,Address")] Retailer retailer)
+        public async Task<ActionResult> Create([Bind(Include = "RetailerId,Name,Address,Website")] Retailer retailer)
         {
             if (ModelState.IsValid)
             {
+                retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
                 db.Retailers.Add(retailer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.LatLngId = new SelectList(db.LatLngs, "LatLngId", "LatLngId", retailer.LatLngId);
             return View(retailer);
         }
 
