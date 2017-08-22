@@ -9,10 +9,9 @@ namespace Deerfly_Patches.Models
         public int AddressId { get; set; }
 
         [ForeignKey("Customer")]
-        public int CustomerId { get; set; }
+        public int ?CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
-        [Required]
         [StringLength(50, MinimumLength = 4)]
         public string Recipient { get; set; }
 

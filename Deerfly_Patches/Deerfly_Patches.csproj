@@ -220,6 +220,7 @@
     <Compile Include="Controllers\ModelControllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ModelControllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
@@ -242,16 +243,34 @@
     <Compile Include="Migrations\201708150324100_models.Designer.cs">
       <DependentUpon>201708150324100_models.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708221824285_Retailer.cs" />
+    <Compile Include="Migrations\201708221824285_Retailer.Designer.cs">
+      <DependentUpon>201708221824285_Retailer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221834362_Retailer1.cs" />
+    <Compile Include="Migrations\201708221834362_Retailer1.Designer.cs">
+      <DependentUpon>201708221834362_Retailer1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221855053_Retailer2.cs" />
+    <Compile Include="Migrations\201708221855053_Retailer2.Designer.cs">
+      <DependentUpon>201708221855053_Retailer2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221859371_Retailer3.cs" />
+    <Compile Include="Migrations\201708221859371_Retailer3.Designer.cs">
+      <DependentUpon>201708221859371_Retailer3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LatLng.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PromoCode.cs" />
+    <Compile Include="Models\Retailer.cs" />
     <Compile Include="Modules\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
     <Compile Include="Modules\FileStorage.cs" />
@@ -372,6 +391,11 @@
     <Content Include="Views\Addresses\DetailPartial.cshtml" />
     <Content Include="Views\Addresses\ModifyPartial.cshtml" />
     <Content Include="Views\Blob\CreateBlobContainer.cshtml" />
+    <Content Include="Views\Retailers\Create.cshtml" />
+    <Content Include="Views\Retailers\Delete.cshtml" />
+    <Content Include="Views\Retailers\Details.cshtml" />
+    <Content Include="Views\Retailers\Edit.cshtml" />
+    <Content Include="Views\Retailers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -400,6 +424,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708150324100_models.resx">
       <DependentUpon>201708150324100_models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221824285_Retailer.resx">
+      <DependentUpon>201708221824285_Retailer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221834362_Retailer1.resx">
+      <DependentUpon>201708221834362_Retailer1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221855053_Retailer2.resx">
+      <DependentUpon>201708221855053_Retailer2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221859371_Retailer3.resx">
+      <DependentUpon>201708221859371_Retailer3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
