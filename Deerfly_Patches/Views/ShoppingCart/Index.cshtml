@@ -79,9 +79,10 @@
             login.render({
                 "appid": "@ViewBag.ClientInfo.ClientId",
                 "authend": "@ViewBag.ClientInfo.Mode",
-                "scopes": "openid profile address",
+                "scopes": "openid",
                 "containerid": "lippButton",
                 "locale": "en-us",
+                "text": "Login to PayPal to order",
                 "returnurl": "@ViewBag.ClientInfo.ReturnUrl"
             });
         });
