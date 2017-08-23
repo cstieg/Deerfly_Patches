@@ -227,6 +227,7 @@
     <Compile Include="Controllers\PayPalController.cs" />
     <Compile Include="Controllers\ModelControllers\ProductsController.cs" />
     <Compile Include="Controllers\ModelControllers\PromoCodesController.cs" />
+    <Compile Include="Controllers\RetailerMapController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -301,6 +302,7 @@
     <Content Include="Connected Services\dfpAzureStorage\ConnectedService.json" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Deerfly_Patches\gmaps.js" />
     <Content Include="Scripts\Deerfly_Patches\site.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -397,6 +399,7 @@
     <Content Include="Views\Retailers\Details.cshtml" />
     <Content Include="Views\Retailers\Edit.cshtml" />
     <Content Include="Views\Retailers\Index.cshtml" />
+    <Content Include="Views\RetailerMap\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -130,7 +130,7 @@ function removeItemInShoppingCart(id) {
         success: function (returnval) {
             var $item = $('#item-' + id)[0];
             $item.remove();
-            if (itemsInDetailCount() == 0) {
+            if (itemsInDetailCount() === 0) {
                 location.reload();
             }
             recalculate();

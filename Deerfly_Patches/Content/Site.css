@@ -83,3 +83,8 @@
 .item-detail-total * {
     font-weight: bold;
 }
+
+/* Retailer map page */
+#retailer-map-view {
+    height: 600px;
+}

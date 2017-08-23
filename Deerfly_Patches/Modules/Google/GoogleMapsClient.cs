@@ -11,8 +11,8 @@ namespace Deerfly_Patches.Modules.Google
 {
     public class GoogleMapsClient
     {
-        private string _ApiKey = ConfigurationManager.AppSettings["GoogleMapsApiKey"];
-        private string _baseUrl = "https://maps.googleapis.com/maps/api/";
+        public static string apiKey = ConfigurationManager.AppSettings["GoogleMapsApiKey"];
+        public static string baseUrl = "https://maps.googleapis.com/maps/api/";
 
         public async Task<LatLng> GeocodeAddress(Address address)
         {
@@ -22,10 +22,10 @@ namespace Deerfly_Patches.Modules.Google
                 client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en_US"));
 
                 // construct url for google maps api
-                string url = _baseUrl;
+                string url = baseUrl;
                 url += "geocode/json";
                 url += "?address=" + address.ToString();
-                url += "&key=" + _ApiKey;
+                url += "&key=" + apiKey;
                 url = url.Replace(" ", "+");
 
                 // construct request
@@ -46,14 +46,12 @@ namespace Deerfly_Patches.Modules.Google
         }
     }
 
-
     // Classes mapping google maps api call result
     public class GeocodingResponse
     {
         [JsonProperty("results")]
         public List<GeocodingResult> Results { get; set; }
     }
-
 
     public class GeocodingResult
     {

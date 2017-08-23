@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Deerfly_Patches.Models.Retailer>
+
+@{
+    ViewBag.Title = "Retailer Map";
+}
+
+<h2>Retailer Map</h2>
+
+<div class="row">
+    <div id="retailer-list-view" class="col-sm-4"></div>
+    <div id="retailer-map-view" class="col-sm-8"></div>
+</div>
+
+
+
+<script async defer src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
+<script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError()"></script>
