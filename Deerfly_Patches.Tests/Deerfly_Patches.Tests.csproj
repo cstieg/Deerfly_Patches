@@ -99,9 +99,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RetailerMapControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
-    <Compile Include="UnitTest2.cs" />
+    <Compile Include="GoogleMapsClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

@@ -11,7 +11,7 @@
     <div id="retailer-map-view" class="col-sm-8"></div>
 </div>
 
-
+<div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
 
 <script async defer src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
 <script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError()"></script>

@@ -117,6 +117,14 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             return RedirectToAction("Index");
         }
 
+        public JsonResult ListJson()
+        {
+            //TODO: filter by location
+            var retailers = db.Retailers.Include(r => r.LatLng);
+            var returnval = retailers.ToList();
+            return Json(returnval, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
