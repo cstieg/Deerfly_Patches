@@ -1,44 +1,32 @@
-﻿var gmaps = {
-    init: function () {
-        this.retailerMap;
-        this.defaultMapLocation = new LatLng(43, -86);
-        this.displayMap();
-        this.setMapToCurrentLocation();
-    },
+﻿function initialMap() {
+    var mapElement = $('#retailer-map-view')[0];
+    retailerMap = new GMap(mapElement);
+}
 
-    displayMap: function (location = this.defaultMapLocation) {
-        var mapElement = $('#retailer-map-view')[0];
-        this.retailerMap = new google.maps.Map(mapElement, {
-            zoom: 15,
-            center: location
+class GMap {
+    constructor(mapElement, location = null, zoom = 10) {
+        this._mapElement = mapElement;
+        this._location = location;
+        if (location === null) {
+            this._location = new LatLng(43, -86);
+        }
+        this._zoom = zoom;
+
+        this._map = new google.maps.Map(this._mapElement, {
+            zoom: this._zoom,
+            center: this._location
         });
-    },
 
-    setMapToCurrentLocation: function (map = this.retailerMap) {
+        if (location === null) {
+            this.setMapToCurrentLocation();
+        }
+    }
+
+    setMapToCurrentLocation(map = this._map) {
         $.getJSON('http://freegeoip.net/json/', function (data) {
-            debugger;
             map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
         });
-    },
-
-    getCurrentLocation: function() {
-        var data = $.ajax({
-            url: 'http://freegeoip.net/json/',
-            dataType: 'json',
-            async: false,
-            error: function (err) {
-                debugger;
-                alert("Couldn't determine current location!");
-            }
-        });
-
-        var response = data.responseJSON;
-        return new LatLng(response.latitude, response.longitude);
     }
-};
-
-function initialMap() {
-    gmaps.init();
 }
 
 class LatLng {
