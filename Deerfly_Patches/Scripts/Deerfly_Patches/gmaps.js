@@ -102,3 +102,22 @@ class LatLng {
     }
 }
 
+// Code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formulda
+/**
+ * 
+ * @param {LatLng} point1
+ * @param {LatLng} point2
+ */
+function distance(point1, point2) {
+    // pi / 180
+    var p = 0.017453292519943295;
+
+    var c = Math.cos;
+    var a = 0.5 - c((point2.lat - point1.lat) * p) / 2 +
+        c(point1.lat * p) * c(point2.lat * p) *
+        (1 - c((point2.lng - point1.lng) * p)) / 2;
+    // 2 * R; R = 6371 km
+    var km = 12742 * Math.asin(Math.sqrt(a));
+    var miles = km * 0.621371;
+    return miles;
+}
