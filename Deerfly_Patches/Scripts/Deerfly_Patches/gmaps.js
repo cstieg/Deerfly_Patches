@@ -12,14 +12,30 @@
         $.getJSON(url, function (data, result) {
             for (var i = 0; i < data.length; i++) {
                 var latlng = LatLng.latlng(data[i].LatLng);
-                var gMarker = self.map.addMarker(latlng, "");
+                var info = self.formatInfoWindow(data[i]);
+                var gMarker = self.map.addMarker(latlng, info);
 
-
-                // Todo: add data to gmarker
+                // Add data to gmarker
+                gMarker.placeName = data[i].Name;
+                gMarker.address = data[i].Address;
+                gMarker.website = data[i].Website;
 
                 self.retailers.push(gMarker);
             }
         });
+    },
+
+    formatInfoWindow(retailer) {
+        var info = '<b>' + retailer.Name + '</b><br>' +
+            retailer.Address.Address1 + '<br>' +
+            retailer.Address.City + ', ' + retailer.Address.State;
+        if (retailer.Address.Phone) {
+            info += '<br>' + retailer.Address.Phone;
+        }
+        if (retailer.Website) {
+            info += '<br><a href="' + retailer.Website + '" target="_blank">' + retailer.Website + '</a>';
+        }
+        return info;
     }
 };
 
@@ -33,7 +49,7 @@ function loadGMapsError() {
 
 
 class GMap {
-    constructor(mapElement, location = null, zoom = 10) {
+    constructor(mapElement, location = null, zoom = 5) {
         this._mapElement = mapElement;
         this._location = location;
         if (location === null) {
@@ -45,6 +61,7 @@ class GMap {
             zoom: this._zoom,
             center: this._location
         });
+        this._infoWindow = new google.maps.InfoWindow();
 
         this._markers = [];
 
@@ -63,10 +80,24 @@ class GMap {
         var newMarker = new google.maps.Marker({
             position: location,
             address: '',
-            placeName: ''
+            placeName: '',
+            content: content,
+            parentClass: this
+        });
+
+        google.maps.event.addListener(newMarker, 'mouseover', function (event) {
+            // parentClass is included in the marker object as a hack to get a reference back to the class
+            newMarker.parentClass.showInfoWindow(newMarker);
         });
         newMarker.setMap(this._map);
+        this._markers.push(newMarker);
+
         return newMarker;
+    }
+
+    showInfoWindow(marker) {
+        this._infoWindow.setContent(marker.content);
+        this._infoWindow.open(this._map, marker);
     }
 }
 
