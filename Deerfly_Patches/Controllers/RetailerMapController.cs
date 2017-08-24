@@ -13,8 +13,8 @@ namespace Deerfly_Patches.Controllers
         public ActionResult Index()
         {
             ViewBag.GoogleMapsUrl = GoogleMapsClient.baseUrl + "js?key=" + GoogleMapsClient.apiKey + "&callback=initialMap";
-            var retailers = db.Retailers.Include(r => r.LatLng);
-            return View();
+            var retailers = db.Retailers.Include(r => r.LatLng).Include(r => r.Address);
+            return View(retailers);
         }
     }
 }

@@ -5,10 +5,14 @@
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
+.container {
+    height: auto;
+}
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    height: auto;
+    height: 100vh;
 }
 
 .row {
@@ -19,9 +23,7 @@
     margin: auto;
 }
 
-.container {
-    height: auto;
-}
+
 
 .image-square-rounded {
     width: 100%;
@@ -85,6 +87,35 @@
 }
 
 /* Retailer map page */
+#retailer-map-container {
+    height: 80%;
+}
+
 #retailer-map-view {
-    height: 600px;
+    height: 100%;
+    min-height: 100px;
+    border: thin black solid;
+}
+
+#retailer-list-view {
+    height: 100%;
+    border: 2px gray inset;
+    background-color: beige;
+    overflow: scroll;
+}
+
+#retailer-list-view form {
+    width: 100%;
+}
+
+#retailer-list-view form input[name='zip'] {
+    width: 50px;
+}
+
+#retailer-list-view form input[name='range'] {
+    width: 30px;
+}
+
+.retailer-name {
+    font-weight: bold;
 }

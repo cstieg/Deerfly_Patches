@@ -6,8 +6,37 @@
 
 <h2>Retailer Map</h2>
 
-<div class="row">
-    <div id="retailer-list-view" class="col-sm-4"></div>
+<div class="row" id="retailer-map-container">
+    <div id="retailer-list-view" class="col-sm-4">
+        <form action="" id="retailer-list-filter">
+            <label for="zip">Enter your zip</label>
+            <input type="text" name="zip" /><br />
+
+            <label for="range">Search within </label>
+            <input type="text" name="range" /> miles
+
+            <input type="submit" value="Filter" />
+        </form>
+        <hr />
+        <ul id="retailer-list">
+            @foreach (var retailer in Model)
+            {
+                <li class="retailer-item-li">
+                    <div class="retailer-item">
+                        <span class="retailer-name">@retailer.Name <br /></span>
+                        <span class="retailer-address">
+                            @retailer.Address.Address1 <br />
+                            @retailer.Address.City, @retailer.Address.State<br />
+                        </span>
+                        <span class="retailer-phone">@retailer.Address.Phone<br /></span>
+                        <span class="retailer-website"><a href="@retailer.Website">@retailer.Website</a></span>
+                        <span class="retailer-latlng hidden">@retailer.LatLng.ToJson()</span>
+                    </div>
+                    <hr />
+                </li>
+            }
+        </ul>
+    </div>
     <div id="retailer-map-view" class="col-sm-8"></div>
 </div>
 

@@ -2,41 +2,24 @@
     init: function () {
         var mapElement = $('#retailer-map-view')[0];
         this.map = new GMap(mapElement);
-        this.retailers = [];
         this.getRetailers();
     },
 
     getRetailers: function () {
         var self = this;
-        var url = $('#retailerJsonUrl').text();
-        $.getJSON(url, function (data, result) {
-            for (var i = 0; i < data.length; i++) {
-                var latlng = LatLng.latlng(data[i].LatLng);
-                var info = self.formatInfoWindow(data[i]);
-                var gMarker = self.map.addMarker(latlng, info);
-
-                // Add data to gmarker
-                gMarker.placeName = data[i].Name;
-                gMarker.address = data[i].Address;
-                gMarker.website = data[i].Website;
-
-                self.retailers.push(gMarker);
-            }
-        });
+        var $retailers = $('.retailer-item');
+        for (var i = 0; i < $retailers.length; i++) {
+            $retailer = $($retailers[i]);
+            var latlng = JSON.parse($retailer.find('.retailer-latlng').text());
+            var info = $retailer.html();
+            debugger;
+            var gMarker = this.map.addMarker(latlng, info);
+            $retailer.bind('mouseover', function (event) {
+                self.map.showInfoWindow(gMarker);
+            });
+        }
     },
 
-    formatInfoWindow(retailer) {
-        var info = '<b>' + retailer.Name + '</b><br>' +
-            retailer.Address.Address1 + '<br>' +
-            retailer.Address.City + ', ' + retailer.Address.State;
-        if (retailer.Address.Phone) {
-            info += '<br>' + retailer.Address.Phone;
-        }
-        if (retailer.Website) {
-            info += '<br><a href="' + retailer.Website + '" target="_blank">' + retailer.Website + '</a>';
-        }
-        return info;
-    }
 };
 
 function initialMap() {
@@ -76,9 +59,13 @@ class GMap {
         });
     }
 
+    setMapToZip(zip, map = this._map) {
+
+    }
+
     addMarker(location, content) {
         var newMarker = new google.maps.Marker({
-            position: location,
+            position: new google.maps.LatLng(location),
             address: '',
             placeName: '',
             content: content,
@@ -96,6 +83,8 @@ class GMap {
     }
 
     showInfoWindow(marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        marker.setAnimation(null);
         this._infoWindow.setContent(marker.content);
         this._infoWindow.open(this._map, marker);
     }
