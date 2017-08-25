@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Deerfly_Patches.Models;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Deerfly_Patches.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
-            return View();
+            return View(db.Products.ToList());
         }
 
         public ActionResult About()

@@ -1,0 +1,16 @@
+﻿@model Deerfly_Patches.Models.Product
+
+@{ var item = Model; }
+
+<article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
+    <div class="image-wrapper">
+        <img class="product-image" src="@item.ImageURL" alt="@item.Name image" />
+    </div>
+    <h4 class="product-name">@item.Name</h4>
+    <p class="product-description">@item.Description</p>
+    <p class="product-price">$@item.Price</p>
+    <div class="button-container">
+        <button class="btn" onclick="buyNow(@item.ProductId)">Buy Now</button>
+        <button class="btn" onclick="addToShoppingCart(@item.ProductId)">Add to Shopping Cart</button>
+    </div>
+</article>

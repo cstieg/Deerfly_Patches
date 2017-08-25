@@ -260,6 +260,14 @@
     <Compile Include="Migrations\201708221859371_Retailer3.Designer.cs">
       <DependentUpon>201708221859371_Retailer3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708250103112_displayonfrontpage.cs" />
+    <Compile Include="Migrations\201708250103112_displayonfrontpage.Designer.cs">
+      <DependentUpon>201708250103112_displayonfrontpage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708250105214_paypalurl.cs" />
+    <Compile Include="Migrations\201708250105214_paypalurl.Designer.cs">
+      <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -401,6 +409,7 @@
     <Content Include="Views\Retailers\Edit.cshtml" />
     <Content Include="Views\Retailers\Index.cshtml" />
     <Content Include="Views\RetailerMap\Index.cshtml" />
+    <Content Include="Views\Shared\_ProductPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -441,6 +450,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708221859371_Retailer3.resx">
       <DependentUpon>201708221859371_Retailer3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708250103112_displayonfrontpage.resx">
+      <DependentUpon>201708250103112_displayonfrontpage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708250105214_paypalurl.resx">
+      <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

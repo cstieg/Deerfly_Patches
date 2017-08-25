@@ -25,5 +25,9 @@ namespace Deerfly_Patches.Models
 
         [StringLength(50)]
         public string Category { get; set; }
+
+        public bool DisplayOnFrontPage { get; set; }
+
+        public string PayPalUrl { get; set; }
     }
 }
