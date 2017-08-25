@@ -1,18 +1,24 @@
-﻿var retailerMap = {
+﻿
+var retailerMap = {
     init: function () {
         var mapElement = $('#retailer-map-view')[0];
-        this.map = new GMap(mapElement);
+        this.location = JSON.parse($('#location').text());
+        this.zoom = parseInt($('#zoom').text());
+        this.map = new GMap(mapElement, this.location, this.zoom);
         this.getRetailers();
     },
 
     getRetailers: function () {
         var self = this;
         var $retailers = $('.retailer-item');
+        if ($retailers.length == 0) {
+            $('#retailer-list').html('<p>Sorry, no retailers in this area. You may <a href="/order">order them here.</a></p>');
+        }
+
         for (var i = 0; i < $retailers.length; i++) {
             $retailer = $($retailers[i]);
             var latlng = JSON.parse($retailer.find('.retailer-latlng').text());
             var info = $retailer.html();
-            debugger;
             var gMarker = this.map.addMarker(latlng, info);
             $retailer.bind('mouseover', function (event) {
                 self.map.showInfoWindow(gMarker);
@@ -20,14 +26,17 @@
         }
     },
 
+
 };
 
 function initialMap() {
     retailerMap.init();
 }
 
+
 function loadGMapsError() {
     alert("Wasn't able to load map :(");
+    window.location = "/order";
 }
 
 
@@ -57,10 +66,6 @@ class GMap {
         $.getJSON('http://freegeoip.net/json/', function (data) {
             map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
         });
-    }
-
-    setMapToZip(zip, map = this._map) {
-
     }
 
     addMarker(location, content) {
@@ -96,12 +101,10 @@ class LatLng {
         this.lat = lat;
         this.lng = lng;
     }
-
-    static latlng(obj) {
-        return new LatLng(obj.Lat, obj.Lng);
-    }
 }
 
+
+// Based on Haversine Formula
 // Code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formulda
 /**
  * 
@@ -121,3 +124,4 @@ function distance(point1, point2) {
     var miles = km * 0.621371;
     return miles;
 }
+

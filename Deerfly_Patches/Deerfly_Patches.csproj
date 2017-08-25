@@ -275,6 +275,7 @@
     <Compile Include="Modules\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
     <Compile Include="Modules\FileStorage.cs" />
+    <Compile Include="Modules\GeoLocation.cs" />
     <Compile Include="Modules\Google\GoogleMapsClient.cs" />
     <Compile Include="Modules\JsonDeserializer.cs" />
     <Compile Include="Modules\PayPal\AccessToken.cs" />

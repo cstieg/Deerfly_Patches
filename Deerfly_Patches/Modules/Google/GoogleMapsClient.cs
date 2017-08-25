@@ -1,5 +1,6 @@
 ﻿using Deerfly_Patches.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace Deerfly_Patches.Modules.Google
 
         public async Task<LatLng> GeocodeAddress(Address address)
         {
+            return await GeocodeAddress(address.ToString());
+        }
+
+        public async Task<LatLng> GeocodeAddress(string address)
+        {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -24,7 +30,7 @@ namespace Deerfly_Patches.Modules.Google
                 // construct url for google maps api
                 string url = baseUrl;
                 url += "geocode/json";
-                url += "?address=" + address.ToString();
+                url += "?address=" + address;
                 url += "&key=" + apiKey;
                 url = url.Replace(" ", "+");
 
@@ -39,10 +45,16 @@ namespace Deerfly_Patches.Modules.Google
             }
         }
 
+
         // Deserialize json response into an object (nested classes) conforming to google maps api result format
         public GeocodingResponse GetGeocodingResponseObject(string result)
         {
             return JsonConvert.DeserializeObject<GeocodingResponse>(result);
+        }
+
+        public static int RadiusToZoom(double radius)
+        {
+            return (int) Math.Round(14 - Math.Log(radius) / Math.Log(2));
         }
     }
 

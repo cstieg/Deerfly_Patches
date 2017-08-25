@@ -8,12 +8,14 @@
 
 <div class="row" id="retailer-map-container">
     <div id="retailer-list-view" class="col-sm-4">
-        <form action="" id="retailer-list-filter">
+        <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
             <label for="zip">Enter your zip</label>
-            <input type="text" name="zip" /><br />
+            <input type="text" name="zip" value="@ViewBag.Zip"/><br />
 
             <label for="range">Search within </label>
-            <input type="text" name="range" /> miles
+            <input type="text" name="range" value="@ViewBag.Range"/> miles
+
+            <input type="hidden" name="location" />
 
             <input type="submit" value="Filter" />
         </form>
@@ -41,6 +43,8 @@
 </div>
 
 <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
+<div class="hidden" id="zoom">@ViewBag.Zoom</div>
+<div class="hidden" id="location">@ViewBag.Location.ToJson()</div>
 
-<script async defer src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
-<script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError()"></script>
+<script src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
+<script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError();"></script>
