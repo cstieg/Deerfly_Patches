@@ -20,12 +20,30 @@ var retailerMap = {
             var latlng = JSON.parse($retailer.find('.retailer-latlng').text());
             var info = $retailer.html();
             var gMarker = this.map.addMarker(latlng, info);
+
+            // calculate distance from location
+            gMarker.distance = distance(latlng, this.location);
+            $retailer.find('.retailer-distance').text(gMarker.distance.toFixed(1) + ' miles from your location');
+
             $retailer.bind('mouseover', function (event) {
                 self.map.showInfoWindow(gMarker);
             });
         }
+
+        this.sortRetailersByDistance();
     },
 
+    sortRetailersByDistance() {
+        var $retailers = $('.retailer-item');
+        var $retailerList = $retailers.find('.retailer-item-li');
+
+        $retailerList.detach().sort(function (a, b) {
+            var aDistance = parseInt($(a).find('.retailer-distance').text());
+            var bDistance = parseInt($(b).find('.retailer-distance').text());
+            return (aDistance > bDistance) ? (aDistance < bDistance) ? 1 : 0 : -1;
+        });
+        $retailers.append($retailerList);
+    }
 
 };
 
@@ -105,7 +123,7 @@ class LatLng {
 
 
 // Based on Haversine Formula
-// Code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formulda
+// Based on code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formulda
 /**
  * 
  * @param {LatLng} point1
