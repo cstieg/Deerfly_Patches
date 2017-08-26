@@ -1,0 +1,14 @@
+﻿
+@model IEnumerable<string>
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@foreach(string controller in Model)
+{
+    <p><a href="/@controller">@controller</a></p>
+}

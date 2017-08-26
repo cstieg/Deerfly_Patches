@@ -286,6 +286,7 @@
     <Compile Include="Modules\GeoLocation.cs" />
     <Compile Include="Modules\Google\GoogleMapsClient.cs" />
     <Compile Include="Modules\JsonDeserializer.cs" />
+    <Compile Include="Modules\MvcHelper.cs" />
     <Compile Include="Modules\PayPal\AccessToken.cs" />
     <Compile Include="Modules\PayPal\ClientInfo.cs" />
     <Compile Include="Modules\PayPal\PayPalApiClient.cs" />
@@ -410,6 +411,7 @@
     <Content Include="Views\Retailers\Index.cshtml" />
     <Content Include="Views\RetailerMap\Index.cshtml" />
     <Content Include="Views\Shared\_ProductPartial.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
