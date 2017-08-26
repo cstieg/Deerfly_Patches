@@ -67,6 +67,7 @@
     height: auto;
     margin-top: 12px;
     margin-bottom: 30px;
+    padding: 5px;
     border: transparent thick solid;
     border-radius: 14px;
 }
