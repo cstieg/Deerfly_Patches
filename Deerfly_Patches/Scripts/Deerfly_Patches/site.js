@@ -1,23 +1,13 @@
 /* On DOM Ready */
 $(function () {
     // Add emphasis on mouseover product items on order view
-    $('.product-item img').mouseenter(function () {
-        $(this).animate({ height: '+=5', width: '+=5' })
-            .animate({ height: '-=5', width: '-=5' });
-        // TODO: Use JQueryUI to animate
-        // $(this).effect("pulsate");
+    $('.product-item').mouseover(function () {
+        $(this).css('border', 'tan thick solid');
     });
-
-
-
+    $('.product-item').mouseout(function () {
+        $(this).css('border', 'transparent thick solid');
+    });
 });
-
-
-
-
-
-
-
 
 
 function antiForgeryToken() {
