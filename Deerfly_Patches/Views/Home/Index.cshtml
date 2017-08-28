@@ -6,26 +6,26 @@
 
 <div class="container main-page">
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 front-display-item">
             <h3>How Can I Protect Against Deerflies?</h3>
             <p>
                 Deerfly Patches are odorless hat strips that stop deerflies from biting!
             </p>
             <ul>
                 <li>Prevents biting better than a spray repellent</li>
-                <li>Natural, no chemicals</li>
+                <li>Natural, no chemicals, no odor</li>
                 <li>Safe with children</li>
             </ul>
         </div>
 
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <img class="image-square-rounded" alt="Deerfly Patches header graphic"
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 front-display-item">
+            <img class="image-square-rounded centered" alt="Deerfly Patches header graphic"
                  src="~/content/images/deerflypatchheader.jpg"
                  srcset="~/content/images/deerflypatchheader.jpg 409w, ~/images/deerflypatchheader-small.jpg 164w" />
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6">
-            <h3>Deerfly Patches are the best deerfly bite prevention!</h3>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6 front-display-item">
+            <h3 class="text-center">Deerfly Patches are the best deerfly bite prevention!</h3>
         </div>
         <div class="clearfix"></div>
         <hr />
@@ -39,7 +39,24 @@
                     @Html.Partial("_ProductPartial", item)
                 }
             }
+
+            <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
+                <div class="image-wrapper">
+                    <img class="product-image" src="" alt="Retail display carton image" />
+                </div>
+                <p class="product-description">
+                    Retailers and distributors please contact us for wholesale pricing.
+                </p>
+                <p>
+                    <a href="callto:12318322323">(231) 832-2323</a>
+                </p>
+                <p>
+                    <address><a href="mailto:stieg_d@yahoo.com">stieg_d@yahoo.com</a></address>
+                </p>
+            </article>
         </div>
+
+
 
     </div>
 </div>

@@ -24,10 +24,6 @@
     height: auto;
 }
 
-.centered {
-    margin: auto;
-}
-
 
 
 .image-square-rounded {
@@ -126,4 +122,18 @@
 
 .retailer-name {
     font-weight: bold;
+}
+
+
+
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.textbox {
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
 }
