@@ -11,7 +11,22 @@
     <div class="row">
         @foreach (var item in Model)
         {
-           @Html.Partial("_ProductPartial", item)
+            @Html.Partial("_ProductPartial", item)
         }
+
+        <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
+            <div class="image-wrapper">
+                <img class="product-image" src="" alt="Retail display carton image" />
+            </div>
+            <p class="product-description">
+                Retailers and distributors please contact us for wholesale pricing.
+            </p>
+            <p>
+                <a href="callto:12318322323">(231) 832-2323</a>
+            </p>
+            <p>
+                <address><a href="mailto:stieg_d@yahoo.com">stieg_d@yahoo.com</a></address>
+            </p>
+        </article>
     </div>
 </div>
