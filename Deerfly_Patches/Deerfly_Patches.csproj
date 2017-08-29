@@ -221,6 +221,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
+    <Compile Include="Controllers\ModelControllers\TestimonialsController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ModelControllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
@@ -268,6 +269,18 @@
     <Compile Include="Migrations\201708250105214_paypalurl.Designer.cs">
       <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708291702293_testimonials.cs" />
+    <Compile Include="Migrations\201708291702293_testimonials.Designer.cs">
+      <DependentUpon>201708291702293_testimonials.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708291726240_testimonials1.cs" />
+    <Compile Include="Migrations\201708291726240_testimonials1.Designer.cs">
+      <DependentUpon>201708291726240_testimonials1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708291754252_testimonials11.cs" />
+    <Compile Include="Migrations\201708291754252_testimonials11.Designer.cs">
+      <DependentUpon>201708291754252_testimonials11.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -280,6 +293,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\PromoCode.cs" />
     <Compile Include="Models\Retailer.cs" />
+    <Compile Include="Models\Testimonial.cs" />
     <Compile Include="Modules\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
     <Compile Include="Modules\FileStorage.cs" />
@@ -413,6 +427,12 @@
     <Content Include="Views\RetailerMap\Index.cshtml" />
     <Content Include="Views\Shared\_ProductPartial.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Testimonials\Create.cshtml" />
+    <Content Include="Views\Testimonials\Delete.cshtml" />
+    <Content Include="Views\Testimonials\Details.cshtml" />
+    <Content Include="Views\Testimonials\Edit.cshtml" />
+    <Content Include="Views\Testimonials\Index.cshtml" />
+    <Content Include="Views\Testimonials\_ModifyPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -459,6 +479,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708250105214_paypalurl.resx">
       <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708291702293_testimonials.resx">
+      <DependentUpon>201708291702293_testimonials.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708291726240_testimonials1.resx">
+      <DependentUpon>201708291726240_testimonials1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708291754252_testimonials11.resx">
+      <DependentUpon>201708291754252_testimonials11.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

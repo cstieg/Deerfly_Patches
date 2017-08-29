@@ -38,5 +38,7 @@ namespace Deerfly_Patches.Models
         public DbSet<Deerfly_Patches.Models.PromoCode> PromoCodes { get; set; }
         public DbSet<Deerfly_Patches.Models.Retailer> Retailers { get; set; }
         public DbSet<Deerfly_Patches.Models.LatLng> LatLngs { get; set; }
+
+        public System.Data.Entity.DbSet<Deerfly_Patches.Models.Testimonial> Testimonials { get; set; }
     }
 }
