@@ -1,4 +1,6 @@
-﻿body {
+﻿/* ***************** COMMON ***************************************** */
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -16,16 +18,11 @@
     color: darkgreen;
 }
 
-.main-page > * {
+.row {
+    height: auto;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
-.row {
-    height: auto;
-}
-
-
 
 .image-square-rounded {
     width: 100%;
@@ -48,18 +45,13 @@
     padding: 45px 10px 20px 100px;
 }
 
-.button-container {
-    margin: auto;
-} 
-
 /* Shopping Cart Icon Fix */
 .glyphicon {
     position: inherit;
     margin-right: 8px;
 }
 
-
-/* Order Page */
+/* **************************** Product display *********************************** */
 .product-item {
     height: auto;
     margin-top: 12px;
@@ -81,17 +73,28 @@
     margin: auto;
 }
 
+.selected .product-image {
+    border: lightgreen thick solid;
+    border-radius: 14px;
+}
+
+
+.selected button {
+    border: red thin solid;
+    border-radius: 6px;
+}
+
 .image-wrapper {
     width: 100%;
 }
 
-/* Order detail page */
+/* ************************* Order detail page *************** */
 .item-detail-header *,
 .item-detail-total * {
     font-weight: bold;
 }
 
-/* Retailer map page */
+/* ************************* Retailer map page *************** */
 #retailer-map-container {
     height: 80%;
 }
@@ -126,7 +129,7 @@
 }
 
 
-/* ************************************** Testimonials **************************************************** */
+/* **************************** Testimonials page ******************************* */
 #testimonial-item {
     overflow: scroll;
 }
@@ -163,13 +166,8 @@
     font-weight: bold;
 }
 
+/* ********************* Overrides ******************************* */
 .centered {
     margin-left: auto;
     margin-right: auto;
-}
-
-.textbox {
-    margin: auto;
-    text-align: center;
-    vertical-align: middle;
 }

@@ -1,14 +1,3 @@
-/* On DOM Ready */
-$(function () {
-    // Add emphasis on mouseover product items on order view
-    $('.product-item').mouseover(function () {
-        $(this).css('border', 'tan thick solid');
-    });
-    $('.product-item').mouseout(function () {
-        $(this).css('border', 'transparent thick solid');
-    });
-});
-
 
 function antiForgeryToken() {
     return $('#anti-forgery-token input')[0].value;
