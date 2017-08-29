@@ -1,14 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Runtime.Serialization;
 using Deerfly_Patches.Models;
 
-namespace Deerfly_Patches.Modules
+namespace Deerfly_Patches.Modules.Geography
 {
     [DataContract]
     public class GeoLocation
@@ -50,11 +46,7 @@ namespace Deerfly_Patches.Modules
         { 
             get
             {
-                return new LatLng()
-                {
-                    Lat = Latitude,
-                    Lng = Longitude
-                };
+                return new LatLng(Latitude, Longitude);
             }
         }
 
@@ -68,6 +60,14 @@ namespace Deerfly_Patches.Modules
                 return JsonConvert.DeserializeObject<GeoLocation>(result);
             }
             //"{\"ip\":\"107.77.253.6\",\"country_code\":\"US\",\"country_name\":\"United States\",\"region_code\":\"NY\",\"region_name\":\"New York\",\"city\":\"The Bronx\",\"zip_code\":\"10451\",\"time_zone\":\"America/New_York\",\"latitude\":40.8195,\"longitude\":-73.9209,\"metro_code\":501}\n"
+        }
+
+        public static GeoRange GetGeoRange(LatLng center, float range)
+        {
+            GeoRange geoRange = new GeoRange(
+                new LatLng(center.Lat - range * 70, center.Lng - range * 70),
+                new LatLng(center.Lat + range * 70, center.Lng + range * 70));
+            return geoRange;
         }
     }
 }

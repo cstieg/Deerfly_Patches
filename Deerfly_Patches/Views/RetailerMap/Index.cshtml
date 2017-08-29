@@ -46,6 +46,18 @@
 <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
 <div class="hidden" id="zoom">@ViewBag.Zoom</div>
 <div class="hidden" id="location">@ViewBag.Location.ToJson()</div>
+<ul class="hidden" id="retailer-item-li-template">
+    <li class="retailer-item-li">
+        <div class="retailer-item">
+            <span class="retailer-name"></span><br />
+            <span class="retailer-distance"></span><br />
+            <span class="retailer-address"><br /></span>
+            <span class="retailer-phone"><br /></span>
+            <a class="retailer-website" href=""></a>
+        </div>
+        <hr />
+    </li>
+</ul>
 
 <script src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
 <script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError();"></script>

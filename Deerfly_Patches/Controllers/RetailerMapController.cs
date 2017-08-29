@@ -6,12 +6,15 @@ using System.Linq;
 using Deerfly_Patches.Modules;
 using System.Threading.Tasks;
 using System;
+using Deerfly_Patches.Modules.Geography;
 
 namespace Deerfly_Patches.Controllers
 {
     public class RetailerMapController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        private LatLng userLocation = null;
 
         // GET: RetailerMap
         public async Task<ActionResult> Index(string zip = "", int range = 50)
@@ -20,52 +23,63 @@ namespace Deerfly_Patches.Controllers
             ViewBag.Zip = zip;
             ViewBag.Range = range;
 
-            LatLng location = null;
-
-            // Try to get geolocation from entered zip, or IP
-            try
+            if (userLocation == null)
             {
-                if (zip == "")
+
+                // Try to get geolocation from entered zip, or IP
+                try
                 {
-                    var geoLocation = await GeoLocation.GetGeoLocation();
-                    location = geoLocation.LatLng;
+                    if (zip == "")
+                    {
+                        var geoLocation = await GeoLocation.GetGeoLocation();
+                        userLocation = geoLocation.LatLng;
+                    }
+                    else
+                    {
+                        var googleMapsClient = new GoogleMapsClient();
+                        userLocation = await googleMapsClient.GeocodeAddress(zip);
+                    }
                 }
-                else
+                catch
                 {
-                    var googleMapsClient = new GoogleMapsClient();
-                    location = await googleMapsClient.GeocodeAddress(zip);
+                    userLocation = new LatLng(43, -86);
                 }
             }
-            catch
-            {
-                location = new LatLng()
-                {
-                    Lat = 43,
-                    Lng = -86
-                };
-            }
 
-            ViewBag.Location = location;
+
+            ViewBag.Location = userLocation;
 
             // Zoom is based on search range
             ViewBag.Zoom = GoogleMapsClient.RadiusToZoom(range);
             ViewBag.GoogleMapsUrl = GoogleMapsClient.baseUrl + "js?key=" + GoogleMapsClient.apiKey + "&callback=initialMap";
 
-            // Haversine formula not able to be implemented in SQL due to requiring
-            // cosines and arcsines.
-            // Approximation with "flat earth" model also not possible due to requiring
-            // square root.
-            // Instead, filter assuming 1 degree of latitude or longitude is equal to 70 miles
-            // Only return retailers located in square centered on location with a 
-            // horizontal or vertical radius of given range.
-            // This method may return results slightly beyond the given range, but will not
-            // omit any results less than the given range.
-            // Results may be further filtered on client side.
-            var retailers = db.Retailers.Include(r => r.LatLng).Include(r => r.Address)
-                .Where(r => Math.Abs(r.LatLng.Lat - location.Lat) * 70 <= range && 
-                            Math.Abs(r.LatLng.Lng - location.Lng) * 70 <= range);
 
+            var retailers = GetRetailersInBounds(GeoLocation.GetGeoRange(userLocation, range));
             return View(retailers);
         }
+
+        [HttpPost]
+        public JsonResult SetUserLocation(float lat, float lng)
+        {
+            userLocation = new LatLng(lat, lng);
+            return this.JOk();
+        }
+
+        public JsonResult UpdateRetailerJson(float maxLat, float leftLng, float minLat, float rightLng)
+        {
+            var data = GetRetailersInBounds(new GeoRange(maxLat, leftLng, minLat, rightLng));
+            return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private IQueryable<Retailer> GetRetailersInBounds(GeoRange range)
+        {
+            var retailers = db.Retailers.Include(r => r.LatLng).Include(r => r.Address)
+                .Where(r => r.LatLng.Lat <= range.TopLeft.Lat &&
+                            r.LatLng.Lng >= range.TopLeft.Lng &&
+                            r.LatLng.Lat >= range.BottomRight.Lat &&
+                            r.LatLng.Lng <= range.BottomRight.Lng);
+            return retailers;
+        }
+
     }
 }

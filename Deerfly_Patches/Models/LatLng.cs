@@ -12,6 +12,17 @@ namespace Deerfly_Patches.Models
 
         public float Lng { get; set; }
 
+        public LatLng()
+        {
+
+        }
+
+        public LatLng(float lat, float lng)
+        {
+            Lat = lat;
+            Lng = lng;
+        }
+
         public string ToJson()
         {
             return "{ \"lat\": " + Lat.ToString() + ", \"lng\": " + Lng.ToString() + "}";
