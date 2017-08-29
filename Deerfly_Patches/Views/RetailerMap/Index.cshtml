@@ -5,7 +5,10 @@
 <h2>Retailer Map</h2>
 
 <div class="row" id="retailer-map-container">
-    <div id="retailer-list-view" class="col-sm-4">
+    <div id="retailer-map-view" class="col-sm-8 col-sm-push-4">
+        <p class="text-center">Loading map; please wait...</p>
+    </div>
+    <div id="retailer-list-view" class="col-sm-4 col-sm-pull-8">
         <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
             <label for="zip">Enter your zip</label>
             <input type="text" name="zip" value="@ViewBag.Zip"/><br />
@@ -22,9 +25,7 @@
             Loading retailer data; please wait...
         </ul>
     </div>
-    <div id="retailer-map-view" class="col-sm-8">
-        <p class="text-center">Loading map; please wait...</p>
-    </div>
+
 </div>
 
 <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
