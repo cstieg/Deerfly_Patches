@@ -98,7 +98,9 @@ var retailerMap = {
         $retailerItemTemplate.find('.retailer-address').html(retailer.Address.Address1 + '<br />' +
             retailer.Address.City + ', ' + retailer.Address.State + '<br />');
         if (retailer.Address.Phone) {
-            $retailerItemTemplate.find('.retailer-phone').html(retailer.Address.Phone + '<br />');
+            $retailerItemTemplate.find('.retailer-phone')
+                .html(retailer.Address.Phone + '<br />')
+                .prop('href', 'callto:' + retailer.Address.Phone);
         }
         if (retailer.Website) {
             $retailerItemTemplate.find('.retailer-website')
