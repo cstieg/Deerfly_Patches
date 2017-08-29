@@ -1,21 +1,32 @@
-﻿var retailerMap = {
-    init: function () {
+﻿/* ************************ Code for retailer map page ************************************** */
+var retailerMap = {
+    init: function (userLocation) {
+        // reference to retailerMap for use in callbacks
         var self = this;
-        var mapElement = $('#retailer-map-view')[0];
-        this.location = JSON.parse($('#location').text());
-        this.zoom = parseInt($('#zoom').text());
-        this.map = new GMap(mapElement, this.location, this.zoom);
-        this.retailers = [];
 
-        this.map.addPanListener(function () {
+        // div in which to render map
+        var mapElement = $('#retailer-map-view')[0];
+
+        this.location = userLocation;
+        this.zoom = parseInt($('#zoom').text());
+
+        // create instance of map wrapper class
+        this.map = new GMap(mapElement, this.location, this.zoom);
+
+        // add event handlers to update retailers on map load or move
+        this.map.onLoad(function () {
+            self.updateRetailers(self.map.getBounds());
+        }).onPan(function () {
+            self.updateRetailers(self.map.getBounds());
+        }).onZoom(function () {
             self.updateRetailers(self.map.getBounds());
         });
-        // TODO: zoom
 
-
-        //this.getRetailers();
+        // container for retailer objects
+        this.retailers = [];
     },
 
+    // Get data for retailers within mapBounds from server, call method to show them when finished
     updateRetailers: function (mapBounds) {
         var self = this;
         var maxLat = mapBounds.f.f;
@@ -32,63 +43,56 @@
         });
     },
 
-    getRetailers: function () {
+    // Show retailers in list and on map
+    showRetailers: function () {
+        // reference to retailerMap for use in callbacks
         var self = this;
-        var $retailers = $('.retailer-item');
-        if ($retailers.length == 0) {
-            $('#retailer-list').html('<p>Sorry, no retailers in this area. You may <a href="/order">order here.</a></p>');
-        }
 
-        for (var i = 0; i < $retailers.length; i++) {
-            $retailer = $($retailers[i]);
-            var latlng = JSON.parse($retailer.find('.retailer-latlng').text());
-            var info = $retailer.html();
-
-            var gMarker = this.map.addMarker(latlng, info);
-
-            // calculate distance from location
-            gMarker.distance = distance(latlng, this.location);
-            $retailer.find('.retailer-distance').text(gMarker.distance.toFixed(1) + ' miles from your location');
-
-            $retailer.bind('mouseover', function (event) {
-                self.map.showInfoWindow(gMarker);
-            });
-        }
-
-        this.sortRetailersByDistance();
-    },
-
-    showRetailers: function() {
-        var self = this;
+        // container for retailer list
         $retailerList = $('#retailer-list');
+
+        // empty retailer list before populating it
         $retailerList.html('');
+
+        // display message if no retailers in range
         if (this.retailers.length == 0) {
             $('#retailer-list').html('<p>Sorry, no retailers in this area. You may <a href="/order">order here.</a></p>');
         }
+
         for (var i = 0; i < this.retailers.length; i++) {
             var retailer = this.retailers[i];
+
+            // hack to make variable name case match data from server
             retailer.LatLng.lat = retailer.LatLng.Lat;
             retailer.LatLng.lng = retailer.LatLng.Lng;
+
+            // calculate distance to user's location
             retailer.distance = distance(retailer.LatLng, this.location);
 
-            var itemHTML = this.getRetailerListItem(retailer);
+            // get retailer list element from template function
+            var retailerListElement = this.getRetailerListItem(retailer);
 
-            var gMarker = this.map.addMarker(retailer.LatLng, itemHTML.html());
+            // add map marker to map
+            var gMarker = this.map.addMarker(retailer.LatLng, retailerListElement.html());
 
-            // calculate distance from location
-            gMarker.distance = retailer.distance;
-            itemHTML.bind('mouseenter', { gM: gMarker }, function(event) {
+            // add listener to show info window with marker on map when mouse over retailer in list
+            retailerListElement.bind('mouseenter', { gM: gMarker }, function(event) {
                 self.map.showInfoWindow(event.data.gM);
             });
-            gMarker = null;
-            $retailerList.append(itemHTML);
+
+            // add retailer list elements to list
+            $retailerList.append(retailerListElement);
         }
+        this.sortRetailersByDistance();
     },
 
+    // template to generate retailer list item
     getRetailerListItem: function (retailer) {
         $retailerItemTemplate = $('#retailer-item-li-template .retailer-item-li');
+
         // clear out data from any previous iteration
         $('#retailer-item-li-template .retailer-item').children().text('');
+
         $retailerItemTemplate.find('.retailer-name').text(retailer.Name);
         $retailerItemTemplate.find('.retailer-distance').text(retailer.distance.toPrecision(3) + ' miles from your location');
         $retailerItemTemplate.find('.retailer-address').html(retailer.Address.Address1 + '<br />' +
@@ -104,6 +108,7 @@
         return $retailerItemTemplate.clone();
     },
 
+    // sort retailers in list view by distance to user
     sortRetailersByDistance() {
         var $retailers = $('.retailer-item');
         var $retailerList = $retailers.find('.retailer-item-li');
@@ -118,31 +123,43 @@
 
 };
 
+// callback from Google Maps when finished loading API
 function initialMap() {
-    retailerMap.init();
+    // If zip has been specified, set location passed from server
+    var position = "";
+    var positionText = $('#location').text();
+    if (positionText) {
+        position = JSON.parse(positionText);
+    }
+    if (position) {
+        retailerMap.init(position);
+        return;
+    }
 
-    /*
+    // If no zip has been specified, get location from browser or ip
     if (navigator.geolocation) {
+        // location from browser
         var options = { timeout: 10000 };
-        navigator.geolocation.getCurrentPosition(function (pos) {
-            $.post("/retailermap/setuserlocation?lat=" + pos.coords.latitude + "&lng=" + pos.coords.longitude, function () {
-                debugger;
-
-            });
+        navigator.geolocation.getCurrentPosition(function (data) {
+            var position = new LatLng(data.coords.latitude, data.coords.longitude);
+            retailerMap.init(position);
         },
-        function (err) {
-                debugger;
-                retailerMap.init();
-        },
-        options);
+            function (err) {
+                // location from ip
+                $.getJSON('http://freegeoip.net/json/', function (data) {
+                    var position = new LatLng(data.latitude, data.longitude);
+                    retailerMap.init(data);
+                });
+            },
+            options);
     }
     else {
-        alert("Browser does not support geolocation");
-        retailerMap.init();
-    } */
-
+        // location from ip
+        $.getJSON('http://freegeoip.net/json/', function (data) {
+            retailerMap.init(data);
+        });
+    }
 }
-
 
 function loadGMapsError() {
     alert("Wasn't able to load map :(");
@@ -150,6 +167,8 @@ function loadGMapsError() {
 }
 
 
+/* ************************************** GMap ********************************************************** */
+// Wrapper class for Google Map
 class GMap {
     constructor(mapElement, location = null, zoom = 5) {
         this._mapElement = mapElement;
@@ -173,14 +192,7 @@ class GMap {
         }
     }
 
-
-    // not used
-    setMapToCurrentLocation(map = this._map) {
-        $.getJSON('http://freegeoip.net/json/', function (data) {
-            map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
-        });
-    }
-
+    // add a marker at a specified location to the map, and show info window on mouseover
     addMarker(location, content) {
         var newMarker = new google.maps.Marker({
             position: new google.maps.LatLng(location),
@@ -194,6 +206,8 @@ class GMap {
             // parentClass is included in the marker object as a hack to get a reference back to the class
             newMarker.parentClass.showInfoWindow(newMarker);
         });
+
+        // place the marker on the map
         newMarker.setMap(this._map);
         this._markers.push(newMarker);
 
@@ -208,6 +222,7 @@ class GMap {
         this._markers = [];
     }
 
+    // opens an infoWindow displaying the information for the given marker
     showInfoWindow(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         marker.setAnimation(null);
@@ -219,7 +234,19 @@ class GMap {
         return this._map.getBounds();
     }
 
-    addPanListener(callback) {
+    setMapToCurrentLocation(map = this._map) {
+        $.getJSON('http://freegeoip.net/json/', function (data) {
+            map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
+        });
+    }
+
+    // ***** Event Handlers ******
+    onLoad(callback) {
+        google.maps.event.addListenerOnce(this._map, 'idle', callback);
+        return this;
+    }
+
+    onPan(callback) {
         var self = this;
         this._map.addListener('mousedown', function () {
             self._mouseIsDown = true;
@@ -237,10 +264,16 @@ class GMap {
                 callback();
             }
         });
+        return this;
+    }
+
+    onZoom(callback) {
+        this._map.addListener('zoom_changed', callback);
+        return this;
     }
 }
 
-
+// Helper class representing a geographical point
 class LatLng {
     constructor(lat, lng) {
         this.lat = lat;
@@ -248,11 +281,10 @@ class LatLng {
     }
 }
 
-
-// Based on Haversine Formula
-// Based on code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formulda
 /**
- * 
+ * Finds the distance between two geographical points in miles
+ * Based on Haversine Formula
+ * Based on code by Salvador Dali, https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
  * @param {LatLng} point1
  * @param {LatLng} point2
  */
@@ -269,4 +301,3 @@ function distance(point1, point2) {
     var miles = km * 0.621371;
     return miles;
 }
-

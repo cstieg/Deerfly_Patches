@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Deerfly_Patches.Models.Retailer>
-
-@{
+﻿@{
     ViewBag.Title = "Retailer Map";
 }
 
@@ -21,31 +19,20 @@
         </form>
         <hr />
         <ul id="retailer-list">
-            @foreach (var retailer in Model)
-            {
-                <li class="retailer-item-li">
-                    <div class="retailer-item">
-                        <span class="retailer-name">@retailer.Name <br /></span>
-                        <span class="retailer-distance"></span><br />
-                        <span class="retailer-address">
-                            @retailer.Address.Address1 <br />
-                            @retailer.Address.City, @retailer.Address.State<br />
-                        </span>
-                        <span class="retailer-phone">@retailer.Address.Phone<br /></span>
-                        <span class="retailer-website"><a href="@retailer.Website">@retailer.Website</a></span>
-                        <span class="retailer-latlng hidden">@retailer.LatLng.ToJson()</span>
-                    </div>
-                    <hr />
-                </li>
-            }
+            <p>Loading retailer data; please wait...</p>
         </ul>
     </div>
-    <div id="retailer-map-view" class="col-sm-8"></div>
+    <div id="retailer-map-view" class="col-sm-8">
+        <p class="text-center">Loading map; please wait...</p>
+    </div>
 </div>
 
 <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
 <div class="hidden" id="zoom">@ViewBag.Zoom</div>
-<div class="hidden" id="location">@ViewBag.Location.ToJson()</div>
+<div class="hidden" id="location">@if (ViewBag.Location != null)
+    {
+        @ViewBag.Location.ToJson()
+    }</div>
 <ul class="hidden" id="retailer-item-li-template">
     <li class="retailer-item-li">
         <div class="retailer-item">

@@ -19,43 +19,29 @@ namespace Deerfly_Patches.Controllers
         // GET: RetailerMap
         public async Task<ActionResult> Index(string zip = "", int range = 50)
         {
-            // Pass filter terms back to view
-            ViewBag.Zip = zip;
-            ViewBag.Range = range;
-
-            if (userLocation == null)
+            // If zip is passed, get coords for zip
+            if (zip != "")
             {
-
-                // Try to get geolocation from entered zip, or IP
                 try
                 {
-                    if (zip == "")
-                    {
-                        var geoLocation = await GeoLocation.GetGeoLocation();
-                        userLocation = geoLocation.LatLng;
-                    }
-                    else
-                    {
-                        var googleMapsClient = new GoogleMapsClient();
-                        userLocation = await googleMapsClient.GeocodeAddress(zip);
-                    }
+                    var googleMapsClient = new GoogleMapsClient();
+                    userLocation = await googleMapsClient.GeocodeAddress(zip);
                 }
                 catch
                 {
-                    userLocation = new LatLng(43, -86);
+
                 }
             }
 
-
             ViewBag.Location = userLocation;
 
+            // Pass filter terms back to view
+            ViewBag.Zip = zip;
+            ViewBag.Range = range;
             // Zoom is based on search range
             ViewBag.Zoom = GoogleMapsClient.RadiusToZoom(range);
             ViewBag.GoogleMapsUrl = GoogleMapsClient.baseUrl + "js?key=" + GoogleMapsClient.apiKey + "&callback=initialMap";
-
-
-            var retailers = GetRetailersInBounds(GeoLocation.GetGeoRange(userLocation, range));
-            return View(retailers);
+            return View();
         }
 
         [HttpPost]
