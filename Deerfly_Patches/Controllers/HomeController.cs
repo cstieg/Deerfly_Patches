@@ -25,6 +25,11 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
+        public ActionResult Testimonials()
+        {
+            return View(db.Testimonials.ToList());
+        }
+
         public ActionResult Edit()
         {
             string modelControllers = ConfigurationManager.AppSettings["modelControllers"];

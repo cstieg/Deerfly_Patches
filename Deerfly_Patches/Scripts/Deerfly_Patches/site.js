@@ -14,6 +14,7 @@ function antiForgeryToken() {
     return $('#anti-forgery-token input')[0].value;
 }
 
+/* ************************** Shopping Cart **************************************************** */
 
 function addToShoppingCart(id) {
     var postData = {
@@ -214,3 +215,10 @@ function countryChange() {
     recalculate();
 }
 
+
+/* ******************************* Testimonials ************************************************* */
+function displayTestimonial(id, url) {
+    $('#testimonial-display').html(`<div class="display-table"><div class="display-cell"><img src="${url}" alt="image of customer testimonial" /></div></div>`);
+    $('.testimonial-lable').removeClass('selected-testimonial');
+    $('#' + id).addClass('selected-testimonial');
+}

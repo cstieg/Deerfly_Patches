@@ -13,6 +13,7 @@
     padding-left: 15px;
     padding-right: 15px;
     height: 100vh;
+    color: darkgreen;
 }
 
 .main-page > * {
@@ -125,7 +126,42 @@
 }
 
 
+/* ************************************** Testimonials **************************************************** */
+#testimonial-item {
+    overflow: scroll;
+}
 
+#testimonial-display {
+    display: table;
+    height: 80vh;
+    border: ridge green thick;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.display-table {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.display-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#testimonial-display img {
+    display: block;
+    max-width: 80%;
+    max-height: 80%;
+    margin: auto;
+    border: solid lightgray thin;
+    border-radius: 14px;
+}
+
+.selected-testimonial {
+    font-weight: bold;
+}
 
 .centered {
     margin-left: auto;
