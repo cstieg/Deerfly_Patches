@@ -121,6 +121,15 @@ h2 {
     font-weight: bold;
 }
 
+/* ************************* About page ********************** */
+.deerfly-images-content > * {
+    margin: auto;
+    display: block;
+    max-width: 100%;
+}
+
+
+
 /* ************************* Retailer map page *************** */
 #retailer-map-container {
     height: 100%;
