@@ -19,7 +19,7 @@ namespace Deerfly_Patches.Models
 
         public decimal Shipping { get; set; }
 
-        [StringLength(255)]
+        [Url]
         [DisplayName("Upload image file")]
         public string ImageURL { get; set; }
 
@@ -28,6 +28,7 @@ namespace Deerfly_Patches.Models
 
         public bool DisplayOnFrontPage { get; set; }
 
+        [Url]
         public string PayPalUrl { get; set; }
     }
 }

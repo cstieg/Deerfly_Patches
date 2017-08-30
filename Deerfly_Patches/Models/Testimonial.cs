@@ -22,7 +22,7 @@ namespace Deerfly_Patches.Models
         public DateTime ?Date { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [Url]
         [DisplayName("Upload image file")]
         public string ImageUrl { get; set; }
     }

@@ -24,6 +24,7 @@ namespace Deerfly_Patches.Models
         public virtual int ?LatLngId { get; set; }
         public virtual LatLng LatLng { get; set; }
 
+        [Url]
         public string Website { get; set; }
     }
 }
