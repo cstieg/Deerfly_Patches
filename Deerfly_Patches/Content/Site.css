@@ -3,6 +3,7 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+
 }
 
 /* Wrapping element */
@@ -88,12 +89,6 @@ h2 {
     height: 220px;
     margin: auto;
 }
-
-.selected .product-image {
-    border: #b2ff76 thick solid;
-    border-radius: 14px;
-}
-
 
 .selected button {
     border: red thin solid;
