@@ -434,6 +434,7 @@
     <Content Include="Views\Testimonials\Index.cshtml" />
     <Content Include="Views\Testimonials\_ModifyPartial.cshtml" />
     <Content Include="Views\Home\Testimonials.cshtml" />
+    <Content Include="Views\Home\Faq.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

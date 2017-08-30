@@ -30,6 +30,11 @@ namespace Deerfly_Patches.Controllers
             return View(db.Testimonials.ToList());
         }
 
+        public ActionResult Faq()
+        {
+            return View();
+        }
+
         public ActionResult Edit()
         {
             string modelControllers = ConfigurationManager.AppSettings["modelControllers"];
