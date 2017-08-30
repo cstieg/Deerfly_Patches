@@ -184,8 +184,8 @@ h2 {
 
 /* ********************** FAQ page ******************************* */
 .faq {
-    margin: 10px;
-    box-sizing: padding-box;
+    margin: 10px auto;
+    box-sizing: border-box;
     border: thin solid green;
     border-radius: 14px;
     height: 300px;
