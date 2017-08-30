@@ -184,8 +184,27 @@ h2 {
 
 /* ********************** FAQ page ******************************* */
 .faq {
-    border: thin solid gray;
+    margin: 10px;
+    box-sizing: padding-box;
+    border: thin solid green;
     border-radius: 14px;
+    height: 300px;
+}
+
+.c1 {
+    background-color: lightgoldenrodyellow;
+}
+
+.c2 {
+    background-color: lightcyan;
+}
+
+.c3 {
+    background-color: antiquewhite;
+}
+
+.c4 {
+    background-color: lavender;
 }
 
 .qa-question,
@@ -196,7 +215,7 @@ h2 {
 .qa-question {
     font-size: large;
     font-weight: bold;
-    margin-bottom: 10px;
+    height: 100px;
 }
 
 .qa-question::before,
