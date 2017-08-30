@@ -44,7 +44,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Detex</p>
+            <span>&copy; @DateTime.Now.Year - Detex</span>
+            <span class="pull-right">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></span>
         </footer>
         <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
     </div>

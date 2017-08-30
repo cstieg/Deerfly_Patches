@@ -6,6 +6,10 @@ body {
 
 }
 
+footer {
+    font-size: small;
+}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .container {
