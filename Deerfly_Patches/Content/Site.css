@@ -3,12 +3,25 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-image: url("/Content/images/birch-forest-tile.jpg");
+}
 
+.body-content {
+    background-color: #f8fff8;
+}
+
+main {
+    min-height: 70vh;
+    height: 70vh;
+    display: block;
 }
 
 footer {
     font-size: small;
+    bottom: 0;
 }
+
+
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -19,7 +32,6 @@ footer {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    height: 100vh;
     color: #011f01; /* super dark green */
     font-size: medium;
 }
@@ -95,7 +107,7 @@ h2 {
 }
 
 .selected button {
-    border: red thin solid;
+    border: red 2px solid;
     border-radius: 6px;
 }
 
@@ -111,8 +123,11 @@ h2 {
 
 /* ************************* Retailer map page *************** */
 #retailer-map-container {
-    height: 80%;
+    height: 100%;
+    border-radius: 8px;
+    border: thick ridge green;
 }
+
 
 #retailer-map-view {
     height: 100%;

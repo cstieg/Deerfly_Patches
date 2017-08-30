@@ -4,48 +4,51 @@
 
 <h2>Retailer Map</h2>
 
-<div class="row" id="retailer-map-container">
-    <div id="retailer-map-view" class="col-sm-8 col-sm-push-4">
-        <p class="text-center">Loading map; please wait...</p>
-    </div>
-    <div id="retailer-list-view" class="col-sm-4 col-sm-pull-8">
-        <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
-            <label for="zip">Enter your zip</label>
-            <input type="text" name="zip" value="@ViewBag.Zip"/><br />
-
-            <label for="range">Search within </label>
-            <input type="text" name="range" value="@ViewBag.Range"/> miles
-
-            <input type="hidden" name="location" />
-
-            <input type="submit" value="Filter" />
-        </form>
-        <hr />
-        <ul id="retailer-list">
-            Loading retailer data; please wait...
-        </ul>
-    </div>
-
-</div>
-
-<div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
-<div class="hidden" id="zoom">@ViewBag.Zoom</div>
-<div class="hidden" id="location">@if (ViewBag.Location != null)
-    {
-        @ViewBag.Location.ToJson()
-    }</div>
-<ul class="hidden" id="retailer-item-li-template">
-    <li class="retailer-item-li">
-        <div class="retailer-item">
-            <span class="retailer-name"></span><br />
-            <span class="retailer-distance"></span><br />
-            <span class="retailer-address"><br /></span>
-            <a class="retailer-phone" href=""><br /></a>
-            <a class="retailer-website" href=""></a>
+<main>
+    <div class="row" id="retailer-map-container">
+        <div id="retailer-map-view" class="col-sm-8 col-sm-push-4">
+                <p class="text-center">Loading map; please wait...</p>
         </div>
-        <hr />
-    </li>
-</ul>
+        <div id="retailer-list-view" class="col-sm-4 col-sm-pull-8">
+                <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
+                    <label for="zip">Enter your zip</label>
+                    <input type="text" name="zip" value="@ViewBag.Zip" /><br />
+
+                    <label for="range">Search within </label>
+                    <input type="text" name="range" value="@ViewBag.Range" /> miles
+
+                    <input type="hidden" name="location" />
+
+                    <input type="submit" value="Filter" />
+                </form>
+                <hr />
+                <ul id="retailer-list">
+                    Loading retailer data; please wait...
+                </ul>
+        </div>
+    </div>
+
+    <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
+    <div class="hidden" id="zoom">@ViewBag.Zoom</div>
+    <div class="hidden" id="location">@if (ViewBag.Location != null)
+        {
+            @ViewBag.Location.ToJson()
+        }
+    </div>
+    <ul class="hidden" id="retailer-item-li-template">
+        <li class="retailer-item-li">
+            <div class="retailer-item">
+                <span class="retailer-name"></span><br />
+                <span class="retailer-distance"></span><br />
+                <span class="retailer-address"><br /></span>
+                <a class="retailer-phone" href=""><br /></a>
+                <a class="retailer-website" href=""></a>
+            </div>
+            <hr />
+        </li>
+    </ul>
+
+</main>
 
 <script src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
 <script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError();"></script>

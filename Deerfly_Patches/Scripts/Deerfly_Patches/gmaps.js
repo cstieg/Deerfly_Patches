@@ -129,7 +129,7 @@ var retailerMap = {
 function initialMap() {
     // If zip has been specified, set location passed from server
     var position = "";
-    var positionText = $('#location').text();
+    var positionText = ($('#location').text()).trim();
     if (positionText) {
         position = JSON.parse(positionText);
     }
