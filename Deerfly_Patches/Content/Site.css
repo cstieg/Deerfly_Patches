@@ -15,7 +15,8 @@ body {
     padding-left: 15px;
     padding-right: 15px;
     height: 100vh;
-    color: darkgreen;
+    color: #011f01; /* super dark green */
+    font-size: medium;
 }
 
 .row {
@@ -29,7 +30,7 @@ body {
     height: 100%;
     max-width: 300px;
     margin: 0 auto;
-    display: inline-block;
+    display: block;
     border-radius: 14px;
 }
 
@@ -44,6 +45,21 @@ body {
     font-size: small;
     padding: 45px 10px 20px 100px;
 }
+
+h2 {
+    background-color: #225f22;
+    color: white;
+    padding: 8px;
+    border: thin ridge yellow;
+    border-radius: 6px;
+}
+
+/* ****************************** Navbar ****************************************** */
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav li a {
+    color: #b2ff76;
+}
+
 
 /* Shopping Cart Icon Fix */
 .glyphicon {
@@ -74,7 +90,7 @@ body {
 }
 
 .selected .product-image {
-    border: lightgreen thick solid;
+    border: #b2ff76 thick solid;
     border-radius: 14px;
 }
 
@@ -165,6 +181,48 @@ body {
 .selected-testimonial {
     font-weight: bold;
 }
+
+/* ********************** FAQ page ******************************* */
+.faq {
+    border: thin solid gray;
+    border-radius: 14px;
+}
+
+.qa-question,
+.qa-answer {
+    padding: 8px;
+}
+
+.qa-question {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.qa-question::before,
+.qa-answer::before {
+    font-size: 20pt;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    border: green outset thick;
+    border-radius: 14px;
+    float: left;
+    width: 2em;
+    height: 2em;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.qa-question::before {
+    content: 'Q';
+}
+.qa-answer::before {
+    content: 'A';
+}
+
+
+
 
 /* ********************* Overrides ******************************* */
 .centered {
