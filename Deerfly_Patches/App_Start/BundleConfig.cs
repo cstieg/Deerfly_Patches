@@ -23,6 +23,12 @@ namespace Deerfly_Patches
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/site").Include(
+                      "~/Scripts/site.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/gmaps").Include(
+                      "~/Scripts/gmaps.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

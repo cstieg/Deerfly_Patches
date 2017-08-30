@@ -50,5 +50,5 @@
 
 </main>
 
-<script src="~/Scripts/Deerfly_Patches/gmaps.js"></script>
+@Scripts.Render("~/bundles/gmaps")
 <script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError();"></script>
