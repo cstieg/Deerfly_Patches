@@ -4,8 +4,7 @@ using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using System.Web;
-using System.IO;
-using Deerfly_Patches.Modules;
+using Deerfly_Patches.Modules.FileStorage;
 
 namespace Deerfly_Patches.Controllers
 {

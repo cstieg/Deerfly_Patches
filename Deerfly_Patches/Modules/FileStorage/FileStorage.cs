@@ -1,7 +1,8 @@
-﻿using System.IO;
+﻿using Deerfly_Patches.Modules.Azure;
+using System.IO;
 using System.Web;
 
-namespace Deerfly_Patches.Modules
+namespace Deerfly_Patches.Modules.FileStorage
 {
     public class FileStorage
     {

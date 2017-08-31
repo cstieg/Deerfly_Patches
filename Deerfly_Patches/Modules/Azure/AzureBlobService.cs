@@ -5,7 +5,7 @@ using System;
 using System.Web;
 
 
-namespace Deerfly_Patches.Modules
+namespace Deerfly_Patches.Modules.Azure
 {
     public class AzureBlobService
     {
