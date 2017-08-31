@@ -21,7 +21,9 @@ footer {
     bottom: 0;
 }
 
-
+.larger-text {
+    font-size: larger;
+}
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -67,8 +69,9 @@ h2 {
     background-color: #225f22;
     color: white;
     padding: 8px;
-    border: thin ridge yellow;
+    border: 2px outset #b2ff76;
     border-radius: 6px;
+    margin: 12px;
 }
 
 /* ****************************** Navbar ****************************************** */
@@ -87,10 +90,8 @@ h2 {
 /* **************************** Product display *********************************** */
 .product-item {
     height: auto;
-    margin-top: 12px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     padding: 5px;
-    border: transparent thick solid;
     border-radius: 14px;
 }
 
@@ -106,8 +107,22 @@ h2 {
     margin: auto;
 }
 
-.selected button {
-    border: red 2px solid;
+.product-item button {
+    background-color: red;
+    color: white;
+    font-size: larger;
+    min-width: 100px;
+    min-height: 20px;
+    border: gray 2px outset;
+}
+
+.product-item button:hover {
+    background-color: maroon;
+    color: white;
+}
+
+.product-item.selected button {
+    border: black 2px solid;
     border-radius: 6px;
 }
 
