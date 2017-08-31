@@ -1,7 +1,6 @@
 ﻿/* ***************** COMMON ***************************************** */
 
 body {
-    padding-top: 25px;
     padding-bottom: 20px;
     background-image: url("/Content/images/birch-forest-tile.jpg");
 }
@@ -25,10 +24,9 @@ footer {
     font-size: larger;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
 .container {
     height: auto;
+    padding: 0; /* Remove padding added by Bootstrap */
 }
 
 .body-content {
@@ -57,6 +55,7 @@ footer {
     position: absolute;
     width: 100%;
     max-height: 290px;
+    max-width: 350px;
 }
 
 .foreground-text {
@@ -78,6 +77,36 @@ h2 {
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-nav li a {
     color: #b2ff76;
+}
+
+.logo {
+    width: 204px;
+    height: 72px;
+    margin: 3px;
+}
+
+.navbar {
+    margin: 0;
+}
+
+.navbar-header {
+    max-width: 100%;
+}
+
+.container > .navbar-header {
+    margin: 0;
+}
+
+.mynav {
+    font-weight: bold;
+    font-size: medium;
+    margin-top: 4px;
+}
+
+.mynav > li {
+    background-color: #225f22;
+    border-radius: 14px;
+    margin: 10px;
 }
 
 
