@@ -24,10 +24,10 @@ namespace Deerfly_Patches
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                      "~/Scripts/site.js"));
+                      "~/Scripts/Deerfly_Patches/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gmaps").Include(
-                      "~/Scripts/gmaps.js"));
+                      "~/Scripts/Deerfly_Patches/gmaps.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
