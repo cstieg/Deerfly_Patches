@@ -298,9 +298,15 @@
     <Compile Include="Models\PromoCode.cs" />
     <Compile Include="Models\Retailer.cs" />
     <Compile Include="Models\Testimonial.cs" />
-    <Compile Include="Modules\AzureBlobService.cs" />
+    <Compile Include="Modules\FileStorage\AzureBlobException.cs" />
+    <Compile Include="Modules\FileStorage\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
-    <Compile Include="Modules\FileStorage.cs" />
+    <Compile Include="Modules\FileStorage\InvalidFileTypeException.cs" />
+    <Compile Include="Modules\FileStorage\FileSaver.cs" />
+    <Compile Include="Modules\FileStorage\FileSystemService.cs" />
+    <Compile Include="Modules\FileStorage\ImageResizer.cs" />
+    <Compile Include="Modules\FileStorage\IFileSaver.cs" />
+    <Compile Include="Modules\FileStorage\ImageSaver.cs" />
     <Compile Include="Modules\Geography\GeoLocation.cs" />
     <Compile Include="Modules\Geography\GeoRange.cs" />
     <Compile Include="Modules\Google\GoogleMapsClient.cs" />

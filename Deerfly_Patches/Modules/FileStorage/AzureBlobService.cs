@@ -5,9 +5,9 @@ using System;
 using System.Web;
 
 
-namespace Deerfly_Patches.Modules.Azure
+namespace Deerfly_Patches.Modules.FileStorage
 {
-    public class AzureBlobService
+    public class AzureBlobService : IFileSaver
     {
         private string _connectionString;
         private string _containerName;
@@ -17,6 +17,20 @@ namespace Deerfly_Patches.Modules.Azure
             _connectionString = connectionString;
             _containerName = containerName;
             ConfigureBlobContainer();
+        }
+
+        /// <summary>
+        /// An alias for UploadFile fulfilling the IFileSaver interface
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public string SaveFile(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength != 0)
+            {
+                return UploadFile(file);
+            }
+            return "";
         }
 
         public string UploadFile(HttpPostedFileBase file)
@@ -41,11 +55,10 @@ namespace Deerfly_Patches.Modules.Azure
                 SetPublicContainerPermissions(blobContainer);
                 return blob.Uri.AbsoluteUri;
             }
-            catch (Exception e)
+            catch
             {
-                //log.Error("Failure to upload file to blob");
+                throw new AzureBlobException("Failure to upload file to blob");
             }
-            return "";
         }
 
         private void ConfigureBlobContainer()
@@ -64,7 +77,7 @@ namespace Deerfly_Patches.Modules.Azure
             }
             catch (Exception e)
             {
-                //log.Error("Failure to create or configure blob storage service");
+                throw new AzureBlobException("Failure to create or configure blob storage service");
             }
 
         }

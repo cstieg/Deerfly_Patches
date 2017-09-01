@@ -58,7 +58,7 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileStorage().SaveImage(imageFile);
+                string urlPath = new FileSaver().SaveFile(imageFile);
                 if (urlPath != "")
                 {
                     product.ImageURL = urlPath;
@@ -100,7 +100,7 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileStorage().SaveImage(imageFile);
+                string urlPath = new FileSaver().SaveImage(imageFile);
                 if (urlPath != "")
                 {
                     product.ImageURL = urlPath;

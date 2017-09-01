@@ -7,13 +7,8 @@ namespace Deerfly_Patches
 {
     public class RouteConfig
     {
-        public static string imagesFolder = "/content/images";
-        public static string imagesPath = HostingEnvironment.MapPath("~" + imagesFolder);
-        public static string productImagesFolder = imagesFolder + "/products";
-        public static string productImagesPath = imagesPath + "/products";
-        public static string testimonialImagesFolder = imagesFolder + "/testimonials";
-        public static string testimonialImagesPath = imagesPath + "/testimonials";
-        public static Boolean storeInCloud = false;
+        public static string contentFolder = "/content";
+        public static string storageService = "fileSystem";
         
 
         public static void RegisterRoutes(RouteCollection routes)

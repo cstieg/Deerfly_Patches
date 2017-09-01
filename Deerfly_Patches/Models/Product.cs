@@ -22,6 +22,7 @@ namespace Deerfly_Patches.Models
         [Url]
         [DisplayName("Upload image file")]
         public string ImageURL { get; set; }
+        public string ImageSrcSet { get; set; }
 
         [StringLength(50)]
         public string Category { get; set; }
