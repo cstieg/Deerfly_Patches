@@ -6,7 +6,7 @@
          onmouseover="$(this).addClass('selected');" 
          onmouseout="$(this).removeClass('selected');">
     <div class="image-wrapper">
-        <img class="product-image" src="@item.ImageUrl" alt="@item.Name image" />
+        <img class="product-image" src="@item.ImageUrl" srcset="@item.ImageSrcSet" alt="@item.Name image" />
     </div>
     <h4 class="product-name">@item.Name</h4>
     <p class="product-description">@item.Description</p>

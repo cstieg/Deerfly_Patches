@@ -45,22 +45,23 @@ namespace Deerfly_Patches.Modules.FileStorage
 
         public string SaveFile(Stream stream, string name)
         {
-            if (stream.Length != 0)
+            if (stream.Length == 0)
             {
-                return _fileSaver.SaveFile(stream, name);
-                
+                throw new NoDataException("There is no data in this stream!");
             }
-            return "";
-            
+
+            name = name.Replace(' ', '_');
+            return _fileSaver.SaveFile(stream, name);
         }
 
         public string SaveFile(HttpPostedFileBase file)
         {
-            if (file.ContentLength != 0)
+            if (file.InputStream.Length == 0)
             {
-                return SaveFile(file.InputStream, file.FileName);
+                throw new NoDataException("There is no data in this stream!");
             }
-            return "";
+
+            return SaveFile(file.InputStream, file.FileName);
         }
     }
 }
