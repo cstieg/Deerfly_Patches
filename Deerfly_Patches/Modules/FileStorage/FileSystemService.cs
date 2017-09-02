@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Web;
 using System.Web.Hosting;
 
 namespace Deerfly_Patches.Modules.FileStorage
@@ -9,26 +8,29 @@ namespace Deerfly_Patches.Modules.FileStorage
         public string BaseDiskPath { get; set; }
         public string BaseUrlPath { get; set; }
 
-        public FileSystemService(string baseDiskPath, string baseUrlPath = "")
+        public FileSystemService(string baseUrlPath, string baseDiskPath = "")
         {
-            BaseDiskPath = baseDiskPath;
-            if (baseUrlPath == "")
+            BaseUrlPath = baseUrlPath;
+            if (baseDiskPath == "")
             {
-                BaseUrlPath = HostingEnvironment.MapPath("~" + BaseDiskPath);
+                BaseDiskPath = HostingEnvironment.MapPath("~" + BaseUrlPath);
             }
             else
             {
-                BaseUrlPath = baseUrlPath;
+                BaseDiskPath = baseDiskPath;
             }
         }
 
-        public string SaveFile(HttpPostedFileBase file)
+        public string SaveFile(Stream stream, string name)
         {
-            if (file != null && file.ContentLength != 0)
+            if (stream.Length != 0)
             {
-                string filePath = Path.Combine(BaseDiskPath, file.FileName);
-                string fileUrl = BaseUrlPath + "/" + file.FileName;
-                file.SaveAs(filePath);
+                string filePath = Path.Combine(BaseDiskPath, name);
+                string fileUrl = BaseUrlPath + "/" + name;
+                using (FileStream savingFile = File.Create(filePath))
+                {
+                    stream.CopyTo(savingFile);
+                }
                 return fileUrl;
             }
             return "";

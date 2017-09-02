@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
+using System.IO;
 using System.Web;
 
 
@@ -24,16 +25,16 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public string SaveFile(HttpPostedFileBase file)
+        public string SaveFile(Stream stream, string name)
         {
-            if (file != null && file.ContentLength != 0)
+            if (stream.Length != 0)
             {
-                return UploadFile(file);
+                return UploadFile(stream, name);
             }
             return "";
         }
 
-        public string UploadFile(HttpPostedFileBase file)
+        public string UploadFile(Stream stream, string name)
         {
             try
             {
@@ -41,17 +42,14 @@ namespace Deerfly_Patches.Modules.FileStorage
                                    DateTime.Now.Month.ToString() +
                                    DateTime.Now.Day.ToString() +
                                    DateTime.Now.Millisecond.ToString() +
-                                   file.FileName);
+                                   name);
 
 
                 CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting(_connectionString));
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 CloudBlobContainer blobContainer = blobClient.GetContainerReference(_containerName);
                 CloudBlockBlob blob = blobContainer.GetBlockBlobReference(timeStampedFileName);
-                using (var filestream = file.InputStream)
-                {
-                    blob.UploadFromStream(filestream);
-                }
+                blob.UploadFromStream(stream);
                 SetPublicContainerPermissions(blobContainer);
                 return blob.Uri.AbsoluteUri;
             }
@@ -75,7 +73,7 @@ namespace Deerfly_Patches.Modules.FileStorage
                     //log.Information("Successfully created public blob storage container");
                 }
             }
-            catch (Exception e)
+            catch
             {
                 throw new AzureBlobException("Failure to create or configure blob storage service");
             }

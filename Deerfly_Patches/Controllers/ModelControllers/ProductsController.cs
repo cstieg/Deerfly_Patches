@@ -5,12 +5,14 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using System.Web;
 using Deerfly_Patches.Modules.FileStorage;
+using System;
 
 namespace Deerfly_Patches.Controllers
 {
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ImageSaver imageSaver = new ImageSaver("images/products");
         private string[] validImageTypes = new string[]
         {
             "image/gif",
@@ -58,15 +60,21 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileSaver().SaveFile(imageFile);
-                if (urlPath != "")
+                try
                 {
-                    product.ImageURL = urlPath;
-                }
+                    string urlPath = imageSaver.SaveFile(imageFile);
+                    product.ImageUrl = urlPath;
 
-                db.Products.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    // add new model
+                    db.Products.Add(product);
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                }
             }
 
             return View(product);
@@ -100,15 +108,22 @@ namespace Deerfly_Patches.Controllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileSaver().SaveImage(imageFile);
-                if (urlPath != "")
+                try
                 {
-                    product.ImageURL = urlPath;
+                    product.ImageUrl = imageSaver.SaveFile(imageFile);
+                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile);
+
+                    // edit model
+                    db.Entry(product).State = EntityState.Modified;
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
                 }
 
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
             return View(product);
         }

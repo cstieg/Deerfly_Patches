@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules;
+using Deerfly_Patches.Modules.FileStorage;
 
 namespace Deerfly_Patches.Controllers.ModelControllers
 {
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ImageSaver imageSaver = new ImageSaver("images/testimonials");
         private string[] validImageTypes = new string[]
         {
             "image/gif",
@@ -62,15 +60,22 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileStorage().SaveImage(imageFile);
-                if (urlPath != "")
+                try
                 {
+                    string urlPath = imageSaver.SaveFile(imageFile);
                     testimonial.ImageUrl = urlPath;
+
+                    // add new model
+                    db.Testimonials.Add(testimonial);
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("ImageURL", "Failure saving image. Please try again.");
                 }
 
-                db.Testimonials.Add(testimonial);
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
             return View(testimonial);
@@ -104,15 +109,21 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
-                string urlPath = new FileStorage().SaveImage(imageFile);
-                if (urlPath != "")
+                try
                 {
+                    string urlPath = imageSaver.SaveFile(imageFile);
                     testimonial.ImageUrl = urlPath;
-                }
 
-                db.Entry(testimonial).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    // edit model
+                    db.Entry(testimonial).State = EntityState.Modified;
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                }
             }
             return View(testimonial);
         }

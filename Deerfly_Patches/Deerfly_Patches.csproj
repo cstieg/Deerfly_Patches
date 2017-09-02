@@ -285,6 +285,10 @@
     <Compile Include="Migrations\201708310116598_urlannotations.Designer.cs">
       <DependentUpon>201708310116598_urlannotations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709012116058_productimagesrcset.cs" />
+    <Compile Include="Migrations\201709012116058_productimagesrcset.Designer.cs">
+      <DependentUpon>201709012116058_productimagesrcset.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -301,6 +305,8 @@
     <Compile Include="Modules\FileStorage\AzureBlobException.cs" />
     <Compile Include="Modules\FileStorage\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
+    <Compile Include="Modules\FileStorage\StreamHelper.cs" />
+    <Compile Include="Modules\FileStorage\Filename.cs" />
     <Compile Include="Modules\FileStorage\InvalidFileTypeException.cs" />
     <Compile Include="Modules\FileStorage\FileSaver.cs" />
     <Compile Include="Modules\FileStorage\FileSystemService.cs" />
@@ -503,6 +509,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708310116598_urlannotations.resx">
       <DependentUpon>201708310116598_urlannotations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709012116058_productimagesrcset.resx">
+      <DependentUpon>201709012116058_productimagesrcset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

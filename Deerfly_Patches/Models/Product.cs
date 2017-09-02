@@ -19,9 +19,8 @@ namespace Deerfly_Patches.Models
 
         public decimal Shipping { get; set; }
 
-        [Url]
         [DisplayName("Upload image file")]
-        public string ImageURL { get; set; }
+        public string ImageUrl { get; set; }
         public string ImageSrcSet { get; set; }
 
         [StringLength(50)]
@@ -29,7 +28,8 @@ namespace Deerfly_Patches.Models
 
         public bool DisplayOnFrontPage { get; set; }
 
-        [Url]
+        [Url(ErrorMessage = "Enter valid Url beginning with 'http://' or 'https://'")]
+        [DisplayName("PayPal purchase URL")]
         public string PayPalUrl { get; set; }
     }
 }

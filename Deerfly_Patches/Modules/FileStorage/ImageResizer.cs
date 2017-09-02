@@ -10,7 +10,7 @@ namespace Deerfly_Patches.Modules.FileStorage
 
         public ImageResizer(Stream imageStream )
         {
-            _webImage = new WebImage(imageStream);
+            _webImage = new WebImage(imageStream.CloneToMemoryStream());
         }
 
         public WebImage GetResizedImage(int width)
@@ -38,6 +38,11 @@ namespace Deerfly_Patches.Modules.FileStorage
         public void SaveImageAsSizes(string filePath, int[] widths, int defaultWidth = 480)
         {
 
+        }
+
+        public int GetImageWidth()
+        {
+            return _webImage.Width;
         }
 
 

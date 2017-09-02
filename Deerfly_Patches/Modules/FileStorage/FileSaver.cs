@@ -1,16 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
     public class FileSaver : IFileSaver
     {
-        private IFileSaver _fileSaver;
-        private string _storageService;
-        private string _folder;
+        protected IFileSaver _fileSaver;
+        protected string _storageService;
+        protected string _folder;
         
-        public FileSaver(string storageService = "", string folder = "")
+        public FileSaver(string folder, string storageService = "")
         {
+            _folder = folder;
+
             if (storageService == "")
             {
                 _storageService = RouteConfig.storageService;
@@ -19,8 +22,6 @@ namespace Deerfly_Patches.Modules.FileStorage
             {
                 _storageService = storageService;
             }
-
-            _folder = folder;
 
             switch (_storageService)
             { 
@@ -42,14 +43,24 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
         }
 
-        public string SaveFile(HttpPostedFileBase file)
+        public string SaveFile(Stream stream, string name)
         {
-            if (file != null && file.ContentLength != 0)
+            if (stream.Length != 0)
             {
-                return _fileSaver.SaveFile(file);
+                return _fileSaver.SaveFile(stream, name);
+                
             }
             return "";
             
+        }
+
+        public string SaveFile(HttpPostedFileBase file)
+        {
+            if (file.ContentLength != 0)
+            {
+                return SaveFile(file.InputStream, file.FileName);
+            }
+            return "";
         }
     }
 }
