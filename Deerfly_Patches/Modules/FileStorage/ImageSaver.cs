@@ -49,20 +49,27 @@ namespace Deerfly_Patches.Modules.FileStorage
             return SaveFile(file.InputStream, file.FileName, maxWidth);
         }
 
-
         public string SaveFile(Stream stream, string name, int? maxWidth)
         {
             if (maxWidth != null)
             {
                 ImageResizer imageResizer = new ImageResizer(stream);
-                if (imageResizer.GetImageWidth() > maxWidth)
+                int imageWidth = imageResizer.GetImageWidth();
+                if (imageWidth > maxWidth)
                 {
                     Stream resizedStream = imageResizer.GetResizedImage((int)(maxWidth)).GetImageStream();
                     stream = resizedStream;
+                    imageWidth = (int)(maxWidth);
                 }
+                name = GetResizedFileName(name, (int)(imageWidth));
             }
 
             return base.SaveFile(stream, name);
+        }
+
+        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null)
+        {
+            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes);
         }
 
         public string SaveImageMultipleSizes(Stream stream, string name, List<int> sizes = null)
@@ -74,26 +81,47 @@ namespace Deerfly_Patches.Modules.FileStorage
 
             List<string> srcSetItems = new List<string>();
 
+            // For small images (smaller than largest desired width), remove target sizes that are larger than original image,
+            // so as not to attempt expanding image.
+            int imageWidth = new ImageResizer(stream).GetImageWidth();
+            sizes = GetAdjustedSizeList(sizes, imageWidth);
+
             MemoryStream memoryStream = stream.CloneToMemoryStream();
 
             for (var i = 0; i < sizes.Count; i++)
             {
-                // Todo: check if image sizes is larger than desired sizes; if not, return largest possible, skip others
-                Filename imageFilename = new Filename(name);
-                string url = SaveFile(memoryStream, imageFilename.BaseName + "-w" + sizes[i].ToString() + imageFilename.Extension, sizes[i]);
+                string url = SaveFile(memoryStream, name, sizes[i]);
                 srcSetItems.Add(url + " " + sizes[i] + "w");
             }
 
             string srcset = string.Join(", ", srcSetItems);
             return srcset;
-
-
         }
 
-        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null)
+        public string GetResizedFileName(string filename, int size)
         {
-            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes);
+            Filename imageFilename = new Filename(filename);
+            return imageFilename.BaseName + "-w" + size.ToString() + imageFilename.Extension;
         }
 
+        public List<int> GetAdjustedSizeList(List<int> sizes, int originalWidth)
+        {
+            sizes = sizes.Clone();
+            Boolean isUndersizedImage = false;
+            sizes.ForEach(s =>
+            {
+                if (s > originalWidth)
+                {
+                    sizes.Remove(s);
+                    isUndersizedImage = true;
+                }
+            });
+            // Add original (largest possible) size in case of small image
+            if (isUndersizedImage)
+            {
+                sizes.Add(originalWidth);
+            }
+            return sizes;
+        }
     }
 }

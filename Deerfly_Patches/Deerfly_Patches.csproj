@@ -305,6 +305,8 @@
     <Compile Include="Modules\FileStorage\AzureBlobException.cs" />
     <Compile Include="Modules\FileStorage\AzureBlobService.cs" />
     <Compile Include="Modules\ControllerExtensions.cs" />
+    <Compile Include="Modules\FileStorage\ListHelper.cs" />
+    <Compile Include="Modules\FileStorage\NoDataException.cs" />
     <Compile Include="Modules\FileStorage\StreamHelper.cs" />
     <Compile Include="Modules\FileStorage\Filename.cs" />
     <Compile Include="Modules\FileStorage\InvalidFileTypeException.cs" />

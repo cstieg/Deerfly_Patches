@@ -6,6 +6,7 @@ using Deerfly_Patches.Models;
 using System.Web;
 using Deerfly_Patches.Modules.FileStorage;
 using System;
+using System.Collections.Generic;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -110,8 +111,8 @@ namespace Deerfly_Patches.Controllers
                 // Save image to disk and store filepath in model
                 try
                 {
-                    product.ImageUrl = imageSaver.SaveFile(imageFile);
-                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile);
+                    product.ImageUrl = imageSaver.SaveFile(imageFile, 800);
+                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100});
 
                     // edit model
                     db.Entry(product).State = EntityState.Modified;
@@ -119,7 +120,7 @@ namespace Deerfly_Patches.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch (Exception e)
+                catch
                 {
                     ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
                 }
