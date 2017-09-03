@@ -3,10 +3,15 @@
 body {
     padding-bottom: 20px;
     background-image: url("/Content/images/birch-forest-tile.jpg");
+    box-sizing: border-box;
 }
 
 .body-content {
     background-color: #f8fff8;
+    color: #011f01; /* super dark green */
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: medium;
 }
 
 main {
@@ -26,20 +31,26 @@ footer {
 
 .container {
     height: auto;
-    padding: 0; /* Remove padding added by Bootstrap */
 }
 
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-    color: #011f01; /* super dark green */
-    font-size: medium;
+main.container {
+    padding: 0;
+}
+
+.model-views-container {
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    background-color: #f8fff8;
+    box-sizing: border-box;
 }
 
 .row {
     height: auto;
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 
 .image-square-rounded {
@@ -55,13 +66,13 @@ footer {
     position: absolute;
     width: 100%;
     max-height: 290px;
-    max-width: 350px;
+    max-width: 310px;
 }
 
 .foreground-text {
     position: inherit;
     font-size: small;
-    padding: 45px 10px 20px 100px;
+    padding: 40px 10px 20px 80px;
 }
 
 h2 {

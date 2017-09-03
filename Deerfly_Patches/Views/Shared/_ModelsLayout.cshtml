@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Deerfly Patches</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
+
+    <!-- Favicon links-->
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/Content/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/Content/images/favicon/apple-icon-76x76.png">
+    <link rel="icon" type="image/png" sizes="72x72" href="/Content/images/favicon/android-icon-72x72.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/Content/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/Content/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/Content/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/Content/images/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/"><img class="logo" src="~/Content/images/deerflypatches-logo.png" /></a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav mynav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Retailer Map", "Index", "RetailerMap")</li>
+                    <li>@Html.ActionLink("Testimonials", "Testimonials", "Home")</li>
+                    <li>@Html.ActionLink("FAQ", "Faq", "Home")</li>
+                    <!--
+                    <li>@Html.ActionLink("Order", "Index", "Order")</li>
+                    <li>
+                        <a href="/shoppingcart"><span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart</a>
+                    </li>
+                        -->
+                </ul>
+                <!--
+                @Html.Partial("_LoginPartial")
+                    -->
+            </div>
+        </div>
+    </div>
+    <div class="model-views-container">
+        @RenderBody()
+        <hr />
+        <footer>
+            <span>&copy; @DateTime.Now.Year - Detex</span>
+            <span class="pull-right">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></span>
+        </footer>
+        <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/site")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
