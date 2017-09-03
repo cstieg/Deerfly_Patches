@@ -21,8 +21,8 @@ namespace Deerfly_Patches.Models
         [DisplayName("Date of testimonial (optional)")]
         public DateTime ?Date { get; set; }
 
-        [Required]
         [DisplayName("Upload image file")]
         public string ImageUrl { get; set; }
+        public string ImageSrcSet { get; set; }
     }
 }

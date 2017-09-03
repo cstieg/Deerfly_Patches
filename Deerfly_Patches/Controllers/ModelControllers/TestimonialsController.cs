@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.FileStorage;
+using System.Collections.Generic;
 
 namespace Deerfly_Patches.Controllers.ModelControllers
 {
@@ -12,13 +13,6 @@ namespace Deerfly_Patches.Controllers.ModelControllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ImageSaver imageSaver = new ImageSaver("images/testimonials");
-        private string[] validImageTypes = new string[]
-        {
-            "image/gif",
-            "image/jpeg",
-            "image/png"
-        };
-
 
         // GET: Testimonials
         public ActionResult Index()
@@ -55,27 +49,26 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         public ActionResult Create([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request);
+            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "");
 
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
                 try
                 {
-                    string urlPath = imageSaver.SaveFile(imageFile);
-                    testimonial.ImageUrl = urlPath;
-
-                    // add new model
-                    db.Testimonials.Add(testimonial);
-
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    testimonial.ImageUrl = imageSaver.SaveFile(imageFile, 200);
+                    testimonial.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
                 }
                 catch
                 {
-                    ModelState.AddModelError("ImageURL", "Failure saving image. Please try again.");
+                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                    return View(testimonial);
                 }
 
+                // add new model
+                db.Testimonials.Add(testimonial);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
             return View(testimonial);
@@ -104,27 +97,32 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         public ActionResult Edit([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request);
+            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, testimonial.ImageUrl);
 
             if (ModelState.IsValid)
             {
-                // Save image to disk and store filepath in model
-                try
+                // imageFile is null if no file was uploaded, but previous file exists
+                if (imageFile != null)
                 {
-                    string urlPath = imageSaver.SaveFile(imageFile);
-                    testimonial.ImageUrl = urlPath;
-
-                    // edit model
-                    db.Entry(testimonial).State = EntityState.Modified;
-
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    // Save image to disk and store filepath in model
+                    try
+                    {
+                        testimonial.ImageUrl = imageSaver.SaveFile(imageFile, 200);
+                        testimonial.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                        return View(testimonial);
+                    }
                 }
-                catch
-                {
-                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
-                }
+
+                // edit model
+                db.Entry(testimonial).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
+
             return View(testimonial);
         }
 
@@ -161,27 +159,6 @@ namespace Deerfly_Patches.Controllers.ModelControllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private HttpPostedFileBase GetImageFile(ModelStateDictionary ModelState, HttpRequestBase Request)
-        {
-            // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = null;
-            if (Request.Files.Count == 0)
-            {
-                ModelState.AddModelError("ImageUrl", "This field is required");
-            }
-            else
-            {
-                imageFile = Request.Files[0];
-            }
-
-            if (imageFile != null && (imageFile.ContentLength == 0 || !validImageTypes.Contains(imageFile.ContentType)))
-            {
-                ModelState.AddModelError("ImageUrl", "Please choose either a valid GIF, JPG or PNG image.");
-            }
-
-            return imageFile;
         }
 
     }

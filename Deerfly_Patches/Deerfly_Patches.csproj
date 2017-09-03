@@ -222,6 +222,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
     <Compile Include="Controllers\ModelControllers\TestimonialsController.cs" />
+    <Compile Include="Controllers\ModelControllers\_ModelControllersHelper.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ModelControllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
@@ -288,6 +289,14 @@
     <Compile Include="Migrations\201709012116058_productimagesrcset.cs" />
     <Compile Include="Migrations\201709012116058_productimagesrcset.Designer.cs">
       <DependentUpon>201709012116058_productimagesrcset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709031943067_testimonialAllowRelativeUrl.cs" />
+    <Compile Include="Migrations\201709031943067_testimonialAllowRelativeUrl.Designer.cs">
+      <DependentUpon>201709031943067_testimonialAllowRelativeUrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709032014187_testimonialImageUrlNotRequired.cs" />
+    <Compile Include="Migrations\201709032014187_testimonialImageUrlNotRequired.Designer.cs">
+      <DependentUpon>201709032014187_testimonialImageUrlNotRequired.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -514,6 +523,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709012116058_productimagesrcset.resx">
       <DependentUpon>201709012116058_productimagesrcset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709031943067_testimonialAllowRelativeUrl.resx">
+      <DependentUpon>201709031943067_testimonialAllowRelativeUrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709032014187_testimonialImageUrlNotRequired.resx">
+      <DependentUpon>201709032014187_testimonialImageUrlNotRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

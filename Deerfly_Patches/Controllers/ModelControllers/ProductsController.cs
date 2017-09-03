@@ -14,12 +14,6 @@ namespace Deerfly_Patches.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ImageSaver imageSaver = new ImageSaver("images/products");
-        private string[] validImageTypes = new string[]
-        {
-            "image/gif",
-            "image/jpeg",
-            "image/png"
-        };
 
         // GET: Products
         public ActionResult Index()
@@ -56,7 +50,7 @@ namespace Deerfly_Patches.Controllers
         public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request, "");
+            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "");
 
             if (ModelState.IsValid)
             {
@@ -104,7 +98,7 @@ namespace Deerfly_Patches.Controllers
         public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request, product.ImageUrl);
+            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, product.ImageUrl);
 
             if (ModelState.IsValid)
             {
@@ -166,40 +160,5 @@ namespace Deerfly_Patches.Controllers
             }
             base.Dispose(disposing);
         }
-
-        private HttpPostedFileBase GetImageFile(ModelStateDictionary ModelState, HttpRequestBase Request, string imageUrl)
-        {
-            // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = null;
-
-            if (Request.Files.Count == 0)
-            {
-                // Don't add model error if there is already an image file
-                if (!imageUrl.Equals(""))
-                {
-                    return null;
-                }
-
-                ModelState.AddModelError("ImageUrl", "This field is required");
-            }
-            else
-            {
-                imageFile = Request.Files[0];
-            }
-
-            if (imageFile != null && (imageFile.ContentLength == 0 || !validImageTypes.Contains(imageFile.ContentType)))
-            {
-                // Don't add model error if there is already an image file
-                if (!imageUrl.Equals(""))
-                {
-                    return null;
-                }
-
-                ModelState.AddModelError("ImageUrl", "Please choose either a valid GIF, JPG or PNG image.");
-            }
-
-            return imageFile;
-        }
-
     }
 }
