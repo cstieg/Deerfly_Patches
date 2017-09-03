@@ -53,29 +53,29 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageURL,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request);
+            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request, "");
 
             if (ModelState.IsValid)
             {
                 // Save image to disk and store filepath in model
                 try
                 {
-                    string urlPath = imageSaver.SaveFile(imageFile);
-                    product.ImageUrl = urlPath;
-
-                    // add new model
-                    db.Products.Add(product);
-
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    product.ImageUrl = imageSaver.SaveFile(imageFile, 200);
+                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
                 }
                 catch
                 {
                     ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                    return View(product);
                 }
+
+                // add new model
+                db.Products.Add(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
             return View(product);
@@ -101,30 +101,33 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageURL,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
+        public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
         {
             // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request);
+            HttpPostedFileBase imageFile = GetImageFile(ModelState, Request, product.ImageUrl);
 
             if (ModelState.IsValid)
             {
-                // Save image to disk and store filepath in model
-                try
+                // imageFile is null if no file was uploaded, but previous file exists
+                if (imageFile != null)
                 {
-                    product.ImageUrl = imageSaver.SaveFile(imageFile, 800);
-                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100});
-
-                    // edit model
-                    db.Entry(product).State = EntityState.Modified;
-
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    // Save image to disk and store filepath in model
+                    try
+                    {
+                        product.ImageUrl = imageSaver.SaveFile(imageFile, 200);
+                        product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
+                        return View(product);
+                    }
                 }
-                catch
-                {
-                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
-                }
 
+                // edit model
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(product);
         }
@@ -164,13 +167,20 @@ namespace Deerfly_Patches.Controllers
             base.Dispose(disposing);
         }
 
-        private HttpPostedFileBase GetImageFile(ModelStateDictionary ModelState, HttpRequestBase Request)
+        private HttpPostedFileBase GetImageFile(ModelStateDictionary ModelState, HttpRequestBase Request, string imageUrl)
         {
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = null;
+
             if (Request.Files.Count == 0)
             {
-                ModelState.AddModelError("ImageURL", "This field is required");
+                // Don't add model error if there is already an image file
+                if (!imageUrl.Equals(""))
+                {
+                    return null;
+                }
+
+                ModelState.AddModelError("ImageUrl", "This field is required");
             }
             else
             {
@@ -179,7 +189,13 @@ namespace Deerfly_Patches.Controllers
 
             if (imageFile != null && (imageFile.ContentLength == 0 || !validImageTypes.Contains(imageFile.ContentType)))
             {
-                ModelState.AddModelError("ImageURL", "Please choose either a valid GIF, JPG or PNG image.");
+                // Don't add model error if there is already an image file
+                if (!imageUrl.Equals(""))
+                {
+                    return null;
+                }
+
+                ModelState.AddModelError("ImageUrl", "Please choose either a valid GIF, JPG or PNG image.");
             }
 
             return imageFile;

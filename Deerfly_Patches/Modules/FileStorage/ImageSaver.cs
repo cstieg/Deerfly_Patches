@@ -106,22 +106,25 @@ namespace Deerfly_Patches.Modules.FileStorage
 
         public List<int> GetAdjustedSizeList(List<int> sizes, int originalWidth)
         {
-            sizes = sizes.Clone();
+            List<int> adjustedSizes = new List<int>();
             Boolean isUndersizedImage = false;
             sizes.ForEach(s =>
             {
-                if (s > originalWidth)
+                if (s <= originalWidth)
                 {
-                    sizes.Remove(s);
+                    adjustedSizes.Add(s);
+                }
+                else
+                { 
                     isUndersizedImage = true;
                 }
             });
             // Add original (largest possible) size in case of small image
             if (isUndersizedImage)
             {
-                sizes.Add(originalWidth);
+                adjustedSizes.Add(originalWidth);
             }
-            return sizes;
+            return adjustedSizes;
         }
     }
 }
