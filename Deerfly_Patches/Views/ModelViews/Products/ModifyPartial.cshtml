@@ -47,6 +47,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+
+                <!-- Image preview -->
                 @if (ViewBag.Title == "Edit")
                 {
                     @Html.HiddenFor(model => model.ImageUrl)
@@ -56,8 +58,9 @@
                 {
                     <img id="upload-image-preview" />
                 }
-                <label for="imageFile" class="btn">Select new image</label>
+                <label for="imageFile" class="btn btn-default">Select new image</label>
                 <input id="imageFile" type="file" name="imageFile" class="hidden" onchange="imageUploadPreview('#upload-image-preview')"/>
+
                 @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
             </div>
         </div>
