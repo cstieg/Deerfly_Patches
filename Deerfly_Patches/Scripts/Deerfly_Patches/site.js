@@ -206,8 +206,11 @@ function countryChange() {
 
 
 /* ******************************* Testimonials ************************************************* */
-function displayTestimonial(id, url) {
-    $('#testimonial-display').html(`<div class="display-table"><div class="display-cell"><img src="${url}" alt="image of customer testimonial" /></div></div>`);
+function displayTestimonial(id, url, srcset) {
+    $('#testimonial-display').html(`
+        <a href="${url}">
+            <img src="${url}" srcset="${srcset}" alt="image of customer testimonial" />
+        </a>`);
     $('.testimonial-lable').removeClass('selected-testimonial');
     $('#' + id).addClass('selected-testimonial');
 }
