@@ -158,7 +158,7 @@ namespace Deerfly_Patches.Controllers
         /// <summary>
         /// Deletes a Product model, along with the associated image files
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">ID of Product model to be deleted</param>
         /// <returns>Redirect to Product Index</returns>
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
