@@ -18,6 +18,9 @@ using System.Linq;
 
 namespace Deerfly_Patches.Modules
 {
+    /// <summary>
+    /// Deserializes JSON string back into an object
+    /// </summary>
     public class JsonDeserializer
     {
         private IDictionary<string, object> jsonData { get; set; }
