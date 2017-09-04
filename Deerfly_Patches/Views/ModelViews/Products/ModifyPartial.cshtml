@@ -60,7 +60,14 @@
                 }
                 <label for="imageFile" class="btn btn-default">Select new image</label>
                 <input id="imageFile" type="file" name="imageFile" class="hidden" onchange="imageUploadPreview('#upload-image-preview')"/>
-
+                <p>
+                    Please keep in mind the following guidelines:
+                </p>
+                <ul>
+                    <li>Filenames should be unique; otherwise they will overwrite older images.</li>
+                    <li>Optimally, filenames should be descriptive -- deerfly40pack.jpg</li>
+                    <li>Use the largest resolution files possible; they will be automatically resized down as necessary.</li>
+                </ul>
                 @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -85,6 +92,7 @@
             @Html.LabelFor(model => model.PayPalUrl, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PayPalUrl, new { htmlAttributes = new { @class = "form-control" } })
+                <p>URL must start with http:// or https://</p>
                 @Html.ValidationMessageFor(model => model.PayPalUrl, "", new { @class = "text-danger" })
             </div>
         </div>
