@@ -6,6 +6,9 @@ using Deerfly_Patches.Modules.PayPal;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// Controller to provide shopping cart view
+    /// </summary>
     public class ShoppingCartController : Controller
     {
         // GET: ShoppingCart

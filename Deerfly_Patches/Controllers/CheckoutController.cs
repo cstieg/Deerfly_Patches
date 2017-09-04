@@ -6,6 +6,9 @@ using Deerfly_Patches.ViewModels;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// Controller to handle checkout of shopping cart through PayPal
+    /// </summary>
     public class CheckoutController : Controller
     {
         // GET: Checkout
@@ -19,7 +22,6 @@ namespace Deerfly_Patches.Controllers
         [HttpPost, ActionName("UpdateShippingAddress")]
         public ActionResult UpdateShippingAddress()
         {
-
             Address shippingAddress = new Address()
             {
                 Recipient = Request.Form["ship-to"],

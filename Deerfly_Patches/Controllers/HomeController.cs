@@ -6,6 +6,9 @@ using System.Web.Mvc;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// Controller for home page
+    /// </summary>
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -35,6 +38,9 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Displays list of links to model edit pages
+        /// </summary>
         public ActionResult Edit()
         {
             string modelControllers = ConfigurationManager.AppSettings["modelControllers"];

@@ -11,6 +11,9 @@ using Deerfly_Patches.Modules;
 
 namespace DeerflyPatches.Controllers
 {
+    /// <summary>
+    /// Controller to handle PayPal interface
+    /// </summary>
     public class PayPalController : Controller
     {
         private PayPalApiClient _paypalClient;

@@ -3,10 +3,12 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.ViewModels;
 using Deerfly_Patches.Modules;
-using System.Web;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// Controller for Order page
+    /// </summary>
     public class OrderController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -17,6 +19,11 @@ namespace Deerfly_Patches.Controllers
             return View(db.Products.ToList());
         }
 
+        /// <summary>
+        /// Adds a product to the shopping cart, or increments if already present
+        /// </summary>
+        /// <param name="id">ID of Product model to add</param>
+        /// <returns>JSON success response</returns>
         [HttpPost, ActionName("AddOrderDetailToShoppingCart")]
         [ValidateAntiForgeryToken]
         public ActionResult AddOrderDetailToShoppingCart(int id)
@@ -43,6 +50,11 @@ namespace Deerfly_Patches.Controllers
             return this.JOk();
         }
 
+        /// <summary>
+        /// Decreases the quantity of an item in the shopping cart
+        /// </summary>
+        /// <param name="id">ID of the Product model qty to decrement</param>
+        /// <returns>JSON success response</returns>
         [HttpPost, ActionName("DecrementItemInShoppingCart")]
         [ValidateAntiForgeryToken]
         public ActionResult DecrementItemInShoppingCart(int id)
@@ -63,12 +75,17 @@ namespace Deerfly_Patches.Controllers
                 return HttpNotFound();
             }
 
-            // Add new order detail to session
+            // Decrement qty and update shopping cart in session
             shoppingCart.DecrementProduct(product);
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
             return this.JOk();
         }
 
+        /// <summary>
+        /// Removes a Product from the shopping cart
+        /// </summary>
+        /// <param name="id">ID of Product model to remove</param>
+        /// <returns>JSON success response</returns>
         [HttpPost, ActionName("RemoveItemInShoppingCart")]
         [ValidateAntiForgeryToken]
         public ActionResult RemoveItemInShoppingCart(int id)
@@ -89,7 +106,7 @@ namespace Deerfly_Patches.Controllers
                 return HttpNotFound();
             }
 
-            // Add new order detail to session
+            // Remove Product and update shopping cart in session
             shoppingCart.RemoveProduct(product);
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
             return this.JOk();
