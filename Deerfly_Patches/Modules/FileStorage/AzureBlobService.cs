@@ -6,32 +6,49 @@ using System.IO;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
+    /// <summary>
+    /// A file manager service to save files using Azure Blob
+    /// </summary>
     public class AzureBlobService : IFileManager
     {
         private string _connectionString;
         private string _containerName;
+        private CloudBlobContainer _blobContainer;
 
+        /// <summary>
+        /// Constructor for AzureBlobService which configures the service
+        /// </summary>
+        /// <param name="connectionString">The connection string used to connect to Azure Blob</param>
+        /// <param name="containerName">The container where this service stores files.  Set by folder param in wrapper.</param>
         public AzureBlobService(string connectionString, string containerName)
         {
             _connectionString = connectionString;
             _containerName = containerName;
             ConfigureBlobContainer();
+            _blobContainer = GetContainer();
         }
 
         /// <summary>
-        /// An alias for UploadFile fulfilling the IFileSaver interface
+        /// An alias for UploadFile to fulfill the IFileManager interface
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="stream">A Stream object containing the file data to be saved</param>
+        /// <param name="name">The filename where the file is to be saved</param>
+        /// <returns>The URL where the saved file can be accessed</returns>
         public string SaveFile(Stream stream, string name)
         {
             if (stream.Length != 0)
             {
                 return UploadFile(stream, name);
             }
-            return "";
+            throw new AzureBlobException("File is empty!");
         }
 
+        /// <summary>
+        /// Uploads a file to Azure Blob
+        /// </summary>
+        /// <param name="stream">A Stream object containing the file data to be uploaded</param>
+        /// <param name="name">The filename where the file is to be uploaded</param>
+        /// <returns>The URL where the uploaded file can be accessed</returns>
         public string UploadFile(Stream stream, string name)
         {
             try
@@ -41,14 +58,13 @@ namespace Deerfly_Patches.Modules.FileStorage
                                    DateTime.Now.Day.ToString() +
                                    DateTime.Now.Millisecond.ToString() +
                                    name);
+                
+                // get blob
+                CloudBlockBlob blob = _blobContainer.GetBlockBlobReference(timeStampedFileName);
 
-
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting(_connectionString));
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-                CloudBlobContainer blobContainer = blobClient.GetContainerReference(_containerName);
-                CloudBlockBlob blob = blobContainer.GetBlockBlobReference(timeStampedFileName);
+                // upload file
                 blob.UploadFromStream(stream);
-                SetPublicContainerPermissions(blobContainer);
+                SetPublicContainerPermissions(_blobContainer);
                 return blob.Uri.AbsoluteUri;
             }
             catch
@@ -57,6 +73,38 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
         }
 
+        /// <summary>
+        /// Deletes a blob
+        /// </summary>
+        /// <param name="filePath">The URL of the blob to delete</param>
+        public void DeleteFile(string filePath)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Deletes all blobs matching wildcard
+        /// </summary>
+        /// <param name="filePath">The URL of the blob to delete containing wildcards</param>
+        public void DeleteFilesWithWildcard(string filePath)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Makes a blob container publicly accessible
+        /// </summary>
+        /// <param name="blobContainer">The blob container to be made publicly accessible</param>
+        public void SetPublicContainerPermissions(CloudBlobContainer blobContainer)
+        {
+            BlobContainerPermissions permissions = blobContainer.GetPermissions();
+            permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+            blobContainer.SetPermissions(permissions);
+        }
+
+        /// <summary>
+        /// Configures the blob container
+        /// </summary>
         private void ConfigureBlobContainer()
         {
             try
@@ -78,21 +126,17 @@ namespace Deerfly_Patches.Modules.FileStorage
 
         }
 
-        public void SetPublicContainerPermissions(CloudBlobContainer blobContainer)
+        /// <summary>
+        /// Gets the blob container for the service
+        /// </summary>
+        /// <returns>A blob container with the name specified in the service</returns>
+        private CloudBlobContainer GetContainer()
         {
-            BlobContainerPermissions permissions = blobContainer.GetPermissions();
-            permissions.PublicAccess = BlobContainerPublicAccessType.Container;
-            blobContainer.SetPermissions(permissions);
-        }
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting(_connectionString));
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer blobContainer = blobClient.GetContainerReference(_containerName);
 
-        public void DeleteFile(string filePath)
-        {
-            // TODO
-        }
-
-        public void DeleteFilesWithWildcard(string filePath)
-        {
-            // TODO
+            return blobContainer;
         }
 
     }

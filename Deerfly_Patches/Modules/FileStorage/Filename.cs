@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Deerfly_Patches.Modules.FileStorage
+﻿namespace Deerfly_Patches.Modules.FileStorage
 {
+    /// <summary>
+    /// Represents a filename, allowing it to be broken down into its constituent components
+    /// </summary>
     public class Filename
     {
+        /// <summary>
+        /// Constructor for Filename
+        /// </summary>
+        /// <param name="filename">Filename to be represented</param>
         public Filename(string filename)
         {
             FileName = filename;
@@ -46,7 +48,6 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
         }
 
-
         public string BaseName
         {
             get
@@ -59,5 +60,9 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
         }
 
+        public override string ToString()
+        {
+            return FileName;
+        }
     }
 }

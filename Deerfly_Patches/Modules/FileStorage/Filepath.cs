@@ -5,14 +5,43 @@ using System.Web;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
+    /// <summary>
+    /// Represents a Filepath, allowing it to be broken down into the folder path and file name
+    /// </summary>
     public class Filepath
     {
+        private string _filePath;
+        public Boolean IsBackslashes = false;
+
+        /// <summary>
+        /// Constructor for Filepath
+        /// </summary>
+        /// <param name="filePath">The filepath to be represented</param>
         public Filepath(string filePath)
         {
-            FilePath = filePath;
+            _filePath = filePath;
         }
 
-        public string FilePath { get; set; }
+        public string FilePath
+        {
+            get
+            {
+                if (IsBackslashes)
+                {
+                    return _filePath.Replace('/', '\\');
+                }
+                return _filePath;
+            }
+            set
+            {
+                if (value.Contains('\\'))
+                {
+                    IsBackslashes = true;
+                    value = value.Replace('\\', '/');
+                }
+                _filePath = value;
+            }
+        }
 
         public int Length
         {
@@ -27,6 +56,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             get
             {
                 int lastSlash = FilePath.LastIndexOf('/');
+                // If there is no slash, there is no path
                 if (lastSlash == -1)
                 {
                     return 0;
@@ -40,6 +70,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             get
             {
                 int lastSlash = FilePath.LastIndexOf('/');
+                // If there is no slash, the entire filepath is the filename
                 if (lastSlash == -1)
                 {
                     return Length;
@@ -70,6 +101,11 @@ namespace Deerfly_Patches.Modules.FileStorage
             {
                 FilePath = value + "/" + Filename;
             }
+        }
+
+        public override string ToString()
+        {
+            return FilePath;
         }
     }
 }

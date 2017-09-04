@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
+    /// <summary>
+    /// The exception that is thrown when Azure Blob encounters a file IO error
+    /// </summary>
     public class AzureBlobException : Exception
     {
         public AzureBlobException() : base() { }
