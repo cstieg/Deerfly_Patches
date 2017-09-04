@@ -11,10 +11,17 @@ using System.Web.Hosting;
 
 namespace Deerfly_Patches.Modules.PayPal
 {
+    /// <summary>
+    /// Client for PayPal API
+    /// </summary>
     public class PayPalApiClient
     {
         private static string payPalBaseURL = "https://api.sandbox.paypal.com/v1/";
 
+        /// <summary>
+        /// Gets client id and secret from PayPal.json in root directory
+        /// </summary>
+        /// <returns>ClientInfo object containing client id info</returns>
         public ClientInfo GetClientSecrets()
         {
             string file = HostingEnvironment.MapPath("/PayPal.json");
@@ -23,9 +30,16 @@ namespace Deerfly_Patches.Modules.PayPal
             return paypalSecrets;
         }
 
+        /// <summary>
+        /// Gets an access token to be able to access PayPal API service
+        /// </summary>
+        /// <param name="paypalSecrets">Object containing PayPal client id info</param>
+        /// <returns>AccessToken to use in accessing PayPal API</returns>
         public async Task<AccessToken> GetAccessToken(ClientInfo paypalSecrets)
         {
             // TODO: Store access token to reuse until expires
+
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -48,6 +62,14 @@ namespace Deerfly_Patches.Modules.PayPal
             }
         }
 
+        /// <summary>
+        /// Make API call to PayPal with specified data.  
+        /// Generic wrapper generalizing elements needed by all API calls, such as access token header.
+        /// </summary>
+        /// <param name="Url">API endpoint URL being called</param>
+        /// <param name="data">Data to pass to endpoint</param>
+        /// <param name="accessToken">Access token authorizing access</param>
+        /// <returns>String result of call</returns>
         public async Task<string> PayPalCall(string Url, string data, string accessToken)
         {
             string result;
@@ -68,6 +90,11 @@ namespace Deerfly_Patches.Modules.PayPal
             return result;
         }
 
+        /// <summary>
+        /// Gets user info from PayPal API
+        /// </summary>
+        /// <param name="accessToken">Access token authorizing API call</param>
+        /// <returns>String result of API call</returns>
         public async Task<string> GetUserInfo(string accessToken)
         {
             string data = JsonConvert.SerializeObject(new
@@ -77,6 +104,11 @@ namespace Deerfly_Patches.Modules.PayPal
             return await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo", data, accessToken);
         }
 
+        /// <summary>
+        /// Creates an order to pass to PayPal API
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart object containing items to put in order</param>
+        /// <returns>JSON representation of the order in the format expected by PayPal</returns>
         public string CreateOrder(ShoppingCart shoppingCart)
         {
             object data = new
@@ -123,6 +155,12 @@ namespace Deerfly_Patches.Modules.PayPal
             return dataJSON;
         }
 
+        /// <summary>
+        /// Posts an order to PayPal API
+        /// </summary>
+        /// <param name="data">JSON order data in PayPal format</param>
+        /// <param name="accessToken">Access token authorizing PayPal call</param>
+        /// <returns></returns>
         public async Task<string> PostOrder(string data, string accessToken)
         {
             string result;
@@ -145,6 +183,11 @@ namespace Deerfly_Patches.Modules.PayPal
             return result;
         }
 
+        /// <summary>
+        /// Converts address to PayPal object format
+        /// </summary>
+        /// <param name="address">Address to convert</param>
+        /// <returns>Object representation of address in PayPal format</returns>
         private object GetPayPalAddress(Address address)
         {
             return new
@@ -160,6 +203,11 @@ namespace Deerfly_Patches.Modules.PayPal
             };
         }
 
+        /// <summary>
+        /// Converts OrderDetail model to PayPal item format
+        /// </summary>
+        /// <param name="orderDetail">OrderDetail object containing item being purchased</param>
+        /// <returns>Purchase item in PayPal object format</returns>
         private object GetPayPalItem(OrderDetail orderDetail)
         {
             return new
@@ -172,6 +220,11 @@ namespace Deerfly_Patches.Modules.PayPal
             };
         }
 
+        /// <summary>
+        /// Converts shopping cart info to PayPal object format
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart containing items to be purchased</param>
+        /// <returns>Shopping cart items in PayPal object format</returns>
         private List<object> GetPayPalItems(ShoppingCart shoppingCart)
         {
             List<object> items = new List<object>();

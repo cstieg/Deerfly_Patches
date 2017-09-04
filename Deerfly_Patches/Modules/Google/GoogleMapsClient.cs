@@ -10,16 +10,29 @@ using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Modules.Google
 {
+    /// <summary>
+    /// Client for Google Maps API
+    /// </summary>
     public class GoogleMapsClient
     {
         public static string apiKey = ConfigurationManager.AppSettings["GoogleMapsApiKey"];
         public static string baseUrl = "https://maps.googleapis.com/maps/api/";
 
+        /// <summary>
+        /// Gets a LatLng from an Address object
+        /// </summary>
+        /// <param name="address">A street address to geocode</param>
+        /// <returns>The LatLng of the given street address</returns>
         public async Task<LatLng> GeocodeAddress(Address address)
         {
             return await GeocodeAddress(address.ToString());
         }
 
+        /// <summary>
+        /// Gets a LatLng from a street address
+        /// </summary>
+        /// <param name="address">A street address to geocode</param>
+        /// <returns>The LatLng of the given street address</returns>
         public async Task<LatLng> GeocodeAddress(string address)
         {
             using (var client = new HttpClient())
@@ -45,13 +58,21 @@ namespace Deerfly_Patches.Modules.Google
             }
         }
 
-
-        // Deserialize json response into an object (nested classes) conforming to google maps api result format
+        /// <summary>
+        /// Deserialize json response into an object (nested classes) conforming to google maps api result format
+        /// </summary>
+        /// <param name="result">The response from Google Maps Geocoding API</param>
+        /// <returns>The geolocation data in object form</returns>
         public GeocodingResponse GetGeocodingResponseObject(string result)
         {
             return JsonConvert.DeserializeObject<GeocodingResponse>(result);
         }
 
+        /// <summary>
+        /// Gets the proper zoom setting for Google Maps with given radius
+        /// </summary>
+        /// <param name="radius">Desired radius of map in miles</param>
+        /// <returns>Zoom setting for Google Maps</returns>
         public static int RadiusToZoom(double radius)
         {
             return (int) Math.Round(14 - Math.Log(radius) / Math.Log(2));
