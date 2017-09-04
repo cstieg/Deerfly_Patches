@@ -38,7 +38,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         {
             get
             {
-                return FileName.Substring(FileName.LastIndexOf('.'));
+                return FileName.Substring(Length - ExtensionLength);
             }
             set
             {
@@ -51,7 +51,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         {
             get
             {
-                return FileName.Substring(0, FileName.LastIndexOf('.'));
+                return FileName.Substring(0, Length - ExtensionLength);
             }
             set
             {

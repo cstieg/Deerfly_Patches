@@ -13,7 +13,7 @@ namespace Deerfly_Patches.Controllers
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private ImageSaver imageSaver = new ImageSaver("images/products");
+        private ImageManager imageManager = new ImageManager("images/products");
 
         // GET: Products
         public ActionResult Index()
@@ -57,8 +57,8 @@ namespace Deerfly_Patches.Controllers
                 // Save image to disk and store filepath in model
                 try
                 {
-                    product.ImageUrl = imageSaver.SaveFile(imageFile, 200);
-                    product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                    product.ImageUrl = imageManager.SaveFile(imageFile, 200);
+                    product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
                 }
                 catch
                 {
@@ -108,8 +108,10 @@ namespace Deerfly_Patches.Controllers
                     // Save image to disk and store filepath in model
                     try
                     {
-                        product.ImageUrl = imageSaver.SaveFile(imageFile, 200);
-                        product.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                        string oldUrl = product.ImageUrl;
+                        product.ImageUrl = imageManager.SaveFile(imageFile, 200);
+                        product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                        imageManager.DeleteImageWithMultipleSizes(oldUrl);
                     }
                     catch
                     {
@@ -147,6 +149,10 @@ namespace Deerfly_Patches.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Product product = db.Products.Find(id);
+
+            // remove image files used by product
+            imageManager.DeleteImageWithMultipleSizes(product.ImageUrl);
+
             db.Products.Remove(product);
             db.SaveChanges();
             return RedirectToAction("Index");

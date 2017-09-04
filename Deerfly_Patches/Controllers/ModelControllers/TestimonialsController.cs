@@ -12,7 +12,7 @@ namespace Deerfly_Patches.Controllers.ModelControllers
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private ImageSaver imageSaver = new ImageSaver("images/testimonials");
+        private ImageManager imageSaver = new ImageManager("images/testimonials");
 
         // GET: Testimonials
         public ActionResult Index()
@@ -107,8 +107,10 @@ namespace Deerfly_Patches.Controllers.ModelControllers
                     // Save image to disk and store filepath in model
                     try
                     {
+                        string oldUrl = testimonial.ImageUrl;
                         testimonial.ImageUrl = imageSaver.SaveFile(imageFile, 1600);
                         testimonial.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 });
+                        imageSaver.DeleteImageWithMultipleSizes(oldUrl);
                     }
                     catch
                     {
@@ -147,6 +149,10 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         public ActionResult DeleteConfirmed(int id)
         {
             Testimonial testimonial = db.Testimonials.Find(id);
+
+            // Remove old image when deleting
+            imageSaver.DeleteImageWithMultipleSizes(testimonial.ImageUrl);
+
             db.Testimonials.Remove(testimonial);
             db.SaveChanges();
             return RedirectToAction("Index");

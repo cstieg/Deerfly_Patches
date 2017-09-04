@@ -3,12 +3,10 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.IO;
-using System.Web;
-
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
-    public class AzureBlobService : IFileSaver
+    public class AzureBlobService : IFileManager
     {
         private string _connectionString;
         private string _containerName;
@@ -85,6 +83,16 @@ namespace Deerfly_Patches.Modules.FileStorage
             BlobContainerPermissions permissions = blobContainer.GetPermissions();
             permissions.PublicAccess = BlobContainerPublicAccessType.Container;
             blobContainer.SetPermissions(permissions);
+        }
+
+        public void DeleteFile(string filePath)
+        {
+            // TODO
+        }
+
+        public void DeleteFilesWithWildcard(string filePath)
+        {
+            // TODO
         }
 
     }

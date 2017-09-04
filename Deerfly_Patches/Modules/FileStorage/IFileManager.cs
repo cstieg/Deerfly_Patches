@@ -2,7 +2,7 @@
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
-    public interface IFileSaver
+    public interface IFileManager
     {
         /// <summary>
         /// Saves a file to some storage medium, whether disk or cloud
@@ -10,5 +10,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="stream">the stream of the file to save</param>
         /// <returns>the URL by which the file is publicly accessible </returns>
         string SaveFile(Stream stream, string name);
+        void DeleteFile(string filePath);
+        void DeleteFilesWithWildcard(string filePath);
     }
 }

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
-    public class ImageSaver : FileSaver
+    public class ImageManager : FileManager
     {
         protected string[] _validImageTypes = new string[]
         {
@@ -19,7 +19,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             1600, 800, 400, 200, 100
         };
 
-        public ImageSaver(string folder, string storageService = "", string[] validImageTypes = null, List<int> imageSizes = null) : base(folder, storageService)
+        public ImageManager(string folder, string storageService = "", string[] validImageTypes = null, List<int> imageSizes = null) : base(folder, storageService)
         {
             if (validImageTypes != null)
             {
@@ -125,6 +125,11 @@ namespace Deerfly_Patches.Modules.FileStorage
                 adjustedSizes.Add(originalWidth);
             }
             return adjustedSizes;
+        }
+
+        public void DeleteImageWithMultipleSizes(string filePath)
+        {
+            DeleteFilesWithWildcard(filePath);
         }
     }
 }

@@ -4,13 +4,13 @@ using System.Web;
 
 namespace Deerfly_Patches.Modules.FileStorage
 {
-    public class FileSaver : IFileSaver
+    public class FileManager : IFileManager
     {
-        protected IFileSaver _fileSaver;
+        protected IFileManager _fileManager;
         protected string _storageService;
         protected string _folder;
         
-        public FileSaver(string folder, string storageService = "")
+        public FileManager(string folder, string storageService = "")
         {
             _folder = folder;
 
@@ -30,7 +30,7 @@ namespace Deerfly_Patches.Modules.FileStorage
                     {
                         throw new Exception("Container is required for Azure Blob Service");
                     }
-                    _fileSaver = new AzureBlobService("AzureStorageConnectionString", folder);
+                    _fileManager = new AzureBlobService("AzureStorageConnectionString", folder);
                     break;
 
                 case "fileSystem":
@@ -38,7 +38,7 @@ namespace Deerfly_Patches.Modules.FileStorage
                     {
                         folder = "/" + folder;
                     }
-                    _fileSaver = new FileSystemService(RouteConfig.contentFolder + folder);
+                    _fileManager = new FileSystemService(RouteConfig.contentFolder + folder);
                     break;
             }
         }
@@ -51,7 +51,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
 
             name = name.Replace(' ', '_');
-            return _fileSaver.SaveFile(stream, name);
+            return _fileManager.SaveFile(stream, name);
         }
 
         public string SaveFile(HttpPostedFileBase file)
@@ -62,6 +62,16 @@ namespace Deerfly_Patches.Modules.FileStorage
             }
 
             return SaveFile(file.InputStream, file.FileName);
+        }
+
+        public void DeleteFile(string filePath)
+        {
+            _fileManager.DeleteFile(filePath);
+        }
+
+        public void DeleteFilesWithWildcard(string filePath)
+        {
+            _fileManager.DeleteFilesWithWildcard(filePath);
         }
     }
 }
