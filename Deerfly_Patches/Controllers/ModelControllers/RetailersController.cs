@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers.ModelControllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for Retailers
+    /// </summary>
     public class RetailersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -49,7 +52,9 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         {
             if (ModelState.IsValid)
             {
+                // Geocode address of retailer
                 retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
+
                 db.Retailers.Add(retailer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -70,7 +75,7 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             {
                 return HttpNotFound();
             }
-            ViewBag.LatLngId = new SelectList(db.LatLngs, "LatLngId", "LatLngId", retailer.LatLngId);
+
             return View(retailer);
         }
 
@@ -79,15 +84,18 @@ namespace Deerfly_Patches.Controllers.ModelControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RetailerId,Name,LatLngId")] Retailer retailer)
+        public async Task<ActionResult> Edit([Bind(Include = "RetailerId,Name,LatLngId")] Retailer retailer)
         {
             if (ModelState.IsValid)
             {
+                // Geocode address of retailer
+                retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
+
                 db.Entry(retailer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.LatLngId = new SelectList(db.LatLngs, "LatLngId", "LatLngId", retailer.LatLngId);
+
             return View(retailer);
         }
 

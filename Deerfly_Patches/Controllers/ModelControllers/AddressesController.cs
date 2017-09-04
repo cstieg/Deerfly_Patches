@@ -6,6 +6,9 @@ using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for Addresses
+    /// </summary>
     public class AddressesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

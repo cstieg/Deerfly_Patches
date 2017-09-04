@@ -5,11 +5,13 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using System.Web;
 using Deerfly_Patches.Modules.FileStorage;
-using System;
 using System.Collections.Generic;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for Products
+    /// </summary>
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -42,6 +44,11 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Creates a new Product model, saving an image to the default imageManager
+        /// </summary>
+        /// <param name="product">The Product model passed from the client</param>
+        /// <returns>If valid POST, redirect to Product Index; otherwise rerender the Create form</returns>
         // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -90,6 +97,11 @@ namespace Deerfly_Patches.Controllers
             return View(product);
         }
 
+        /// <summary>
+        /// Edits a Product model, saving a new image to the default imageManager, and deleting the old
+        /// </summary>
+        /// <param name="product">The Product model passed from the POST request</param>
+        /// <returns>If valid POST, redirect to Product Index; otherwise rerender the Edit form</returns>
         // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -143,6 +155,11 @@ namespace Deerfly_Patches.Controllers
             return View(product);
         }
 
+        /// <summary>
+        /// Deletes a Product model, along with the associated image files
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Redirect to Product Index</returns>
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

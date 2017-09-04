@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace Deerfly_Patches.Controllers.ModelControllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for Testimonials
+    /// </summary>
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -41,6 +44,12 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             return View();
         }
 
+
+        /// <summary>
+        /// Creates a new Testimonial model, saving an image to the default imageManager
+        /// </summary>
+        /// <param name="testimonial">The Testimonial model passed from the client</param>
+        /// <returns>If valid POST, redirect to Testimonial Index; otherwise rerender the Create form</returns>
         // POST: Testimonials/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -89,6 +98,11 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             return View(testimonial);
         }
 
+        /// <summary>
+        /// Edits a Testimonial model, saving an image to the default imageManager, and deleting the previous image
+        /// </summary>
+        /// <param name="testimonial">The Testimonial model passed from the client</param>
+        /// <returns>If valid POST, redirect to Testimonial Index; otherwise rerender the Edit form</returns>
         // POST: Testimonials/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -143,6 +157,11 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             return View(testimonial);
         }
 
+        /// <summary>
+        /// Deletes a Testimonial model, along with the associated image files
+        /// </summary>
+        /// <param name="id">ID of Testimonial model to be deleted</param>
+        /// <returns>Redirect to Testimonial Index</returns>
         // POST: Testimonials/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

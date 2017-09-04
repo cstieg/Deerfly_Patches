@@ -8,6 +8,9 @@ using Deerfly_Patches.Modules;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for OrderDetails
+    /// </summary>
     public class OrderDetailsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

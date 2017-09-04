@@ -6,6 +6,9 @@ using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// The controller providing model scaffolding for Orders
+    /// </summary>
     public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

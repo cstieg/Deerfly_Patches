@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 namespace Deerfly_Patches.Controllers
 {
+    /// <summary>
+    /// A helper class containing code common to ModelControllers
+    /// </summary>
     public class _ModelControllersHelper
     {
         private static string[] validImageTypes = new string[]
@@ -13,6 +16,13 @@ namespace Deerfly_Patches.Controllers
             "image/png"
         };
 
+        /// <summary>
+        /// Validates and gets an image file from the POST request
+        /// </summary>
+        /// <param name="ModelState">The ModelState object from the controller</param>
+        /// <param name="Request">The Request object from the current POST request</param>
+        /// <param name="imageUrl">The URL of the image which may have been previously stored</param>
+        /// <returns>The validated image file</returns>
         public static HttpPostedFileBase GetImageFile(ModelStateDictionary ModelState, HttpRequestBase Request, string imageUrl)
         {
             // Check file is exists and is valid image
