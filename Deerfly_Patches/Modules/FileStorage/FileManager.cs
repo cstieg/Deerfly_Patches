@@ -35,6 +35,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             // Set storage service to be used
             switch (_storageService)
             { 
+                /* uncomment to add Azure Blob service
                 case "AzureBlob":
                     if (folder == "")
                     {
@@ -42,6 +43,7 @@ namespace Deerfly_Patches.Modules.FileStorage
                     }
                     _fileManager = new AzureBlobService("AzureStorageConnectionString", folder);
                     break;
+                */
 
                 case "fileSystem":
                     if (folder != "")
@@ -58,14 +60,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="file">The file to be saved, derived from a POST request</param>
         /// <returns>The URL by which the saved file is accessible</returns>
-        public string SaveFile(HttpPostedFileBase file)
+        public string SaveFile(HttpPostedFileBase file, bool timeStamped = true)
         {
             if (file.InputStream.Length == 0)
             {
                 throw new NoDataException("There is no data in this stream!");
             }
 
-            return SaveFile(file.InputStream, file.FileName);
+            return SaveFile(file.InputStream, file.FileName, timeStamped);
         }
 
         /// <summary>
@@ -74,8 +76,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="stream">The stream containing the file data to be saved</param>
         /// <param name="name">The filename by which to save the file</param>
         /// <returns></returns>
-        public string SaveFile(Stream stream, string name)
+        public string SaveFile(Stream stream, string name, bool timeStamped = true)
         {
+            if (timeStamped)
+            {
+                // Timestamp the filename to prevent collisions
+                name = GetTimeStampedFileName(name);
+            }
+
             if (stream.Length == 0)
             {
                 throw new NoDataException("There is no data in this stream!");
@@ -103,6 +111,17 @@ namespace Deerfly_Patches.Modules.FileStorage
         public void DeleteFilesWithWildcard(string filePath)
         {
             _fileManager.DeleteFilesWithWildcard(filePath);
+        }
+
+        public string GetTimeStampedFileName(string name)
+        {
+            return (DateTime.Now.Year.ToString("D4") +
+                   DateTime.Now.Month.ToString("D2") +
+                   DateTime.Now.Day.ToString("D2") +
+                   DateTime.Now.Hour.ToString("D2") +
+                   DateTime.Now.Minute.ToString("D2") +
+                   DateTime.Now.Second.ToString("D2") +
+                   "-" + name);
         }
     }
 }

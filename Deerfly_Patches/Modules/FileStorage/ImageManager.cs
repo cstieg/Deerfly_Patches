@@ -50,9 +50,9 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="file">The image file derived from the POST request</param>
         /// <returns>The URL by which the image file is accessible</returns>
-        public new string SaveFile(HttpPostedFileBase file)
+        public new string SaveFile(HttpPostedFileBase file, bool timeStamped = true)
         {
-            return SaveFile(file, null);
+            return SaveFile(file, null, timeStamped);
         }
 
         /// <summary>
@@ -61,14 +61,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="file">The image file derived from the POST request</param>
         /// <param name="maxWidth">The maximum width the image in pixels</param>
         /// <returns>The URL by which the image file is accessible, including a -w### extension indicating image width</returns>
-        public string SaveFile(HttpPostedFileBase file, int? maxWidth)
+        public string SaveFile(HttpPostedFileBase file, int? maxWidth, bool timeStamped = true)
         {
             if (_validImageTypes.Count() > 0 && !_validImageTypes.Contains(file.ContentType))
             {
                 throw new InvalidFileTypeException();
             }
 
-            return SaveFile(file.InputStream, file.FileName, maxWidth);
+            return SaveFile(file.InputStream, file.FileName, maxWidth, timeStamped);
         }
 
         /// <summary>
@@ -78,8 +78,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="name">The name under which to save the images</param>
         /// <param name="maxWidth">The maximum width of the image in pixels</param>
         /// <returns>The URL by which the file is accessible</returns>
-        public string SaveFile(Stream stream, string name, int? maxWidth)
+        public string SaveFile(Stream stream, string name, int? maxWidth, bool timeStamped = true)
         {
+            if (timeStamped)
+            {
+                // Timestamp the filename to prevent collisions
+                name = GetTimeStampedFileName(name);
+            }
+
             if (maxWidth != null)
             {
                 ImageResizer imageResizer = new ImageResizer(stream);
@@ -93,7 +99,8 @@ namespace Deerfly_Patches.Modules.FileStorage
                 name = GetResizedFileName(name, (int)(imageWidth));
             }
 
-            return base.SaveFile(stream, name);
+            // timeStamped = false, so not to double timestamp
+            return base.SaveFile(stream, name, false);
         }
 
         /// <summary>
@@ -102,9 +109,9 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="imageFile">The image file derived from a POST request</param>
         /// <param name="sizes">The list of image widths to be created</param>
         /// <returns>The URL by which the base file is accessible</returns>
-        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null)
+        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null, bool timeStamped = true)
         {
-            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes);
+            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes, timeStamped);
         }
 
         /// <summary>
@@ -114,8 +121,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="name">The base image name</param>
         /// <param name="sizes">The list of image widths to be created</param>
         /// <returns>The URL by which the base file is accessible</returns>
-        public string SaveImageMultipleSizes(Stream stream, string name, List<int> sizes = null)
+        public string SaveImageMultipleSizes(Stream stream, string name, List<int> sizes = null, bool timeStamped = true)
         {
+            if (timeStamped)
+            {
+                // Timestamp the filename to prevent collisions
+                name = GetTimeStampedFileName(name);
+            }
+
             if (sizes == null)
             {
                 sizes = _imageSizes;
@@ -132,7 +145,8 @@ namespace Deerfly_Patches.Modules.FileStorage
 
             for (var i = 0; i < sizes.Count; i++)
             {
-                string url = SaveFile(memoryStream, name, sizes[i]);
+                // timeStamped = false, so not to double timestamp
+                string url = SaveFile(memoryStream, name, sizes[i], false);
                 srcSetItems.Add(url + " " + sizes[i] + "w");
             }
 

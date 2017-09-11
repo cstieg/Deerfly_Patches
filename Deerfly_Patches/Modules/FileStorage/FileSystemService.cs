@@ -37,16 +37,8 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="stream">The Stream object containing the file data to be saved</param>
         /// <param name="name">The filename under which to save the file</param>
         /// <returns>A URL by which the file can be accessed</returns>
-        public string SaveFile(Stream stream, string name)
+        public string SaveFile(Stream stream, string name, bool timeStamped = false)
         {
-            // Timestamp the filename to prevent collisions
-            string timeStampedFileName = (DateTime.Now.Year.ToString() +
-                   DateTime.Now.Month.ToString() +
-                   DateTime.Now.Day.ToString() +
-                   DateTime.Now.Millisecond.ToString() +
-                   name);
-            name = timeStampedFileName;
-
             if (stream.Length == 0)
             {
                 throw new NoDataException("No data in stream");
