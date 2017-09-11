@@ -1,0 +1,58 @@
+Download AWS Toolkit for Visual Studio
+
+Sign up for AWS
+
+Create project (Elastic Beanstalk)
+Need 
+ * Compute engine
+ * Environment
+ * RDS (Relational Database System)
+
+In RDS, create new database
+	Under details, note:
+		endpoint (<instance-name>.us-east-2.rds.amazonaws.com) -- not including port (:1433)
+		port (1433)
+		username
+		password
+
+In VS, 
+	Open SQL Server Explorer, right-click SQL Server
+		Add SQL Server
+		Paste endpoint name into Server Name blank
+		Change Authentication to SQL Server Authentication
+		Input username and password
+		Leave Database Name as <default>
+		Connect
+
+	Click on newly created SQL Server (<instance-name>.us-east-2.rds.amazonaws.com)
+		Right-click on Databases
+		Add new database, choose identifying name
+
+	Open Server Explorer, right-click Data Connections
+		Add Connection
+		Change Data source to Microsoft SQL Server
+		Paste endpoint name into Server Name blank
+		Change Authentication to SQL Server Authentication
+		Input username and password
+		Can test connection
+		Select database name previously assigned
+
+	In project's web.config file,
+		Add a key with a connectionString that looks something like this:
+connectionString="Data Source=<instance-name>.us-east-2.rds.amazonaws.com,1433;Initial Catalog=dfp;Persist Security Info=True;User ID=cstieg;Password=sens*R20;Encrypt=False"/>
+		Make sure ApplicationDbContext uses this key as the first parameter in the constructor
+
+	Project -> <Project> Properties
+		Package/Publish Web -> Include all databases configured in Package/Publish SQL tab -> checked
+		Package/Publish SQL
+			Import connection strings from web.config
+			Make sure the Connection String for Destination Database is the connection string including <instance-name>.us-east-2.rds.amazonaws.com,1433
+			Make sure the Connection String for Source Database is the connection string to the local SQL Server
+		Save
+
+	Nuget Package Manager Console
+		Update-Database
+
+	Solution Explorer
+		Right-click on solution name
+		Publish to AWS Elastic Beanstalk

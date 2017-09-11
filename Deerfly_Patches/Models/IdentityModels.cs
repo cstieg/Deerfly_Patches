@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Configuration;
 
 namespace Deerfly_Patches.Models
 {
@@ -21,7 +22,11 @@ namespace Deerfly_Patches.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base(ConfigurationManager.AppSettings["DbConnection"], throwIfV1Schema: false)
+        {
+        }
+
+        public ApplicationDbContext(string connection) : base(connection)
         {
         }
 
