@@ -11,6 +11,7 @@ namespace Deerfly_Patches.Controllers.ModelControllers
     /// <summary>
     /// The controller providing model scaffolding for Retailers
     /// </summary>
+    [Authorize]
     public class RetailersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

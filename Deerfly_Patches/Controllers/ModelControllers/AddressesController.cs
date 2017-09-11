@@ -9,6 +9,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for Addresses
     /// </summary>
+    [Authorize]
     public class AddressesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

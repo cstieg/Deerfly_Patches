@@ -9,6 +9,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for PromoCodes
     /// </summary>
+    [Authorize]
     public class PromoCodesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

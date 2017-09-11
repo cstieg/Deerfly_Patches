@@ -12,6 +12,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for Products
     /// </summary>
+    [Authorize]
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

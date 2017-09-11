@@ -12,6 +12,7 @@ namespace Deerfly_Patches.Controllers.ModelControllers
     /// <summary>
     /// The controller providing model scaffolding for Testimonials
     /// </summary>
+    [Authorize]
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

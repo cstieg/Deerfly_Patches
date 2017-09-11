@@ -11,6 +11,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for OrderDetails
     /// </summary>
+    [Authorize]
     public class OrderDetailsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
