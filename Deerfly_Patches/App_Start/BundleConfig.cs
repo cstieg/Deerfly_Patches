@@ -24,14 +24,14 @@ namespace Deerfly_Patches
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                      "~/Scripts/Deerfly_Patches/site.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/gmaps").Include(
+                      "~/Scripts/Deerfly_Patches/site.js",
                       "~/Scripts/Deerfly_Patches/gmaps.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

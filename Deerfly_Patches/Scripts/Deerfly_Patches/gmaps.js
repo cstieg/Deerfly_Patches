@@ -1,4 +1,60 @@
-﻿/* ************************ Code for retailer map page ************************************** */
+﻿/*  References:
+    * JQuery
+
+    Calls:
+    * Google Maps API
+*/
+
+// Load Google Maps API if on page calling for it
+(function callGMaps() {
+    var $gmapsUrl = $('#google-maps-url-info').text();
+    if ($gmapsUrl) {
+        $.getScript($gmapsUrl).fail(function (jqxhr, settings, exception) {
+            alert("Wasn't able to load map :(");
+            window.location = "/order";
+        });
+    }
+})();
+
+// callback from Google Maps when finished loading API
+function initialMap() {
+    // If zip has been specified, set location passed from server
+    var position = "";
+    var positionText = ($('#location').text()).trim();
+    if (positionText) {
+        position = JSON.parse(positionText);
+    }
+    if (position) {
+        retailerMap.init(position);
+        return;
+    }
+
+    // If no zip has been specified, get location from browser or ip
+    if (navigator.geolocation) {
+        // location from browser
+        var options = { timeout: 10000 };
+        navigator.geolocation.getCurrentPosition(function (data) {
+            var position = new LatLng(data.coords.latitude, data.coords.longitude);
+            retailerMap.init(position);
+        },
+            function (err) {
+                // location from ip
+                $.getJSON('http://freegeoip.net/json/', function (data) {
+                    var position = new LatLng(data.latitude, data.longitude);
+                    retailerMap.init(data);
+                });
+            },
+            options);
+    }
+    else {
+        // location from ip
+        $.getJSON('http://freegeoip.net/json/', function (data) {
+            retailerMap.init(data);
+        });
+    }
+}
+
+/* ************************ Code for retailer map page ************************************** */
 var retailerMap = {
     init: function (userLocation) {
         // reference to retailerMap for use in callbacks
@@ -125,48 +181,6 @@ var retailerMap = {
 
 };
 
-// callback from Google Maps when finished loading API
-function initialMap() {
-    // If zip has been specified, set location passed from server
-    var position = "";
-    var positionText = ($('#location').text()).trim();
-    if (positionText) {
-        position = JSON.parse(positionText);
-    }
-    if (position) {
-        retailerMap.init(position);
-        return;
-    }
-
-    // If no zip has been specified, get location from browser or ip
-    if (navigator.geolocation) {
-        // location from browser
-        var options = { timeout: 10000 };
-        navigator.geolocation.getCurrentPosition(function (data) {
-            var position = new LatLng(data.coords.latitude, data.coords.longitude);
-            retailerMap.init(position);
-        },
-            function (err) {
-                // location from ip
-                $.getJSON('http://freegeoip.net/json/', function (data) {
-                    var position = new LatLng(data.latitude, data.longitude);
-                    retailerMap.init(data);
-                });
-            },
-            options);
-    }
-    else {
-        // location from ip
-        $.getJSON('http://freegeoip.net/json/', function (data) {
-            retailerMap.init(data);
-        });
-    }
-}
-
-function loadGMapsError() {
-    alert("Wasn't able to load map :(");
-    window.location = "/order";
-}
 
 
 /* ************************************** GMap ********************************************************** */

@@ -50,5 +50,4 @@
 
 </main>
 
-@Scripts.Render("~/bundles/gmaps")
-<script async defer src="@ViewBag.GoogleMapsUrl" onerror="loadGMapsError();"></script>
+<div id="google-maps-url-info" class="hidden">@ViewBag.GoogleMapsUrl</div>
