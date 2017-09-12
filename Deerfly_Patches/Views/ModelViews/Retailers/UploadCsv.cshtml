@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Upload Retailers CSV";
+}
+
+<h2>UploadCsv</h2>
+
+@using (Html.BeginForm("PostUploadCsv", "Retailers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-2">
+                <label>Upload CSV file</label>
+            </div>
+            <div class="col-md-10">
+                <input id="RetailersCsv" type="file" accept=".csv" name="imageFile" />
+                <br />
+                <p>
+                    The CSV file should have the following fields:
+                </p>
+                <ul>
+                    <li>Name of retailer</li>
+                    <li>Address</li>
+                    <li>City</li>
+                    <li>State</li>
+                    <li>Zip</li>
+                    <li>Phone</li>
+                    <li>Website -- make sure they start with http://</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                <label>Delete Current Retailer Data</label>
+            </div>
+            <div class="col-md-10">
+                <input type="checkbox" name="deleteCurrent" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Upload" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

@@ -7,7 +7,7 @@ using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.FileStorage;
 using System.Collections.Generic;
 
-namespace Deerfly_Patches.Controllers.ModelControllers
+namespace Deerfly_Patches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Testimonials

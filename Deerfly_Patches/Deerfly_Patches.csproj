@@ -56,6 +56,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -271,10 +274,6 @@
     <Compile Include="Migrations\201708250105214_paypalurl.Designer.cs">
       <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708291702293_testimonials.cs" />
-    <Compile Include="Migrations\201708291702293_testimonials.Designer.cs">
-      <DependentUpon>201708291702293_testimonials.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201708291726240_testimonials1.cs" />
     <Compile Include="Migrations\201708291726240_testimonials1.Designer.cs">
       <DependentUpon>201708291726240_testimonials1.cs</DependentUpon>
@@ -298,6 +297,10 @@
     <Compile Include="Migrations\201709032014187_testimonialImageUrlNotRequired.cs" />
     <Compile Include="Migrations\201709032014187_testimonialImageUrlNotRequired.Designer.cs">
       <DependentUpon>201709032014187_testimonialImageUrlNotRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709112301292_removeaddressrequired.cs" />
+    <Compile Include="Migrations\201709112301292_removeaddressrequired.Designer.cs">
+      <DependentUpon>201709112301292_removeaddressrequired.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -372,7 +375,6 @@
     <Content Include="Content\images\favicon\ms-icon-70x70.png" />
     <Content Include="Content\images\slantbox-info.png" />
     <Content Include="Content\images\starburst-box-dfp.png" />
-    <Content Include="Content\site.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -502,6 +504,8 @@
     <Content Include="Views\ModelViews\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\ModelViews\Retailers\_ModifyPartial.cshtml" />
+    <Content Include="Views\ModelViews\Retailers\UploadCsv.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -546,9 +550,6 @@
     <EmbeddedResource Include="Migrations\201708250105214_paypalurl.resx">
       <DependentUpon>201708250105214_paypalurl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708291702293_testimonials.resx">
-      <DependentUpon>201708291702293_testimonials.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708291726240_testimonials1.resx">
       <DependentUpon>201708291726240_testimonials1.cs</DependentUpon>
     </EmbeddedResource>
@@ -566,6 +567,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709032014187_testimonialImageUrlNotRequired.resx">
       <DependentUpon>201709032014187_testimonialImageUrlNotRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709112301292_removeaddressrequired.resx">
+      <DependentUpon>201709112301292_removeaddressrequired.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

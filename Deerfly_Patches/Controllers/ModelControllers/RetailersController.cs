@@ -5,8 +5,11 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.Google;
 using System.Threading.Tasks;
+using System.Web;
+using CsvHelper;
+using System.IO;
 
-namespace Deerfly_Patches.Controllers.ModelControllers
+namespace Deerfly_Patches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Retailers
@@ -132,6 +135,61 @@ namespace Deerfly_Patches.Controllers.ModelControllers
             var retailers = db.Retailers.Include(r => r.LatLng);
             var returnval = retailers.ToList();
             return Json(returnval, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult UploadCsv()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PostUploadCsv()
+        {
+            string deleteCurrent = Request.Params.Get("deleteCurrent");
+            if (Request.Params.Get("deleteCurrent") == "on")
+            {
+                db.Retailers.RemoveRange(db.Retailers.ToList());
+            }
+ 
+            HttpPostedFileBase file = _ModelControllersHelper.GetFile(ModelState, Request, "RetailersCsv");
+            StreamReader textReader = new StreamReader(file.InputStream);
+            CsvParser csvParser = new CsvParser(textReader);
+            string[] headerRow = csvParser.Read();
+            string[] dataRow = csvParser.Read();
+            while (dataRow != null)
+            {
+                Retailer retailer = new Retailer()
+                {
+                    Name = dataRow[0],
+                    Address = new Address()
+                    {
+                        Address1 = dataRow[1],
+                        City = dataRow[2],
+                        State = dataRow[3],
+                        Zip = dataRow[4],
+                        Phone = dataRow[5]
+                    },
+                    Website = dataRow[6]
+                };
+
+                // fix for empty string failing url validation
+                if (retailer.Website.Equals(""))
+                {
+                    retailer.Website = null;
+                }
+
+                retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
+                db.Retailers.Add(retailer);
+                db.SaveChanges();
+
+                // read next row
+                dataRow = csvParser.Read();
+            }
+
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

@@ -19,6 +19,11 @@ namespace Deerfly_Patches.Modules
             return new JsonResult { Data = new { success = "True" } };
         }
 
+        public static JsonResult JError(this Controller controller)
+        {
+            return new JsonResult { Data = new { success = "False" } };
+        }
+
         /// <summary>
         /// Gets the names of all controllers in project
         /// </summary>

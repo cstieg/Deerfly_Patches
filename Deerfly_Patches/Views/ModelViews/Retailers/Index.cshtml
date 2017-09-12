@@ -9,16 +9,28 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<p>
+    @Html.ActionLink("Upload Retailers CSV", "UploadCsv", "Retailers")
+</p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Address)
+            @Html.DisplayNameFor(model => model.Address.Address1)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LatLng)
+            @Html.DisplayNameFor(model => model.Address.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address.State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address.Zip)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address.Phone)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Website)
@@ -32,10 +44,19 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Address)
+            @Html.DisplayFor(modelItem => item.Address.Address1)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LatLng)
+            @Html.DisplayFor(modelItem => item.Address.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address.State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address.Zip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address.Phone)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Website)
@@ -49,3 +70,4 @@
 }
 
 </table>
+
