@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Deerfly_Patches.Modules.FileStorage
+namespace Deerfly_Patches.Modules.FileStorage.Azure
 {
     /// <summary>
     /// The exception that is thrown when Azure Blob encounters a file IO error

@@ -4,12 +4,12 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.IO;
 
-namespace Deerfly_Patches.Modules.FileStorage
+namespace Deerfly_Patches.Modules.FileStorage.Azure
 {
     /// <summary>
     /// A file manager service to save files using Azure Blob
     /// </summary>
-    public class AzureBlobService : IFileManager
+    public class AzureBlobService : IFileService
     {
         private string _connectionString;
         private string _containerName;
@@ -20,10 +20,18 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="connectionString">The connection string used to connect to Azure Blob</param>
         /// <param name="containerName">The container where this service stores files.  Set by folder param in wrapper.</param>
-        public AzureBlobService(string connectionString, string containerName)
+        public AzureBlobService(string connectionString, string containerName = "")
         {
             _connectionString = connectionString;
-            _containerName = containerName;
+            if (containerName != "")
+            {
+                SetFolder(containerName);
+            }
+        }
+
+        public void SetFolder(string folder)
+        {
+            _containerName = folder;
             ConfigureBlobContainer();
             _blobContainer = GetContainer();
         }

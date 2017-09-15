@@ -25,5 +25,11 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="filePath">The URL of the file to delete, including wildcards</param>
         void DeleteFilesWithWildcard(string filePath);
+
+        /// <summary>
+        /// Sets the folder in which to save files and otherwise operate
+        /// </summary>
+        /// <param name="folder">Relative folder path</param>
+        void SetFolder(string folder);
     }
 }

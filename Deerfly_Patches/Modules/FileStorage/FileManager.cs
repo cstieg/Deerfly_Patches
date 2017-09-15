@@ -9,21 +9,20 @@ namespace Deerfly_Patches.Modules.FileStorage
     /// </summary>
     public class FileManager : IFileManager
     {
-        protected IFileManager _fileManager;
-        protected string _storageService;
+        protected IFileService _storageService;
         protected string _folder;
         
         /// <summary>
         /// Constructor for FileManager which selects the file storage service to be used
         /// </summary>
         /// <param name="folder">The folder in which the files are to be saved</param>
-        /// <param name="storageService">A string containing the name of the file storage service: "fileSystem", "AzureBlob"</param>
-        public FileManager(string folder, string storageService = "")
+        /// <param name="storageService">An IFileService object to serve as the storage service</param>
+        public FileManager(string folder, IFileService storageService = null)
         {
             _folder = folder;
 
             // Get default storage service from RouteConfig if not specifically provided
-            if (storageService == "")
+            if (storageService == null)
             {
                 _storageService = RouteConfig.storageService;
             }
@@ -31,28 +30,12 @@ namespace Deerfly_Patches.Modules.FileStorage
             {
                 _storageService = storageService;
             }
+            _storageService.SetFolder(folder);
+        }
 
-            // Set storage service to be used
-            switch (_storageService)
-            { 
-                /* uncomment to add Azure Blob service
-                case "AzureBlob":
-                    if (folder == "")
-                    {
-                        throw new Exception("Container is required for Azure Blob Service");
-                    }
-                    _fileManager = new AzureBlobService("AzureStorageConnectionString", folder);
-                    break;
-                */
-
-                case "fileSystem":
-                    if (folder != "")
-                    {
-                        folder = "/" + folder;
-                    }
-                    _fileManager = new FileSystemService(RouteConfig.contentFolder + folder);
-                    break;
-            }
+        public void SetFolder(string folder)
+        {
+            _folder = folder;
         }
 
         /// <summary>
@@ -92,7 +75,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             // Replace spaces with underscores for HTML access
             name = name.Replace(' ', '_');
 
-            return _fileManager.SaveFile(stream, name);
+            return _storageService.SaveFile(stream, name);
         }
 
         /// <summary>
@@ -101,7 +84,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="filePath">The name of the file to be deleted</param>
         public void DeleteFile(string filePath)
         {
-            _fileManager.DeleteFile(filePath);
+            _storageService.DeleteFile(filePath);
         }
 
         /// <summary>
@@ -110,7 +93,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="filePath">The name of the files to be deleted including wildcards</param>
         public void DeleteFilesWithWildcard(string filePath)
         {
-            _fileManager.DeleteFilesWithWildcard(filePath);
+            _storageService.DeleteFilesWithWildcard(filePath);
         }
 
         public string GetTimeStampedFileName(string name)

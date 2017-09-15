@@ -30,7 +30,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="storageService">The storage service used to store the images</param>
         /// <param name="validImageTypes">An optional string array of valid image types</param>
         /// <param name="imageSizes">An optional list of sizes to create when resizing images</param>
-        public ImageManager(string folder, string storageService = "", string[] validImageTypes = null, List<int> imageSizes = null) : base(folder, storageService)
+        public ImageManager(string folder, IFileService storageService = null, string[] validImageTypes = null, List<int> imageSizes = null) : base(folder, storageService)
         {
             if (validImageTypes != null)
             {

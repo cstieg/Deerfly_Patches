@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.IO;
 using System.Web.Hosting;
 
 namespace Deerfly_Patches.Modules.FileStorage
@@ -8,26 +6,42 @@ namespace Deerfly_Patches.Modules.FileStorage
     /// <summary>
     /// A FileManager service that stores file to the server file system
     /// </summary>
-    public class FileSystemService : IFileManager
+    public class FileSystemService : IFileService
     {
         public string BaseUrlPath { get; set; }
         public string BaseDiskPath { get; set; }
+        private string _folder;
+        private string _baseUrlPath;
+        private string _baseDiskPath;
 
         /// <summary>
         /// Constructor for FileSystemService
         /// </summary>
         /// <param name="baseUrlPath">The URL path by which to access the files saved</param>
         /// <param name="baseDiskPath">The path in which to save files on the server.  Default server mapping used when omitted.</param>
-        public FileSystemService(string baseUrlPath, string baseDiskPath = "")
+        public FileSystemService(string baseUrlPath, string baseDiskPath = "", string folder = "")
         {
-            BaseUrlPath = baseUrlPath;
-            if (baseDiskPath == "")
+            _baseUrlPath = baseUrlPath;
+            _baseDiskPath = baseDiskPath;
+            _folder = folder;
+            SetFolder(folder);
+        }
+
+        public FileSystemService()
+        {
+        }
+
+        public void SetFolder(string folder)
+        {
+            _folder = folder;
+            BaseUrlPath = _baseUrlPath + "/" + folder;
+            if (_baseDiskPath == "")
             {
                 BaseDiskPath = HostingEnvironment.MapPath("~" + BaseUrlPath);
             }
             else
             {
-                BaseDiskPath = baseDiskPath;
+                BaseDiskPath = _baseDiskPath + "/" + folder;
             }
         }
 
