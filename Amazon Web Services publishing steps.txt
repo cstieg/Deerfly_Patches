@@ -8,6 +8,18 @@ Need
  * Environment
  * RDS (Relational Database System)
 
+Services - EC2
+	Launch Instance
+	Select 'Free tier only'
+	Windows Server 2016 Base
+	Instance t2.micro
+	Review and Launch
+	Select or create key pair
+	Launch instances
+	Wait....
+
+
+
 In RDS, create new database
 	Under details, note:
 		endpoint (<instance-name>.us-east-2.rds.amazonaws.com) -- not including port (:1433)
@@ -15,7 +27,12 @@ In RDS, create new database
 		username
 		password
 
-In VS, 
+In VS,
+	Create new
+	Choose environment name, server name
+	Container type = 64bit Windows Server 2016 v.1.2.0 running IIS 10.0
+	t2.micro	
+ 
 	Open SQL Server Explorer, right-click SQL Server
 		Add SQL Server
 		Paste endpoint name into Server Name blank
