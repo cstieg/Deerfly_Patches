@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Hosting;
+﻿using Deerfly_Patches.Modules.FileStorage;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -7,9 +6,9 @@ namespace Deerfly_Patches
 {
     public class RouteConfig
     {
+        // Set container for storage
         public static string contentFolder = "/content";
-        public static string storageService = "fileSystem";
-        
+        public static IFileService storageService = new FileSystemService(contentFolder);
 
         public static void RegisterRoutes(RouteCollection routes)
         {

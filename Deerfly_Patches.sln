@@ -10,15 +10,20 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		LocalStaging|Any CPU = LocalStaging|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{71872246-077A-4328-A14A-4D88E095BC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71872246-077A-4328-A14A-4D88E095BC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71872246-077A-4328-A14A-4D88E095BC9B}.LocalStaging|Any CPU.ActiveCfg = LocalStaging|Any CPU
+		{71872246-077A-4328-A14A-4D88E095BC9B}.LocalStaging|Any CPU.Build.0 = LocalStaging|Any CPU
 		{71872246-077A-4328-A14A-4D88E095BC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71872246-077A-4328-A14A-4D88E095BC9B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.LocalStaging|Any CPU.ActiveCfg = LocalStaging|Any CPU
+		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.LocalStaging|Any CPU.Build.0 = LocalStaging|Any CPU
 		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{160A5C1C-E75C-4F15-95D6-02DFF729894A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
