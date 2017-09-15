@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChristopherStieg.App_Start;
+using System;
 using System.IO;
 using System.Web;
 
@@ -24,7 +25,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             // Get default storage service from RouteConfig if not specifically provided
             if (storageService == null)
             {
-                _storageService = RouteConfig.storageService;
+                _storageService = ContainerConfig.storageService;
             }
             else
             {

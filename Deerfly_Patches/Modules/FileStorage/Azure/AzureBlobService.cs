@@ -48,7 +48,7 @@ namespace Deerfly_Patches.Modules.FileStorage.Azure
             {
                 return UploadFile(stream, name);
             }
-            throw new AzureBlobException("File is empty!");
+            throw new FileEmptyException();
         }
 
         /// <summary>
