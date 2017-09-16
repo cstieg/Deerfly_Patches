@@ -42,7 +42,7 @@ namespace Deerfly_Patches.Modules.FileStorage.Azure
         /// <param name="stream">A Stream object containing the file data to be saved</param>
         /// <param name="name">The filename where the file is to be saved</param>
         /// <returns>The URL where the saved file can be accessed</returns>
-        public string SaveFile(Stream stream, string name, bool timeStamped = false)
+        public string SaveFile(Stream stream, string name, bool timeStamped = false, string timeStamp = "")
         {
             if (stream.Length != 0)
             {

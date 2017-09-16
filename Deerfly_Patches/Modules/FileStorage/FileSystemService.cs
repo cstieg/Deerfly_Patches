@@ -51,7 +51,7 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="stream">The Stream object containing the file data to be saved</param>
         /// <param name="name">The filename under which to save the file</param>
         /// <returns>A URL by which the file can be accessed</returns>
-        public string SaveFile(Stream stream, string name, bool timeStamped = false)
+        public string SaveFile(Stream stream, string name, bool timeStamped = false, string timeStamp = "")
         {
             if (stream.Length == 0)
             {

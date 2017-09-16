@@ -50,9 +50,9 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="file">The image file derived from the POST request</param>
         /// <returns>The URL by which the image file is accessible</returns>
-        public new string SaveFile(HttpPostedFileBase file, bool timeStamped = true)
+        public new string SaveFile(HttpPostedFileBase file, bool timeStamped = true, string timeStamp = "")
         {
-            return SaveFile(file, null, timeStamped);
+            return SaveFile(file, null, timeStamped, timeStamp);
         }
 
         /// <summary>
@@ -61,14 +61,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="file">The image file derived from the POST request</param>
         /// <param name="maxWidth">The maximum width the image in pixels</param>
         /// <returns>The URL by which the image file is accessible, including a -w### extension indicating image width</returns>
-        public string SaveFile(HttpPostedFileBase file, int? maxWidth, bool timeStamped = true)
+        public string SaveFile(HttpPostedFileBase file, int? maxWidth, bool timeStamped = true, string timeStamp = "")
         {
             if (_validImageTypes.Count() > 0 && !_validImageTypes.Contains(file.ContentType))
             {
                 throw new InvalidFileTypeException();
             }
 
-            return SaveFile(file.InputStream, file.FileName, maxWidth, timeStamped);
+            return SaveFile(file.InputStream, file.FileName, maxWidth, timeStamped, timeStamp);
         }
 
         /// <summary>
@@ -78,12 +78,12 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="name">The name under which to save the images</param>
         /// <param name="maxWidth">The maximum width of the image in pixels</param>
         /// <returns>The URL by which the file is accessible</returns>
-        public string SaveFile(Stream stream, string name, int? maxWidth, bool timeStamped = true)
+        public string SaveFile(Stream stream, string name, int? maxWidth, bool timeStamped = true, string timeStamp = "")
         {
             if (timeStamped)
             {
                 // Timestamp the filename to prevent collisions
-                name = GetTimeStampedFileName(name);
+                name = GetTimeStampedFileName(name, timeStamp);
             }
 
             if (maxWidth != null)
@@ -109,9 +109,9 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="imageFile">The image file derived from a POST request</param>
         /// <param name="sizes">The list of image widths to be created</param>
         /// <returns>The URL by which the base file is accessible</returns>
-        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null, bool timeStamped = true)
+        public string SaveImageMultipleSizes(HttpPostedFileBase imageFile, List<int> sizes = null, bool timeStamped = true, string timeStamp = "")
         {
-            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes, timeStamped);
+            return SaveImageMultipleSizes(imageFile.InputStream, imageFile.FileName, sizes, timeStamped, timeStamp);
         }
 
         /// <summary>
@@ -121,12 +121,12 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="name">The base image name</param>
         /// <param name="sizes">The list of image widths to be created</param>
         /// <returns>The URL by which the base file is accessible</returns>
-        public string SaveImageMultipleSizes(Stream stream, string name, List<int> sizes = null, bool timeStamped = true)
+        public string SaveImageMultipleSizes(Stream stream, string name, List<int> sizes = null, bool timeStamped = true, string timeStamp = "")
         {
             if (timeStamped)
             {
                 // Timestamp the filename to prevent collisions
-                name = GetTimeStampedFileName(name);
+                name = GetTimeStampedFileName(name, timeStamp);
             }
 
             if (sizes == null)

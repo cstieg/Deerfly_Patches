@@ -44,14 +44,14 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// </summary>
         /// <param name="file">The file to be saved, derived from a POST request</param>
         /// <returns>The URL by which the saved file is accessible</returns>
-        public string SaveFile(HttpPostedFileBase file, bool timeStamped = true)
+        public string SaveFile(HttpPostedFileBase file, bool timeStamped = true, string timeStamp = "")
         {
             if (file.InputStream.Length == 0)
             {
                 throw new NoDataException("There is no data in this stream!");
             }
 
-            return SaveFile(file.InputStream, file.FileName, timeStamped);
+            return SaveFile(file.InputStream, file.FileName, timeStamped, timeStamp);
         }
 
         /// <summary>
@@ -60,12 +60,12 @@ namespace Deerfly_Patches.Modules.FileStorage
         /// <param name="stream">The stream containing the file data to be saved</param>
         /// <param name="name">The filename by which to save the file</param>
         /// <returns></returns>
-        public string SaveFile(Stream stream, string name, bool timeStamped = true)
+        public string SaveFile(Stream stream, string name, bool timeStamped = true, string timeStamp = "")
         {
             if (timeStamped)
             {
                 // Timestamp the filename to prevent collisions
-                name = GetTimeStampedFileName(name);
+                name = GetTimeStampedFileName(name, timeStamp);
             }
 
             if (stream.Length == 0)
@@ -97,15 +97,23 @@ namespace Deerfly_Patches.Modules.FileStorage
             _storageService.DeleteFilesWithWildcard(filePath);
         }
 
-        public static string GetTimeStampedFileName(string name)
+        public static string GetTimeStampedFileName(string name, string timeStamp = null)
         {
-            return (DateTime.Now.Year.ToString("D4") +
-                   DateTime.Now.Month.ToString("D2") +
-                   DateTime.Now.Day.ToString("D2") +
-                   DateTime.Now.Hour.ToString("D2") +
-                   DateTime.Now.Minute.ToString("D2") +
-                   DateTime.Now.Second.ToString("D2") +
-                   "-" + name);
+            if (timeStamp == null)
+            {
+                return GetTimeStamp() + "-" + name;
+            }
+            return timeStamp + "-" + name;
+        }
+
+        public static string GetTimeStamp()
+        {
+            return DateTime.Now.Year.ToString("D4") +
+                DateTime.Now.Month.ToString("D2") +
+                DateTime.Now.Day.ToString("D2") +
+                DateTime.Now.Hour.ToString("D2") +
+                DateTime.Now.Minute.ToString("D2") +
+                DateTime.Now.Second.ToString("D2");
         }
     }
 }

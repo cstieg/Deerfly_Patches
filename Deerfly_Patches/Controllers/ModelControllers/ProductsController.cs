@@ -65,8 +65,9 @@ namespace Deerfly_Patches.Controllers
                 // Save image to disk and store filepath in model
                 try
                 {
-                    product.ImageUrl = imageManager.SaveFile(imageFile, 200);
-                    product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                    string timeStamp = FileManager.GetTimeStamp();
+                    product.ImageUrl = imageManager.SaveFile(imageFile, 200, true, timeStamp);
+                    product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, true, timeStamp);
                 }
                 catch
                 {
@@ -122,8 +123,9 @@ namespace Deerfly_Patches.Controllers
                     try
                     {
                         string oldUrl = product.ImageUrl;
-                        product.ImageUrl = imageManager.SaveFile(imageFile, 200);
-                        product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 });
+                        string timeStamp = FileManager.GetTimeStamp();
+                        product.ImageUrl = imageManager.SaveFile(imageFile, 200, true, timeStamp);
+                        product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, true, timeStamp);
                         imageManager.DeleteImageWithMultipleSizes(oldUrl);
                     }
                     catch
