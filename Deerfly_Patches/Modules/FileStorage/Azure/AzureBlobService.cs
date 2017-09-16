@@ -60,15 +60,9 @@ namespace Deerfly_Patches.Modules.FileStorage.Azure
         public string UploadFile(Stream stream, string name)
         {
             try
-            {
-                string timeStampedFileName = (DateTime.Now.Year.ToString() +
-                                   DateTime.Now.Month.ToString() +
-                                   DateTime.Now.Day.ToString() +
-                                   DateTime.Now.Millisecond.ToString() +
-                                   name);
-                
+            {   
                 // get blob
-                CloudBlockBlob blob = _blobContainer.GetBlockBlobReference(timeStampedFileName);
+                CloudBlockBlob blob = _blobContainer.GetBlockBlobReference(name);
 
                 // upload file
                 blob.UploadFromStream(stream);

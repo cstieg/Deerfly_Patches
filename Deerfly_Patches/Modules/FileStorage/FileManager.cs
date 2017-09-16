@@ -97,7 +97,7 @@ namespace Deerfly_Patches.Modules.FileStorage
             _storageService.DeleteFilesWithWildcard(filePath);
         }
 
-        public string GetTimeStampedFileName(string name)
+        public static string GetTimeStampedFileName(string name)
         {
             return (DateTime.Now.Year.ToString("D4") +
                    DateTime.Now.Month.ToString("D2") +
