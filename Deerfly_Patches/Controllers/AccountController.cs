@@ -9,7 +9,7 @@ using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -133,7 +133,7 @@ namespace Deerfly_Patches.Controllers
 
         //
         // GET: /Account/Register
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -142,7 +142,7 @@ namespace Deerfly_Patches.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

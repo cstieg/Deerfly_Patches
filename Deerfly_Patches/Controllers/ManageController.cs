@@ -10,7 +10,7 @@ using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

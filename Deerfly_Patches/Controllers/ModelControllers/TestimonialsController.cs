@@ -12,7 +12,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for Testimonials
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

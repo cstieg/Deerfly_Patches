@@ -9,7 +9,7 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// The controller providing model scaffolding for Orders
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
