@@ -1,38 +1,37 @@
+STEPS FOR PUBLISHING ASP.NET (MVC) APPLICATION TO AMAZON WEB SERVICES USING ELASTIC BEANSTALK AND
+MICROSOFT VISUAL STUDIO 2017
+
 Download AWS Toolkit for Visual Studio
+	* Use NuGet package manager
 
 Sign up for AWS
+	Create user (IAM Management Console)
+	In Security Credentials tab, Create Access Key, save AccessKey Id and Secret Key (CSV)
+	In Visual Studio AWS Explorer, Add or Edit Profile
+		Import from CSV file saved previously
+	
 
 Create project (Elastic Beanstalk)
-Need 
- * Compute engine
- * Environment
+Will Need 
+ * EC2 (Compute engine)
+ * EPS (Environment)
  * RDS (Relational Database System)
+ * S3 (Simple Storage Service)
 
-Services - EC2
-	Launch Instance
-	Select 'Free tier only'
-	Windows Server 2016 Base
-	Instance t2.micro
-	Review and Launch
-	Select or create key pair
-	Launch instances
-	Wait....
+Go to console.aws.amazon.com
+	Create key pair
+	** Make sure to save .pem file!!
 
-
-
-In RDS, create new database
+In the console, go to the RDS service
+	Create new database
+	Choose region (us-east-2)
 	Under details, note:
-		endpoint (<instance-name>.us-east-2.rds.amazonaws.com) -- not including port (:1433)
+		endpoint (<instance-name>.<region>.rds.amazonaws.com) -- not including port (:1433)
 		port (1433)
 		username
 		password
 
-In VS,
-	Create new
-	Choose environment name, server name
-	Container type = 64bit Windows Server 2016 v.1.2.0 running IIS 10.0
-	t2.micro	
- 
+In Visual Studio, 
 	Open SQL Server Explorer, right-click SQL Server
 		Add SQL Server
 		Paste endpoint name into Server Name blank
@@ -41,7 +40,7 @@ In VS,
 		Leave Database Name as <default>
 		Connect
 
-	Click on newly created SQL Server (<instance-name>.us-east-2.rds.amazonaws.com)
+	Click on newly created SQL Server (<instance-name>.<region>.rds.amazonaws.com)
 		Right-click on Databases
 		Add new database, choose identifying name
 
@@ -56,20 +55,47 @@ In VS,
 
 	In project's web.config file,
 		Add a key with a connectionString that looks something like this:
-connectionString="Data Source=<instance-name>.us-east-2.rds.amazonaws.com,1433;Initial Catalog=dfp;Persist Security Info=True;User ID=cstieg;Password=sens*R20;Encrypt=False"/>
+
+connectionString="Data Source=**INSTANCENAME**.**REGION**.rds.amazonaws.com,1433;Initial Catalog=**DATABASENAME**;Persist Security Info=True;User ID=**USERID**;Password=**PASSWORD**;Encrypt=False"/>
+
 		Make sure ApplicationDbContext uses this key as the first parameter in the constructor
 
 	Project -> <Project> Properties
 		Package/Publish Web -> Include all databases configured in Package/Publish SQL tab -> checked
 		Package/Publish SQL
 			Import connection strings from web.config
-			Make sure the Connection String for Destination Database is the connection string including <instance-name>.us-east-2.rds.amazonaws.com,1433
+			Make sure the Connection String for Destination Database is the connection string including <instance-name>.<region>.rds.amazonaws.com,1433
 			Make sure the Connection String for Source Database is the connection string to the local SQL Server
 		Save
 
 	Nuget Package Manager Console
-		Update-Database
+		Type 'Update-Database'
 
 	Solution Explorer
 		Right-click on solution name
-		Publish to AWS Elastic Beanstalk
+		Click 'Publish to AWS Elastic Beanstalk'
+		Make sure that the region is the same as the region used for the database
+		Click 'Create new environment'
+		Choose environment name, server name
+		Container type = 64bit Windows Server 2016 v.1.2.0 running IIS 10.0
+		Instance type = t2.micro (free tier)	 
+		Accept defaults
+		Publish
+
+
+
+Can see published files in S3 bucket (created automatically by Elastic Beanstalk)
+
+To delete an instance, must go to Elastic Beanstalk console and remove app.
+	Deleting an instance in EC2 created by Elastic Beanstalk will only cause it to recreate another clone.
+
+
+
+To programmatically access S3 storage, need Access Key and Secret Key
+	Use Amazon.S3 SDK (Package manager)
+
+
+To install SSL:
+
+
+

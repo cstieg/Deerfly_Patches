@@ -9,7 +9,7 @@ namespace ChristopherStieg.App_Start
         public static string domainName = "deerflypatches.com";
         public static string contentFolder = "/content";
 
-        //public static IFileService storageService = new FileSystemService(contentFolder);
-        public static IFileService storageService = new S3Service(domainName);
+        public static IFileService storageService = new FileSystemService(contentFolder);
+        //public static IFileService storageService = new S3Service(domainName);
     }
 }

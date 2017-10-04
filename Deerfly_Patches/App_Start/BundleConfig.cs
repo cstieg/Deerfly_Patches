@@ -25,7 +25,8 @@ namespace Deerfly_Patches
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                       "~/Scripts/Deerfly_Patches/site.js",
-                      "~/Scripts/Deerfly_Patches/gmaps.js"));
+                      "~/Scripts/Deerfly_Patches/gmaps.js",
+                      "~/Scripts/Deerfly_Patches/inputmask.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
