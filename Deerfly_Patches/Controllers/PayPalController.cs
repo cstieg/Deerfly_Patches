@@ -17,31 +17,29 @@ namespace DeerflyPatches.Controllers
     public class PayPalController : Controller
     {
         private PayPalApiClient _paypalClient;
-        private ClientInfo _paypalSecrets;
 
         public PayPalController() : base()
         {
             _paypalClient = new PayPalApiClient();
+        }
 
-            // Get client id from paypal.json
-            _paypalSecrets = _paypalClient.GetClientSecrets();
+        public async Task GetAccessToken()
+        {
+            AccessToken accessToken = await _paypalClient.GetAccessToken();
         }
 
         [HttpPost]
         public async Task<string> GetUserInfo()
         {
-            // Get access token
-            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
-
             // Post order to PayPal API and return order ID to front end
-            return await _paypalClient.GetUserInfo(accessToken.AccessTokenString);
+            return await _paypalClient.GetUserInfo();
         }
 
         [HttpPost]
         public async Task<string> CreateOrder()
         {
             // Get access token
-            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
+            AccessToken accessToken = await _paypalClient.GetAccessToken();
 
             // Get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
@@ -52,7 +50,7 @@ namespace DeerflyPatches.Controllers
             shoppingCart.GetOrder().ShipToAddress.Country = "US";
 
             // Create JSON string with order information
-            shoppingCart.PayeeEmail = _paypalSecrets.ClientAccount;
+            shoppingCart.PayeeEmail = _paypalClient.ClientInfo.ClientAccount;
             string orderData = _paypalClient.CreateOrder(shoppingCart);
 
             // Post order to PayPal API and return order ID to front end
@@ -64,7 +62,7 @@ namespace DeerflyPatches.Controllers
         public async Task<ActionResult> ExecutePayment(string paymentId, FormCollection data)
         {
             // Get access token
-            AccessToken accessToken = await _paypalClient.GetAccessToken(_paypalSecrets);
+            AccessToken accessToken = await _paypalClient.GetAccessToken();
 
             string payerId = Request.Form["PayerID"];
 

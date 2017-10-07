@@ -3,6 +3,7 @@ using Deerfly_Patches.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,6 +18,22 @@ namespace Deerfly_Patches.Modules.PayPal
     public class PayPalApiClient
     {
         private static string payPalBaseURL = "https://api.sandbox.paypal.com/v1/";
+        private HttpClient httpClient = new HttpClient();
+
+        public ClientInfo ClientInfo { get; set; }
+        public AccessToken AccessToken { get; set; }
+        public string ReturnUrl { get; set; }
+        public string CancelUrl { get; set; }
+
+        public PayPalApiClient()
+        {
+            ClientInfo = GetClientSecrets();
+            ReturnUrl = ClientInfo.ReturnUrl;
+            CancelUrl = ClientInfo.ReturnUrl;
+
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en_US"));
+        }
 
         /// <summary>
         /// Gets client id and secret from PayPal.json in root directory
@@ -30,24 +47,30 @@ namespace Deerfly_Patches.Modules.PayPal
             return paypalSecrets;
         }
 
+        private AuthenticationHeaderValue GetAuthenticationHeader()
+        {
+            var byteArray = Encoding.ASCII.GetBytes(ClientInfo.ClientId + ":" + ClientInfo.ClientSecret);
+            var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            return header;
+        }
+
         /// <summary>
         /// Gets an access token to be able to access PayPal API service
         /// </summary>
         /// <param name="paypalSecrets">Object containing PayPal client id info</param>
         /// <returns>AccessToken to use in accessing PayPal API</returns>
-        public async Task<AccessToken> GetAccessToken(ClientInfo paypalSecrets)
+        public async Task<AccessToken> GetAccessToken()
         {
-            // TODO: Store access token to reuse until expires
-
-
-            using (var client = new HttpClient())
+            // Store access token to reuse until expires
+            if (AccessToken != null && !AccessToken.IsExpired)
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en_US"));
+                return AccessToken;
+            }
 
-                var byteArray = Encoding.ASCII.GetBytes(paypalSecrets.ClientId + ":" + paypalSecrets.ClientSecret);
-                var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-                client.DefaultRequestHeaders.Authorization = header;
+            using (var client = httpClient)
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, payPalBaseURL + "oauth2/token")
                 {
@@ -58,27 +81,27 @@ namespace Deerfly_Patches.Modules.PayPal
                 };
                 var response = await client.SendAsync(request);
                 var result = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<AccessToken>(result);
+                AccessToken = JsonConvert.DeserializeObject<AccessToken>(result);
+                return AccessToken;
             }
         }
 
-        /// <summary>
-        /// Make API call to PayPal with specified data.  
-        /// Generic wrapper generalizing elements needed by all API calls, such as access token header.
-        /// </summary>
-        /// <param name="Url">API endpoint URL being called</param>
-        /// <param name="data">Data to pass to endpoint</param>
-        /// <param name="accessToken">Access token authorizing access</param>
-        /// <returns>String result of call</returns>
-        public async Task<string> PayPalCall(string Url, string data, string accessToken)
+        public async Task<string> GetUserAccessToken(string userCode)
         {
+            string url = payPalBaseURL + "identity/openidconnect/tokenservice";
             string result;
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, Url)
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
+                AccessToken accessToken = await GetAccessToken();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent(data, Encoding.UTF8, "application/json")
+                    Content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                        new KeyValuePair<string, string>("code", userCode)
+                    })
                 };
                 var response = await client.SendAsync(request);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -90,18 +113,57 @@ namespace Deerfly_Patches.Modules.PayPal
             return result;
         }
 
+
+        /// <summary>
+        /// Make API call to PayPal with specified data.  
+        /// Generic wrapper generalizing elements needed by all API calls, such as access token header.
+        /// </summary>
+        /// <param name="url">API endpoint URL being called</param>
+        /// <param name="data">Data to pass to endpoint</param>
+        /// <param name="accessToken">Access token authorizing access</param>
+        /// <returns>String result of call</returns>
+        public async Task<string> PayPalCall(string url, string data, string accessToken, string method = "POST")
+        {
+            if (!"POST|GET".Contains(method))
+            {
+                throw new ArgumentException("Argument 'method' must either be 'GET' or 'POST'");
+            }
+            if (method == "GET" && data != "")
+            {
+                throw new ArgumentException("A GET request cannot contain data!");
+            }
+            HttpMethod httpMethod = method == "GET" ? HttpMethod.Get : HttpMethod.Post;
+            string result;
+            using (var client = httpClient)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
+                if (method == "POST")
+                {
+                    request.Content = new StringContent(data, Encoding.UTF8, "application/json");
+                }
+                request.Headers.Add("Accept", "application/json");
+                var response = await client.SendAsync(request);
+                result = response.Content.ReadAsStringAsync().Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException(result.ToString());
+                }
+            }
+            return result;
+        }
+
+
+
         /// <summary>
         /// Gets user info from PayPal API
         /// </summary>
         /// <param name="accessToken">Access token authorizing API call</param>
         /// <returns>String result of API call</returns>
-        public async Task<string> GetUserInfo(string accessToken)
+        public async Task<string> GetUserInfo()
         {
-            string data = JsonConvert.SerializeObject(new
-            {
-                schema = "openid"
-            });
-            return await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo", data, accessToken);
+            AccessToken accessToken = await GetAccessToken();
+            return await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo?schema=openid", "", accessToken.AccessTokenString, "GET");
         }
 
         /// <summary>
@@ -147,8 +209,8 @@ namespace Deerfly_Patches.Modules.PayPal
                 },
                 redirect_urls = new
                 {
-                    return_url = "http://localhost:50138/Home/ShoppingCart",
-                    cancel_url = "http://localhost:50138/Home/ShoppingCart"
+                    return_url = ReturnUrl,
+                    cancel_url = ReturnUrl
                 }
             };
             string dataJSON = JsonConvert.SerializeObject(data);

@@ -2,7 +2,9 @@
 
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules;
+using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.ViewModels;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -11,11 +13,16 @@ namespace Deerfly_Patches.Controllers
     /// </summary>
     public class CheckoutController : Controller
     {
+        private PayPalApiClient _paypalClient = new PayPalApiClient();
+
         // GET: Checkout
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             ViewBag.session = Session;
-            Session.Add("PayPalAuthorizationCode", this.Request.Params.Get("code"));
+            string authorizationCode = Request.Params.Get("code");
+            Session.Add("PayPalAuthorizationCode", authorizationCode);
+            string accesstoken = await _paypalClient.GetUserAccessToken(authorizationCode);
+            //var result = await _paypalClient.GetUserInfo();
             return View();
         }
 
