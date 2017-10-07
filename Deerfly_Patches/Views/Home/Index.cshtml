@@ -38,7 +38,7 @@
         <div class="clearfix"></div>
 
         <div class="product-display">
-            <h2 class="text-center">Buy Here</h2>
+            <h2 class="text-center">@Html.ActionLink("Buy Here", "Index", "Order")</h2>
             @foreach (var item in Model)
             {
                 if (item.DisplayOnFrontPage)
