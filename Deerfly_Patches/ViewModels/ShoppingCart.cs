@@ -7,14 +7,14 @@ namespace Deerfly_Patches.ViewModels
 {
     public class ShoppingCart
     {
-        public Order _order;
-        public List<OrderDetail> _shoppingCart { get; set; }
+        public Order Order;
+        public List<OrderDetail> OrderDetails { get; set; }
         public string PayeeEmail { get; set; }
         public decimal TotalExtendedPrice
         {
             get
             {
-                return _shoppingCart.Sum(p => p.ExtendedPrice);
+                return OrderDetails.Sum(p => p.ExtendedPrice);
             }
         }
 
@@ -22,7 +22,7 @@ namespace Deerfly_Patches.ViewModels
         {
             get
             {
-                return _shoppingCart.Sum(p => p.Shipping);
+                return OrderDetails.Sum(p => p.Shipping);
             }
         }
 
@@ -36,30 +36,30 @@ namespace Deerfly_Patches.ViewModels
 
         public ShoppingCart()
         {
-            _shoppingCart = new List<OrderDetail>();
-            _order = new Order();
+            OrderDetails = new List<OrderDetail>();
+            Order = new Order();
         }
 
         public List<OrderDetail> GetItems()
         {
             // TODO: return clone to prevent writing to the data outside the class?
-            return _shoppingCart;
+            return OrderDetails;
         }
 
         public Order GetOrder()
         {
             // TODO: return clone to prevent writing to the data outside the class?
-            return _order;
+            return Order;
         }
 
         public void AddOrderDetail(OrderDetail newItem)
         {
-            _shoppingCart.Add(newItem);
+            OrderDetails.Add(newItem);
         }
 
         public void AddProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (orderDetail == null)
             {
                 orderDetail = new OrderDetail()
@@ -70,7 +70,7 @@ namespace Deerfly_Patches.ViewModels
                     UnitPrice = product.Price,
                     Shipping = product.Shipping
                 };
-                _shoppingCart.Add(orderDetail);
+                OrderDetails.Add(orderDetail);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace Deerfly_Patches.ViewModels
 
         public void DecrementProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null) && orderDetail.Quantity > 0)
             {
                 orderDetail.Quantity--;
@@ -93,10 +93,10 @@ namespace Deerfly_Patches.ViewModels
 
         public void RemoveProduct(Product product)
         {
-            OrderDetail orderDetail = _shoppingCart.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null))
             {
-                _shoppingCart.Remove(orderDetail);
+                OrderDetails.Remove(orderDetail);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace Deerfly_Patches.Modules.PayPal
 {
+    [DataContract]
     public class PayPalAddress
     {
         [DataMember(Name = "street_address")]
