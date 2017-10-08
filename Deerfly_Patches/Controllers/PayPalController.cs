@@ -23,23 +23,37 @@ namespace DeerflyPatches.Controllers
             _paypalClient = new PayPalApiClient();
         }
 
+        /*
         public async Task GetAccessToken()
         {
             AccessToken accessToken = await _paypalClient.GetAccessToken();
         }
+        */
 
-        [HttpPost]
-        public async Task<string> GetUserInfo()
+        public async Task<ActionResult> GetUserInfo()
         {
-            // Post order to PayPal API and return order ID to front end
-            return await _paypalClient.GetUserInfo();
+            string authorizationCode = Request.Params.Get("code");
+            Session.Add("PayPalAuthorizationCode", authorizationCode);
+            UserInfo userInfo = await _paypalClient.GetUserInfo(authorizationCode);
+            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            Address shippingAddress = shoppingCart.GetOrder().ShipToAddress;
+            shippingAddress.Recipient = userInfo.Name;
+            shippingAddress.Address1 = userInfo.Address.StreetAddress;
+            shippingAddress.City = userInfo.Address.City;
+            shippingAddress.State = userInfo.Address.State;
+            shippingAddress.Zip = userInfo.Address.PostalCode;
+            shippingAddress.Country = userInfo.Address.Country;
+            shippingAddress.Type = AddressType.Shipping;
+            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
+
+            return RedirectToRoute("/checkout");
         }
 
         [HttpPost]
         public async Task<string> CreateOrder()
         {
             // Get access token
-            AccessToken accessToken = await _paypalClient.GetAccessToken();
+            AccessToken accessToken = (AccessToken) await _paypalClient.GetAccessToken<AccessToken>();
 
             // Get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
@@ -62,7 +76,7 @@ namespace DeerflyPatches.Controllers
         public async Task<ActionResult> ExecutePayment(string paymentId, FormCollection data)
         {
             // Get access token
-            AccessToken accessToken = await _paypalClient.GetAccessToken();
+            AccessToken accessToken = (AccessToken) await _paypalClient.GetAccessToken<AccessToken>();
 
             string payerId = Request.Form["PayerID"];
 

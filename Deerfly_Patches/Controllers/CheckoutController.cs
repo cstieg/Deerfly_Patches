@@ -16,13 +16,8 @@ namespace Deerfly_Patches.Controllers
         private PayPalApiClient _paypalClient = new PayPalApiClient();
 
         // GET: Checkout
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            ViewBag.session = Session;
-            string authorizationCode = Request.Params.Get("code");
-            Session.Add("PayPalAuthorizationCode", authorizationCode);
-            string accesstoken = await _paypalClient.GetUserAccessToken(authorizationCode);
-            //var result = await _paypalClient.GetUserInfo();
             return View();
         }
 

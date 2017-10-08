@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Hosting;
@@ -22,6 +23,7 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public ClientInfo ClientInfo { get; set; }
         public AccessToken AccessToken { get; set; }
+        public UserAccessToken UserAccessToken { get; set; }
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
 
@@ -85,33 +87,73 @@ namespace Deerfly_Patches.Modules.PayPal
                 return AccessToken;
             }
         }
-
-        public async Task<string> GetUserAccessToken(string userCode)
+        
+        /// <summary>
+        /// Gets an access token to be able to access PayPal API service
+        /// </summary>
+        /// <param name="paypalSecrets">Object containing PayPal client id info</param>
+        /// <returns>AccessToken to use in accessing PayPal API</returns>
+        public async Task<AccessTokenBase> GetAccessToken<T> (string userCode = "") where T : AccessTokenBase
         {
-            string url = payPalBaseURL + "identity/openidconnect/tokenservice";
-            string result;
-            using (var client = new HttpClient())
+            PropertyInfo cachedTokenProperty;
+            AccessTokenBase cachedToken;
+            string url;
+            FormUrlEncodedContent content;
+            
+            switch (typeof(T).Name)
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
-                AccessToken accessToken = await GetAccessToken();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
-                {
-                    Content = new FormUrlEncodedContent(new[]
+                case "AccessToken":
+                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("AccessToken");
+                    cachedToken = AccessToken;
+                    url = payPalBaseURL + "oauth2/token";
+                    content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "client_credentials")
+                    });
+                    break;
+                case "UserAccessToken":
+                    if (userCode == "")
+                    {
+                        throw new ArgumentException("Must pass authorization code");
+                    }
+                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("UserAccessToken");
+                    cachedToken = UserAccessToken;
+                    url = payPalBaseURL + "identity/openidconnect/tokenservice";
+                    content = new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>("grant_type", "authorization_code"),
                         new KeyValuePair<string, string>("code", userCode)
-                    })
+                    });
+                    break;
+                default:
+                    throw new ArgumentException("Type T must derive from AccessTokenBase");
+            }
+
+            // Store access token to reuse until expires
+            cachedToken = (T) cachedTokenProperty.GetValue(this);
+            if (cachedToken != null && !cachedToken.IsExpired)
+            {
+                return cachedToken;
+            }
+
+            using (var client = httpClient)
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = content
                 };
                 var response = await client.SendAsync(request);
-                result = response.Content.ReadAsStringAsync().Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new HttpRequestException(result.ToString());
-                }
+                var result = response.Content.ReadAsStringAsync().Result;
+                cachedToken = JsonConvert.DeserializeObject<T>(result);
+                cachedTokenProperty.SetValue(this, cachedToken);
+
+                return cachedToken;
             }
-            return result;
         }
+
 
 
         /// <summary>
@@ -134,8 +176,9 @@ namespace Deerfly_Patches.Modules.PayPal
             }
             HttpMethod httpMethod = method == "GET" ? HttpMethod.Get : HttpMethod.Post;
             string result;
-            using (var client = httpClient)
+            using (var client = new HttpClient())
             {
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
                 if (method == "POST")
@@ -160,10 +203,11 @@ namespace Deerfly_Patches.Modules.PayPal
         /// </summary>
         /// <param name="accessToken">Access token authorizing API call</param>
         /// <returns>String result of API call</returns>
-        public async Task<string> GetUserInfo()
+        public async Task<UserInfo> GetUserInfo(string authorizationCode)
         {
-            AccessToken accessToken = await GetAccessToken();
-            return await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo?schema=openid", "", accessToken.AccessTokenString, "GET");
+            UserAccessToken accessToken = (UserAccessToken) await GetAccessToken<UserAccessToken>(authorizationCode);
+            string jsonData = await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo?schema=openid", "", accessToken.AccessTokenString, "GET");
+            return JsonConvert.DeserializeObject<UserInfo>(jsonData);
         }
 
         /// <summary>
