@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -349,7 +350,9 @@
     <Compile Include="Modules\JsonDeserializer.cs" />
     <Compile Include="Modules\PayPal\AccessToken.cs" />
     <Compile Include="Modules\PayPal\ClientInfo.cs" />
+    <Compile Include="Modules\PayPal\PayPalAddress.cs" />
     <Compile Include="Modules\PayPal\PayPalApiClient.cs" />
+    <Compile Include="Modules\PayPal\UserInfo.cs" />
     <Compile Include="Modules\SessionHelper.cs" />
     <Compile Include="Modules\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

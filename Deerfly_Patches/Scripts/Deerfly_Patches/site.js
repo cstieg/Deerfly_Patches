@@ -178,7 +178,7 @@ function itemsInDetailCount() {
 
 function setCountry() {
     var country = 'US';
-    $.getJSON('http://freegeoip.net/json/', function (data) {
+    $.getJSON('https://freegeoip.net/json/', function (data) {
         var $countrySelect = $('#country-select');
         if (country === 'US') {
             $countrySelect.find('input[value="US"]').attr('checked', 'checked');
