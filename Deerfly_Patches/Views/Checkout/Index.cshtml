@@ -1,40 +1,115 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model Deerfly_Patches.ViewModels.ShoppingCart
+
+@{
+    ViewBag.Title = "Checkout";
 }
 
-<h2>Index</h2>
+<h2>Checkout</h2>
+
+<div class="col-xs-12 col-md-10 col-lg-6" id="shipping-address">
+    <h3>Ship To:</h3>
+    <div id="shipping-address-display">
+        <p>@Model.Order.ShipToAddress.Recipient</p>
+        <p>@Model.Order.ShipToAddress.Address1</p>
+        @if(Model.Order.ShipToAddress.Address2 != "")
+        {
+            <p>@Model.Order.ShipToAddress.Address2</p>
+        }
+        <p>@Model.Order.ShipToAddress.City, @Model.Order.ShipToAddress.State @Model.Order.ShipToAddress.Zip</p>
+        <p>@Model.Order.ShipToAddress.Country</p>
+        <p>@Model.Order.ShipToAddress.Phone</p>
+    </div>
+    <div class="hidden" id="shipping-address-edit">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Recipient, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Recipient, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Recipient, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Address1, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Address1, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Address2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Address2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.City, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.City, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.City, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.State, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.State, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.State, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Zip, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Zip, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Country, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Country, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Order.ShipToAddress.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Order.ShipToAddress.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <button onclick="updateShippingAddress()">Save Shipping Address</button>
+        }
+
+    </div>
+
+</div> 
+
+<!--
+
+Display shipping address
+     Change
+
+Form if not provided
+
+Order Summary
+    Products
 
 
-<div class="col-xs-12 col-md-10 col-lg-6">
-    <form id="shipping-address" class="centered">
-        <label for="ship-to">Ship To:</label>
-        <input name="ship-to" type="text" />
-        <br />
-        <label for="address1">Address line 1</label>
-        <input name="address1" type="text" />
-        <br />
-        <label for="address2">Address line 2</label>
-        <input name="address2" type="text" />
-        <br />
-        <label for="city">City</label>
-        <input name="city" type="text" />
-        <br />
-        <label for="state">State/Province</label>
-        <input name="state" type="text" />
-        <br />
-        <label for="zip">Zip/Postal Code</label>
-        <input name="zip" type="text" />
-        <br />
-        <label for="country">Country</label>
-        <input name="country" type="text" />
-        <br />
-        <label for="phone">Phone</label>
-        <input name="phone" type="text" />
+    Order Total
 
-        <button onclick="updateShippingAddress()">Save Shipping Address</button>
-    </form>
 
-</div>
+    Pay with PayPal
+
+
+-->
 
 
 

@@ -36,6 +36,10 @@ namespace DeerflyPatches.Controllers
             Session.Add("PayPalAuthorizationCode", authorizationCode);
             UserInfo userInfo = await _paypalClient.GetUserInfo(authorizationCode);
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            if (shoppingCart.GetOrder().ShipToAddress == null)
+            {
+                shoppingCart.GetOrder().ShipToAddress = new Address();
+            }
             Address shippingAddress = shoppingCart.GetOrder().ShipToAddress;
             shippingAddress.Recipient = userInfo.Name;
             shippingAddress.Address1 = userInfo.Address.StreetAddress;
@@ -46,7 +50,7 @@ namespace DeerflyPatches.Controllers
             shippingAddress.Type = AddressType.Shipping;
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
 
-            return RedirectToRoute("/checkout");
+            return Redirect("/checkout/index");
         }
 
         [HttpPost]

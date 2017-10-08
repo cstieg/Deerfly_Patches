@@ -18,7 +18,8 @@ namespace Deerfly_Patches.Controllers
         // GET: Checkout
         public ActionResult Index()
         {
-            return View();
+            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            return View(shoppingCart);
         }
 
         [HttpPost, ActionName("UpdateShippingAddress")]
