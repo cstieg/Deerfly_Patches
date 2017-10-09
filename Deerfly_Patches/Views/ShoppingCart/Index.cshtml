@@ -70,7 +70,7 @@
     <div id="proceed-to-confirmation-page-link" class="text-right">
         <span id="lippButton"></span>
         <p>Please sign in with PayPal to autofill shipping address</p>
-        <p><a href="/checkout">Or fill it in yourself</a></p>
+        <p><a href="/checkout">Don't have a PayPal account? Click here to enter your address manually.</a></p>
     </div>
     
     <script src='https://www.paypalobjects.com/js/external/api.js'></script>
@@ -79,7 +79,7 @@
             login.render({
                 "appid": "@ViewBag.ClientInfo.ClientId",
                 "authend": "@ViewBag.ClientInfo.Mode",
-                "scopes": "openid profile email address",
+                "scopes": "openid profile email address https://uri.paypal.com/services/expresscheckout https://uri.paypal.com/services/paypalattributes",
                 "containerid": "lippButton",
                 "locale": "en-us",
                 "text": "Login to PayPal to order",
