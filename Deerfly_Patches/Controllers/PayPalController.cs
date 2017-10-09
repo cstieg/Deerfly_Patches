@@ -23,13 +23,6 @@ namespace DeerflyPatches.Controllers
             _paypalClient = new PayPalApiClient();
         }
 
-        /*
-        public async Task GetAccessToken()
-        {
-            AccessToken accessToken = await _paypalClient.GetAccessToken();
-        }
-        */
-
         public async Task<ActionResult> GetUserInfo()
         {
             string authorizationCode = Request.Params.Get("code");
@@ -50,7 +43,7 @@ namespace DeerflyPatches.Controllers
             shippingAddress.Type = AddressType.Shipping;
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
 
-            return Redirect("/checkout/index");
+            return View("CloseLoginWindow");
         }
 
         [HttpPost]
