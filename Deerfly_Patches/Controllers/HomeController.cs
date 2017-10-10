@@ -38,6 +38,11 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
+        public ActionResult Privacy()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Displays list of links to model edit pages
         /// </summary>
