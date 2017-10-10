@@ -154,6 +154,11 @@ function recalculate() {
 }
 
 
+function changeShippingAddress() {
+    $('#shipping-address-edit').removeClass('hidden');
+    $('#shipping-address-display').addClass('hidden');
+}
+
 function updateShippingAddress() {
     var formdata = $('#shipping-address').serializeArray();
     $.ajax({
@@ -162,10 +167,11 @@ function updateShippingAddress() {
         data: formdata,
         dataType: 'json',
         success: function(result, data) {
-            
+            $('#shipping-address-edit').addClass('hidden');
+            $('#shipping-address-display').removeClass('hidden');
         },
         error: function(result) {
-            debugger;
+            alert("Unable to update shipping address :(");
         }
     });
 }

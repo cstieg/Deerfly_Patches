@@ -4,11 +4,23 @@
     ViewBag.Title = "Checkout";
 }
 
+@if (Model.GetOrder().ShipToAddress.Address1 == null 
+    || Model.GetOrder().ShipToAddress.Address1 == "")
+{
+    ViewBag.addressDisplay = "hidden";
+    ViewBag.addressEdit = "";
+}
+else
+{
+    ViewBag.addressDisplay = "";
+    ViewBag.addressEdit = "hidden";
+}
+
 <h2>Checkout</h2>
 
 <div class="col-sm-6" id="shipping-address">
     <h3>Ship To:</h3>
-    <div id="shipping-address-display">
+    <div id="shipping-address-display" class="@ViewBag.addressDisplay">
         <p>@Model.Order.ShipToAddress.Recipient</p>
         <p>@Model.Order.ShipToAddress.Address1</p>
         @if(Model.Order.ShipToAddress.Address2 != "")
@@ -18,80 +30,13 @@
         <p>@Model.Order.ShipToAddress.City, @Model.Order.ShipToAddress.State @Model.Order.ShipToAddress.Zip</p>
         <p>@Model.Order.ShipToAddress.Country</p>
         <p>@Model.Order.ShipToAddress.Phone</p>
-    </div>
-    <div class="hidden" id="shipping-address-edit">
-        @using (Html.BeginForm())
-        {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Recipient, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Recipient, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Recipient, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Address1, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Address1, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Address1, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Address2, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Address2, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Address2, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.City, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.City, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.City, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.State, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.State, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.State, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Zip, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Zip, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Zip, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Country, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Country, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Country, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Order.ShipToAddress.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Order.ShipToAddress.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Order.ShipToAddress.Phone, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <button onclick="updateShippingAddress()">Save Shipping Address</button>
-        }
-
+        <button onclick="changeShippingAddress">Change</button>
     </div>
 
+    <div id="shipping-address-edit" class="@ViewBag.addressEdit">
+        @Html.Partial("_EditShippingAddressPartial", Model.GetOrder().ShipToAddress)
+    </div>
 </div> 
-
 
 <div class="col-sm-6" id="payment-summary" >
     <h3>Payment Summary</h3>
@@ -153,9 +98,9 @@
             @Html.LabelFor(model => model.OrderDetails.First().TotalPrice)
         </div>
     </div>
+
     @foreach(var item in Model.OrderDetails)
     {
- 
         <div class="row">
             <div class="col-xs-2">
                 @Html.DisplayFor(label => item.Product.Name)

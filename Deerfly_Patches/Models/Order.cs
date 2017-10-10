@@ -29,7 +29,7 @@ namespace Deerfly_Patches.Models
         public Address BillToAddress { get; set; }
 
         [InverseProperty("Order")]
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual List<OrderDetail> OrderDetails { get; set; }
 
         public decimal Subtotal { get; set; }
         

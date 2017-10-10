@@ -21,12 +21,13 @@ namespace Deerfly_Patches.Controllers
             return View(shoppingCart);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost, ActionName("UpdateShippingAddress")]
         public ActionResult UpdateShippingAddress()
         {
             Address shippingAddress = new Address()
             {
-                Recipient = Request.Form["ship-to"],
+                Recipient = Request.Form["recipient"],
                 Address1 = Request.Form["address1"],
                 Address2 = Request.Form["address2"],
                 City = Request.Form["city"],
@@ -41,10 +42,7 @@ namespace Deerfly_Patches.Controllers
             shoppingCart.GetOrder().ShipToAddress = shippingAddress;
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
 
-            // TODO: Save address to model
-
-
-            return this.JOk();
+            return View("Index", shoppingCart);
         }
 
     }

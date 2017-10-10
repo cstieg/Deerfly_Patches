@@ -536,6 +536,7 @@
     <Content Include="Views\ModelViews\Retailers\_ModifyPartial.cshtml" />
     <Content Include="Views\ModelViews\Retailers\UploadCsv.cshtml" />
     <Content Include="Views\PayPal\CloseLoginWindow.cshtml" />
+    <Content Include="Views\Checkout\_EditShippingAddressPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
