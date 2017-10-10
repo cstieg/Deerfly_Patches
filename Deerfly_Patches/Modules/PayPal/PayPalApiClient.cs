@@ -103,12 +103,12 @@ namespace Deerfly_Patches.Modules.PayPal
         {
             // Create description of order
             string description;
-            switch (shoppingCart.OrderDetails.Count)
+            switch (shoppingCart.Order.OrderDetails.Count)
             {
                 case 0:
                     throw new ArgumentException("Cannot create an order from an empty shopping cart!");
                 case 1:
-                    description = shoppingCart.OrderDetails[0].Product.Name + " - Qty: " + shoppingCart.OrderDetails[0].Quantity;
+                    description = shoppingCart.Order.OrderDetails[0].Product.Name + " - Qty: " + shoppingCart.Order.OrderDetails[0].Quantity;
                     break;
                 default:
                     description = "Multiple products";

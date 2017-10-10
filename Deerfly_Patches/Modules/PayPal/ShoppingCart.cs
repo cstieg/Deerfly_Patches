@@ -8,13 +8,12 @@ namespace Deerfly_Patches.Modules.PayPal
     public class ShoppingCart
     {
         public Order Order;
-        public List<OrderDetail> OrderDetails { get; set; }
         public string PayeeEmail { get; set; }
         public decimal TotalExtendedPrice
         {
             get
             {
-                return OrderDetails.Sum(p => p.ExtendedPrice);
+                return Order.OrderDetails.Sum(p => p.ExtendedPrice);
             }
         }
 
@@ -22,7 +21,7 @@ namespace Deerfly_Patches.Modules.PayPal
         {
             get
             {
-                return OrderDetails.Sum(p => p.Shipping);
+                return Order.OrderDetails.Sum(p => p.Shipping);
             }
         }
 
@@ -42,13 +41,12 @@ namespace Deerfly_Patches.Modules.PayPal
                 ShipToAddress = new Address(),
                 OrderDetails = new List<OrderDetail>()
             };
-            OrderDetails = Order.OrderDetails;
         }
 
         public List<OrderDetail> GetItems()
         {
             // TODO: return clone to prevent writing to the data outside the class?
-            return OrderDetails;
+            return Order.OrderDetails;
         }
 
         public Order GetOrder()
@@ -59,12 +57,12 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public void AddOrderDetail(OrderDetail newItem)
         {
-            OrderDetails.Add(newItem);
+            Order.OrderDetails.Add(newItem);
         }
 
         public void AddProduct(Product product)
         {
-            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = Order.OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (orderDetail == null)
             {
                 orderDetail = new OrderDetail()
@@ -75,7 +73,7 @@ namespace Deerfly_Patches.Modules.PayPal
                     UnitPrice = product.Price,
                     Shipping = product.Shipping
                 };
-                OrderDetails.Add(orderDetail);
+                Order.OrderDetails.Add(orderDetail);
             }
             else
             {
@@ -85,7 +83,7 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public void DecrementProduct(Product product)
         {
-            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = Order.OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null) && orderDetail.Quantity > 0)
             {
                 orderDetail.Quantity--;
@@ -98,10 +96,10 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public void RemoveProduct(Product product)
         {
-            OrderDetail orderDetail = OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
+            OrderDetail orderDetail = Order.OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
             if (!(orderDetail == null))
             {
-                OrderDetails.Remove(orderDetail);
+                Order.OrderDetails.Remove(orderDetail);
             }
         }
         

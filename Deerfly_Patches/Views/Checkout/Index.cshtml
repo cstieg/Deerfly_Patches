@@ -80,26 +80,26 @@ else
     <h3>Order Summary</h3>
     <div class="row">
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().Product.Name)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().Product.Name)
         </div>
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().UnitPrice)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().UnitPrice)
         </div>
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().Quantity)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().Quantity)
         </div>
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().ExtendedPrice)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().ExtendedPrice)
         </div>
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().Shipping)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().Shipping)
         </div>
         <div class="col-xs-2">
-            @Html.LabelFor(model => model.OrderDetails.First().TotalPrice)
+            @Html.LabelFor(model => model.Order.OrderDetails.First().TotalPrice)
         </div>
     </div>
 
-    @foreach(var item in Model.OrderDetails)
+    @foreach(var item in Model.Order.OrderDetails)
     {
         <div class="row">
             <div class="col-xs-2">
