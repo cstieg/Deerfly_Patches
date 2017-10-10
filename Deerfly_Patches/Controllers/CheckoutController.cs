@@ -21,6 +21,11 @@ namespace Deerfly_Patches.Controllers
             return View(shoppingCart);
         }
 
+        public ActionResult OrderSuccess()
+        {
+            return View();
+        }
+
         [ValidateAntiForgeryToken]
         [HttpPost, ActionName("UpdateShippingAddress")]
         public ActionResult UpdateShippingAddress()
@@ -41,7 +46,7 @@ namespace Deerfly_Patches.Controllers
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
             shoppingCart.GetOrder().ShipToAddress = shippingAddress;
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
-
+            ViewBag.ClientInfo = _paypalClient.GetClientSecrets();
             return View("Index", shoppingCart);
         }
 
