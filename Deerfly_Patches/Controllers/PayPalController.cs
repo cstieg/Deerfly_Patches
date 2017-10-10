@@ -13,6 +13,14 @@ namespace DeerflyPatches.Controllers
     {
         private PayPalApiClient _paypalClient = new PayPalApiClient();
 
+        public string GetOrderJson()
+        {
+            // get shopping cart from session
+            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            return _paypalClient.CreateOrder(shoppingCart);
+        }
+
+
         /// <summary>
         /// Gets the user's profile information from PayPal
         /// </summary>

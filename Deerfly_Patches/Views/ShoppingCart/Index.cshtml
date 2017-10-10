@@ -67,10 +67,9 @@
         };
     </script>
 
-    <div id="proceed-to-confirmation-page-link" class="text-right">
-        <span id="lippButton"></span>
-        <p>Please sign in with PayPal to autofill shipping address</p>
-        <p><a href="/checkout">Don't have a PayPal account? Click here to enter your address manually.</a></p>
+    <div class="text-right">
+        <div id="paypal-button-container"></div>
+        <p>Please click the PayPal button to pay</p>
     </div>
     
     <div class="hidden">
@@ -79,7 +78,9 @@
         <span id="paypalLoginReturnId">@ViewBag.ClientInfo.ReturnUrl</span>
     </div>
 
-    <script src='https://www.paypalobjects.com/js/external/api.js'></script>
+
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <script>
         var clientInfo = {
             clientId: document.getElementById('paypalClientId').innerText,
@@ -87,27 +88,63 @@
             paypalLoginReturnId: document.getElementById('paypalLoginReturnId').innerText
         };
 
-        paypal.use(['login'], function (login) {
-            login.render({
-                "appid": clientInfo.clientId,
-                "authend": clientInfo.mode,
-                "scopes": "openid profile email address https://uri.paypal.com/services/expresscheckout https://uri.paypal.com/services/paypalattributes",
-                "containerid": "lippButton",
-                "locale": "en-us",
-                "text": "Login to PayPal to order",
-                "returnurl": clientInfo.paypalLoginReturnId
-            });
-        });
-    </script>
+        paypal.Button.render({
 
-   
+            env: clientInfo.mode,
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+                sandbox: clientInfo.clientId,
+                production: clientInfo.clientId
+            },
+
+            // Show the buyer a 'Pay Now' button in the checkout flow
+            commit: true,
+
+            // payment() is called when the button is clicked
+            payment: function (data, actions) {
+                // Get JSON order information from server
+                return $.get('/paypal/GetOrderJson')
+                    .then(function (data) {
+                        var payment = JSON.parse(data);
+
+                        // Make a call to the REST api to create the payment
+                        return actions.payment.create({ payment: payment });
+                    })
+                    .catch(function (data) {
+                        debugger;
+                        alert("Error processing order :(");
+                    });
+            },
+
+            // onAuthorize() is called when the buyer approves the payment
+            onAuthorize: function (data, actions) {
+                debugger;
+
+
+                // verify country
+
+                // Make a call to the REST api to execute the payment
+                return actions.payment.execute().then(function () {
+
+                    // verify order information, cancel if incorrect
+
+
+                    window.alert('Payment Complete!');
+                });
+            }
+
+        }, '#paypal-button-container');
+
+    </script>   
 }
 else
 {
-        <div class="row">
-            <h3>No Items in Shopping Cart</h3>
-            <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
-        </div>
+    <div class="row">
+        <h3>No Items in Shopping Cart</h3>
+        <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
+    </div>
 }
 
 </div>

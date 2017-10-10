@@ -99,7 +99,7 @@ namespace Deerfly_Patches.Modules.PayPal
         /// </summary>
         /// <param name="shoppingCart">Shopping cart object containing items to put in order</param>
         /// <returns>JSON representation of the order in the format expected by PayPal</returns>
-        private string CreateOrder(ShoppingCart shoppingCart)
+        public string CreateOrder(ShoppingCart shoppingCart)
         {
             // Create description of order
             string description;
@@ -146,7 +146,7 @@ namespace Deerfly_Patches.Modules.PayPal
                         item_list = new
                         {
                             items = GetPayPalItems(shoppingCart),
-                            shipping_address = GetPayPalAddress(shoppingCart.GetOrder().ShipToAddress)
+                            //shipping_address = GetPayPalAddress(shoppingCart.GetOrder().ShipToAddress)
                         }
                     }
                 },
