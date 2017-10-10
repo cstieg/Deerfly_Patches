@@ -234,7 +234,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ModelControllers\AddressesController.cs" />
-    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\ModelControllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -507,12 +506,10 @@
     <Content Include="Views\ModelViews\PromoCodes\Index.cshtml" />
     <Content Include="Views\ModelViews\PromoCodes\ModifyPartial.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
-    <Content Include="Views\Checkout\Index.cshtml" />
     <Content Include="Views\ModelViews\Customers\DetailPartial.cshtml" />
     <Content Include="Views\ModelViews\Customers\ModifyPartial.cshtml" />
     <Content Include="Views\ModelViews\Addresses\DetailPartial.cshtml" />
     <Content Include="Views\ModelViews\Addresses\ModifyPartial.cshtml" />
-    <Content Include="Views\Blob\CreateBlobContainer.cshtml" />
     <Content Include="Views\ModelViews\Retailers\Create.cshtml" />
     <Content Include="Views\ModelViews\Retailers\Delete.cshtml" />
     <Content Include="Views\ModelViews\Retailers\Details.cshtml" />
@@ -536,7 +533,8 @@
     <Content Include="Views\ModelViews\Retailers\_ModifyPartial.cshtml" />
     <Content Include="Views\ModelViews\Retailers\UploadCsv.cshtml" />
     <Content Include="Views\PayPal\CloseLoginWindow.cshtml" />
-    <Content Include="Views\Checkout\_EditShippingAddressPartial.cshtml" />
+    <Content Include="Views\Home\Privacy.cshtml" />
+    <Content Include="Views\ShoppingCart\OrderSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,6 +13,11 @@ namespace DeerflyPatches.Controllers
     {
         private PayPalApiClient _paypalClient = new PayPalApiClient();
 
+        public ActionResult OrderSuccess()
+        {
+            return View();
+        }
+
         public string GetOrderJson()
         {
             // get shopping cart from session
