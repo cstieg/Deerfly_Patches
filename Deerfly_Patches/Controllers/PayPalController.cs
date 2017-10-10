@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.Models;
-using Deerfly_Patches.ViewModels;
 using Deerfly_Patches.Modules;
+using Deerfly_Patches.Modules.PayPal;
 
 namespace DeerflyPatches.Controllers
 {
@@ -80,10 +79,10 @@ namespace DeerflyPatches.Controllers
         /// <param name="data">Data passed by PayPal frontend order confirmation endpoint</param>
         /// <returns>Json success string</returns>
         [HttpPost]
-        public async Task<ActionResult> ExecutePayment(string paymentId, FormCollection data)
+        public async Task<ActionResult> ExecutePayment()
         {
             string payerId = Request.Form["PayerID"];
-            string paymentId1 = Request.Form["PaymentID"];
+            string paymentId = Request.Form["PaymentID"];
             await _paypalClient.ExecutePayment(paymentId, payerId);
             return this.JOk();
         }

@@ -1,4 +1,4 @@
-﻿@model Deerfly_Patches.ViewModels.ShoppingCart
+﻿@model Deerfly_Patches.Modules.PayPal.ShoppingCart
 
 @{
     ViewBag.Title = "Checkout";
@@ -200,13 +200,17 @@
 
 
 
+<div class="hidden">
+    <span id="createPaymentUrl">@ViewBag.ClientInfo.CreatePaymentUrl</span>
+    <span id="executePaymentUrl">@ViewBag.ClientInfo.ExecutePaymentUrl</span>
+</div>
 
 
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
 <script>
-    var CREATE_PAYMENT_URL = '/paypal/createOrder';
-    var EXECUTE_PAYMENT_URL = '/paypal/executePayment';
+    var CREATE_PAYMENT_URL = document.getElementById('createPaymentUrl').innerText;
+    var EXECUTE_PAYMENT_URL = document.getElementById('executePaymentUrl').innerText;
 
     paypal.Button.render({
 

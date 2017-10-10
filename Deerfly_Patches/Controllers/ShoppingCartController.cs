@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
-using Deerfly_Patches.ViewModels;
 using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
-
 
 namespace Deerfly_Patches.Controllers
 {

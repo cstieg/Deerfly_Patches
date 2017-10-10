@@ -3,8 +3,6 @@
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
-using Deerfly_Patches.ViewModels;
-using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -18,6 +16,7 @@ namespace Deerfly_Patches.Controllers
         // GET: Checkout
         public ActionResult Index()
         {
+            ViewBag.ClientInfo = _paypalClient.GetClientSecrets();
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
             return View(shoppingCart);
         }
