@@ -1,21 +1,19 @@
 ﻿@model Deerfly_Patches.Models.Product
 
-@{ var item = Model; }
-
 <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item" 
          onmouseover="$(this).addClass('selected');" 
          onmouseout="$(this).removeClass('selected');">
     <div class="image-wrapper">
-        <img class="product-image" src="@item.ImageUrl" srcset="@item.ImageSrcSet" alt="@item.Name image" />
+        <img class="product-image" src="@Model.ImageUrl" srcset="@Model.ImageSrcSet" alt="@Model.Name image" />
     </div>
-    <h4 class="product-name">@item.Name</h4>
-    <p class="product-description">@item.Description</p>
-    <p class="product-price">$@item.Price</p>
+    <h4 class="product-name">@Model.Name</h4>
+    <p class="product-description">@Model.Description</p>
+    <p class="product-price">$@Model.Price</p>
     <div class="button-container centered">
-        <button class="btn" onclick="buyNow(@item.ProductId)">Buy Now</button>
-        <button class="btn" onclick="addToShoppingCart(@item.ProductId)">Add to Shopping Cart</button>
+        <button class="btn buy-now" onclick="buyNow(@Model.ProductId)">Buy Now</button>
+        <button class="btn add-to-shopping-cart" onclick="addToShoppingCart(@Model.ProductId)">Add to Shopping Cart</button>
    <!--
-        <button class="btn" onclick="window.location='@item.PayPalUrl'">Buy</button>
+        <button class="btn" onclick="window.location='@Model.PayPalUrl'">Buy</button>
        -->
     </div>
 </article>
