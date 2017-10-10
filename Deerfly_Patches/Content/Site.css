@@ -15,8 +15,7 @@ body {
 }
 
 main {
-    min-height: 70vh;
-    height: 70vh;
+    min-height: 85vh;
     display: block;
 }
 
@@ -47,10 +46,7 @@ main.container {
 
 .row {
     height: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 4px;
-    margin-left: 4px;
+    margin: 10px 4px;
 }
 
 .image-square-rounded {
@@ -99,6 +95,10 @@ h2 {
 .navbar {
     margin: 0;
 }
+.navbar > .container {
+    width: 100%;
+    margin: 4px;
+}
 
 .navbar-header {
     max-width: 100%;
@@ -111,15 +111,19 @@ h2 {
 .mynav {
     font-weight: bold;
     font-size: medium;
-    margin-top: 4px;
+    margin: 12px 4px;
 }
 
+/* Menu items */
 .mynav > li {
     background-color: #225f22;
     border-radius: 14px;
-    margin: 10px;
+    margin: 6px;
 }
 
+.navbar-nav li a {
+    padding: 8px;
+}
 
 /* Shopping Cart Icon Fix */
 .glyphicon {
