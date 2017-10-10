@@ -27,12 +27,16 @@ namespace Deerfly_Patches.Modules.PayPal
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
 
+        /// <summary>
+        /// Constructor for PayPalApiClient which loads urls from paypal.json
+        /// </summary>
         public PayPalApiClient()
         {
             ClientInfo = GetClientSecrets();
             ReturnUrl = ClientInfo.ReturnUrl;
-            CancelUrl = ClientInfo.ReturnUrl;
-
+            CancelUrl = ClientInfo.CancelUrl;
+            
+            // set up http client
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en_US"));
         }
@@ -49,174 +53,70 @@ namespace Deerfly_Patches.Modules.PayPal
             return paypalSecrets;
         }
 
-        private AuthenticationHeaderValue GetAuthenticationHeader()
-        {
-            var byteArray = Encoding.ASCII.GetBytes(ClientInfo.ClientId + ":" + ClientInfo.ClientSecret);
-            var header = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-            return header;
-        }
-
         /// <summary>
-        /// Gets an access token to be able to access PayPal API service
+        /// Gets user info from PayPal API after user login
         /// </summary>
-        /// <param name="paypalSecrets">Object containing PayPal client id info</param>
-        /// <returns>AccessToken to use in accessing PayPal API</returns>
-        public async Task<AccessToken> GetAccessToken()
-        {
-            // Store access token to reuse until expires
-            if (AccessToken != null && !AccessToken.IsExpired)
-            {
-                return AccessToken;
-            }
-
-            using (var client = httpClient)
-            {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, payPalBaseURL + "oauth2/token")
-                {
-                    Content = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    })
-                };
-                var response = await client.SendAsync(request);
-                var result = response.Content.ReadAsStringAsync().Result;
-                AccessToken = JsonConvert.DeserializeObject<AccessToken>(result);
-                return AccessToken;
-            }
-        }
-        
-        /// <summary>
-        /// Gets an access token to be able to access PayPal API service
-        /// </summary>
-        /// <param name="paypalSecrets">Object containing PayPal client id info</param>
-        /// <returns>AccessToken to use in accessing PayPal API</returns>
-        public async Task<AccessTokenBase> GetAccessToken<T> (string userCode = "") where T : AccessTokenBase
-        {
-            PropertyInfo cachedTokenProperty;
-            AccessTokenBase cachedToken;
-            string url;
-            FormUrlEncodedContent content;
-            
-            switch (typeof(T).Name)
-            {
-                case "AccessToken":
-                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("AccessToken");
-                    cachedToken = AccessToken;
-                    url = payPalBaseURL + "oauth2/token";
-                    content = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("grant_type", "client_credentials")
-                    });
-                    break;
-                case "UserAccessToken":
-                    if (userCode == "")
-                    {
-                        throw new ArgumentException("Must pass authorization code");
-                    }
-                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("UserAccessToken");
-                    cachedToken = UserAccessToken;
-                    url = payPalBaseURL + "identity/openidconnect/tokenservice";
-                    content = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                        new KeyValuePair<string, string>("code", userCode)
-                    });
-                    break;
-                default:
-                    throw new ArgumentException("Type T must derive from AccessTokenBase");
-            }
-
-            // Store access token to reuse until expires
-            cachedToken = (T) cachedTokenProperty.GetValue(this);
-            if (cachedToken != null && !cachedToken.IsExpired)
-            {
-                return cachedToken;
-            }
-
-            using (var client = httpClient)
-            {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                client.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
-                {
-                    Content = content
-                };
-                var response = await client.SendAsync(request);
-                var result = response.Content.ReadAsStringAsync().Result;
-                cachedToken = JsonConvert.DeserializeObject<T>(result);
-                cachedTokenProperty.SetValue(this, cachedToken);
-
-                return cachedToken;
-            }
-        }
-
-
-
-        /// <summary>
-        /// Make API call to PayPal with specified data.  
-        /// Generic wrapper generalizing elements needed by all API calls, such as access token header.
-        /// </summary>
-        /// <param name="url">API endpoint URL being called</param>
-        /// <param name="data">Data to pass to endpoint</param>
-        /// <param name="accessToken">Access token authorizing access</param>
-        /// <returns>String result of call</returns>
-        public async Task<string> PayPalCall(string url, string data, string accessToken, string method = "POST")
-        {
-            if (!"POST|GET".Contains(method))
-            {
-                throw new ArgumentException("Argument 'method' must either be 'GET' or 'POST'");
-            }
-            if (method == "GET" && data != "")
-            {
-                throw new ArgumentException("A GET request cannot contain data!");
-            }
-            HttpMethod httpMethod = method == "GET" ? HttpMethod.Get : HttpMethod.Post;
-            string result;
-            using (var client = new HttpClient())
-            {
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpRequestMessage request = new HttpRequestMessage(httpMethod, url);
-                if (method == "POST")
-                {
-                    request.Content = new StringContent(data, Encoding.UTF8, "application/json");
-                }
-                request.Headers.Add("Accept", "application/json");
-                var response = await client.SendAsync(request);
-                result = response.Content.ReadAsStringAsync().Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new HttpRequestException(result.ToString());
-                }
-            }
-            return result;
-        }
-
-
-
-        /// <summary>
-        /// Gets user info from PayPal API
-        /// </summary>
-        /// <param name="accessToken">Access token authorizing API call</param>
-        /// <returns>String result of API call</returns>
+        /// <param name="authorizationCode">Authorization code returned from user login</param>
+        /// <returns>UserInfo object containing information about the user</returns>
         public async Task<UserInfo> GetUserInfo(string authorizationCode)
         {
             UserAccessToken accessToken = (UserAccessToken) await GetAccessToken<UserAccessToken>(authorizationCode);
-            string jsonData = await PayPalCall(payPalBaseURL + "identity/openidconnect/userinfo?schema=openid", "", accessToken.AccessTokenString, "GET");
+            string jsonData = await PayPalCall("identity/openidconnect/userinfo?schema=openid", "", accessToken.AccessTokenString, "GET");
             return JsonConvert.DeserializeObject<UserInfo>(jsonData);
         }
+
+
+        /// <summary>
+        /// Posts an order to PayPal API given a shopping cart
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart object containing order</param>
+        /// <returns>JSON data containing order id</returns>
+        public async Task<string> PostOrder(ShoppingCart shoppingCart)
+        {
+            AccessToken accessToken = (AccessToken)await GetAccessToken<AccessToken>();
+            string orderData = CreateOrder(shoppingCart);
+            return await PayPalCall("payments/payment", orderData, accessToken.AccessTokenString);
+        }
+
+        /// <summary>
+        /// Executes a payment created by PostOrder
+        /// </summary>
+        /// <param name="paymentId">The payment ID passed by user approval dialog on front end</param>
+        /// <param name="payerId">The payer ID passed by user approval dialog on front end</param>
+        public async Task ExecutePayment(string paymentId, string payerId)
+        {
+            AccessToken accessToken = (AccessToken)await GetAccessToken<AccessToken>();
+            string postData = JsonConvert.SerializeObject(new
+            {
+                payer_id = payerId
+            });
+            var result = await PayPalCall("payments/payment/" + paymentId + "/execute", postData, accessToken.AccessTokenString);
+            var orderId = new JsonDeserializer(result).GetString("id");
+        }
+
 
         /// <summary>
         /// Creates an order to pass to PayPal API
         /// </summary>
         /// <param name="shoppingCart">Shopping cart object containing items to put in order</param>
         /// <returns>JSON representation of the order in the format expected by PayPal</returns>
-        public string CreateOrder(ShoppingCart shoppingCart)
+        private string CreateOrder(ShoppingCart shoppingCart)
         {
+            // Create description of order
+            string description;
+            switch (shoppingCart.OrderDetails.Count)
+            {
+                case 0:
+                    throw new ArgumentException("Cannot create an order from an empty shopping cart!");
+                case 1:
+                    description = shoppingCart.OrderDetails[0].Product.Name + " - Qty: " + shoppingCart.OrderDetails[0].Quantity;
+                    break;
+                default:
+                    description = "Multiple products";
+                    break;
+            }
+
+            // Create JSON order object
             object data = new
             {
                 intent = "order",
@@ -243,7 +143,7 @@ namespace Deerfly_Patches.Modules.PayPal
                         {
                             email = shoppingCart.PayeeEmail
                         },
-                        description = "Order from Detex, manufacturer of Deerfly Patches",
+                        description = description,
                         item_list = new
                         {
                             items = GetPayPalItems(shoppingCart),
@@ -254,7 +154,7 @@ namespace Deerfly_Patches.Modules.PayPal
                 redirect_urls = new
                 {
                     return_url = ReturnUrl,
-                    cancel_url = ReturnUrl
+                    cancel_url = CancelUrl
                 }
             };
             string dataJSON = JsonConvert.SerializeObject(data);
@@ -262,32 +162,129 @@ namespace Deerfly_Patches.Modules.PayPal
         }
 
         /// <summary>
-        /// Posts an order to PayPal API
+        /// Gets an access token to use in making PayPal API calls.
+        /// There are two types of access tokens:
+        ///     1.  An AccessToken derived from the client id and secret, used in Payments API
+        ///     2.  A UserAccessToken derived from authorization code created upon user login, used in Identity API
+        /// The access token is cached, and refreshed as necessary.
         /// </summary>
-        /// <param name="data">JSON order data in PayPal format</param>
-        /// <param name="accessToken">Access token authorizing PayPal call</param>
-        /// <returns></returns>
-        public async Task<string> PostOrder(string data, string accessToken)
+        /// <typeparam name="T">Either AccessToken or UserAccessToken</typeparam>
+        /// <param name="userCode">Authorization code obtained from user login which will be exchanged for UserAccessToken.  
+        /// Leave empty if obtaining AccessToken.</param>
+        /// <returns>AccessToken or UserAccessToken to be used in API calls</returns>
+        private async Task<AccessTokenBase> GetAccessToken<T>(string userCode = "") where T : AccessTokenBase
         {
-            string result;
-            string orderId = "";
-            using (var client = new HttpClient())
+            PropertyInfo cachedTokenProperty;
+            AccessTokenBase cachedToken;
+            string url;
+            FormUrlEncodedContent content;
+
+            switch (typeof(T).Name)
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, payPalBaseURL + "payments/payment")
-                {
-                    Content = new StringContent(data, Encoding.UTF8, "application/json")
-                };
-                var response = await client.SendAsync(request);
-                result = response.Content.ReadAsStringAsync().Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new HttpRequestException(result.ToString());
-                }
-                orderId = new JsonDeserializer(result).GetString("id");
+                case "AccessToken":
+                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("AccessToken");
+                    url = payPalBaseURL + "oauth2/token";
+                    content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "client_credentials")
+                    });
+                    break;
+                case "UserAccessToken":
+                    if (userCode == "")
+                    {
+                        throw new ArgumentException("Must pass authorization code");
+                    }
+                    cachedTokenProperty = typeof(PayPalApiClient).GetProperty("UserAccessToken");
+                    url = payPalBaseURL + "identity/openidconnect/tokenservice";
+                    content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                        new KeyValuePair<string, string>("code", userCode)
+                    });
+                    break;
+                default:
+                    throw new ArgumentException("Type T must derive from AccessTokenBase");
+            }
+
+            // Store access token to reuse until expires
+            cachedToken = (T)cachedTokenProperty.GetValue(this);
+            if (cachedToken != null && !cachedToken.IsExpired)
+            {
+                return cachedToken;
+            }
+
+            // Get new access token
+            // Set up request parameters
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            httpClient.DefaultRequestHeaders.Authorization = GetAuthenticationHeader();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = content
+            };
+
+            // Make API call and get results
+            var response = await httpClient.SendAsync(request);
+            var result = response.Content.ReadAsStringAsync().Result;
+            cachedToken = JsonConvert.DeserializeObject<T>(result);
+
+            // store cached token as property
+            cachedTokenProperty.SetValue(this, cachedToken);
+
+            return cachedToken;
+        }
+
+        /// <summary>
+        /// Gets a header used to authenticate PayPal API calls with client id and secret
+        /// </summary>
+        /// <returns>The AuthenticationHeaderValue object containing the authentication data</returns>
+        private AuthenticationHeaderValue GetAuthenticationHeader()
+        {
+            var byteArray = Encoding.ASCII.GetBytes(ClientInfo.ClientId + ":" + ClientInfo.ClientSecret);
+            return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+        }
+
+        /// <summary>
+        /// Make API call to PayPal with specified data.  
+        /// Generic wrapper generalizing elements needed by all API calls, such as getuserinfo.
+        /// </summary>
+        /// <param name="url">API endpoint URL being called</param>
+        /// <param name="data">Data to pass to endpoint</param>
+        /// <param name="accessToken">Access token authorizing access</param>
+        /// <param name="method">GET or POST</param>
+        /// <returns>String result of call</returns>
+        private async Task<string> PayPalCall(string url, string data, string accessToken, string method = "POST")
+        {
+            // Check parameters
+            if (!"POST|GET".Contains(method))
+            {
+                throw new ArgumentException("Argument 'method' must either be 'GET' or 'POST'");
+            }
+            if (method == "GET" && data != "")
+            {
+                throw new ArgumentException("A GET request cannot contain data!");
+            }
+            HttpMethod httpMethod = method == "GET" ? HttpMethod.Get : HttpMethod.Post;
+
+            string fullUrl = payPalBaseURL + url;
+
+            // Set up request parameters
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            HttpRequestMessage request = new HttpRequestMessage(httpMethod, fullUrl);
+            if (method == "POST")
+            {
+                request.Content = new StringContent(data, Encoding.UTF8, "application/json");
+            }
+
+            // Make API call and get results
+            var response = await httpClient.SendAsync(request);
+            string result = response.Content.ReadAsStringAsync().Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(result.ToString());
             }
             return result;
         }
+
 
         /// <summary>
         /// Converts address to PayPal object format

@@ -20,6 +20,15 @@ namespace Deerfly_Patches.Modules.PayPal
         [DataMember(Name = "return_url")]
         public string ReturnUrl { get; set; }
 
+        [DataMember(Name = "cancel_url")]
+        public string CancelUrl { get; set; }
+
+        [DataMember(Name = "create_payment_url")]
+        public string CreatePaymentUrl { get; set; }
+
+        [DataMember(Name = "execute_payment_url")]
+        public string ExecutePaymentUrl { get; set; }
+
         [DataMember(Name = "mode")]
         public string Mode { get; set; }
     }

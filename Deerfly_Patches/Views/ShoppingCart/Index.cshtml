@@ -73,17 +73,29 @@
         <p><a href="/checkout">Don't have a PayPal account? Click here to enter your address manually.</a></p>
     </div>
     
+    <div class="hidden">
+        <span id="paypalClientId">@ViewBag.ClientInfo.ClientId</span>
+        <span id="paypalMode">@ViewBag.ClientInfo.Mode</span>
+        <span id="paypalLoginReturnId">@ViewBag.ClientInfo.ReturnUrl</span>
+    </div>
+
     <script src='https://www.paypalobjects.com/js/external/api.js'></script>
     <script>
+        var clientInfo = {
+            clientId: document.getElementById('paypalClientId').innerText,
+            mode: document.getElementById('paypalMode').innerText,
+            paypalLoginReturnId: document.getElementById('paypalLoginReturnId').innerText
+        };
+
         paypal.use(['login'], function (login) {
             login.render({
-                "appid": "@ViewBag.ClientInfo.ClientId",
-                "authend": "@ViewBag.ClientInfo.Mode",
+                "appid": clientInfo.clientId,
+                "authend": clientInfo.mode,
                 "scopes": "openid profile email address https://uri.paypal.com/services/expresscheckout https://uri.paypal.com/services/paypalattributes",
                 "containerid": "lippButton",
                 "locale": "en-us",
                 "text": "Login to PayPal to order",
-                "returnurl": "@ViewBag.ClientInfo.ReturnUrl"
+                "returnurl": clientInfo.paypalLoginReturnId
             });
         });
     </script>
@@ -98,5 +110,4 @@ else
         </div>
 }
 
-    
 </div>
