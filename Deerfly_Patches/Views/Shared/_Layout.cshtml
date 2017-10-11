@@ -36,7 +36,6 @@
                 <ul class="nav navbar-nav mynav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Retailer Map", "Index", "RetailerMap")</li>
                     <li>@Html.ActionLink("Testimonials", "Testimonials", "Home")</li>
                     <li>@Html.ActionLink("FAQ", "Faq", "Home")</li>
@@ -54,6 +53,15 @@
     <div class="container body-content">
         <main>@RenderBody()</main>
         <hr />
+        <div id="navbar-bottom" class="navbar navbar-inverse">
+            <div class="container">
+                <ul class="nav navbar-nav mynav">
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Privacy Policy", "Privacy", "Home")</li>
+                </ul>
+            </div>
+        </div>
+
         <footer>
             <span>&copy; @DateTime.Now.Year - Detex</span>
             <span class="pull-right">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></span>
