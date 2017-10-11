@@ -19,7 +19,7 @@ namespace Deerfly_Patches.Models
         public string Description { get; set; }
 
         [ForeignKey("PromotionalItem")]
-        public int? PromotionalItemId { get; set; }
+        public Nullable<int> PromotionalItemId { get; set; }
         [Display(Name = "Promotional Item", Description = "A promotional item that is added to the cart")]
         public virtual Product PromotionalItem { get; set; }
 

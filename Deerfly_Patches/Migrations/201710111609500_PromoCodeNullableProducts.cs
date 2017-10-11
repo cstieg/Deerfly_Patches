@@ -10,7 +10,6 @@ namespace Deerfly_Patches.Migrations
             DropForeignKey("dbo.PromoCodes", "SpecialPriceItem_ProductId", "dbo.Products");
             DropIndex("dbo.PromoCodes", new[] { "SpecialPriceItem_ProductId" });
             RenameColumn(table: "dbo.PromoCodes", name: "SpecialPriceItem_ProductId", newName: "SpecialPriceItemId");
-            AlterColumn("dbo.PromoCodes", "SpecialPriceItemId", c => c.Int(nullable: false));
             CreateIndex("dbo.PromoCodes", "SpecialPriceItemId");
             AddForeignKey("dbo.PromoCodes", "SpecialPriceItemId", "dbo.Products", "ProductId", cascadeDelete: true);
         }
@@ -19,7 +18,6 @@ namespace Deerfly_Patches.Migrations
         {
             DropForeignKey("dbo.PromoCodes", "SpecialPriceItemId", "dbo.Products");
             DropIndex("dbo.PromoCodes", new[] { "SpecialPriceItemId" });
-            AlterColumn("dbo.PromoCodes", "SpecialPriceItemId", c => c.Int());
             RenameColumn(table: "dbo.PromoCodes", name: "SpecialPriceItemId", newName: "SpecialPriceItem_ProductId");
             CreateIndex("dbo.PromoCodes", "SpecialPriceItem_ProductId");
             AddForeignKey("dbo.PromoCodes", "SpecialPriceItem_ProductId", "dbo.Products", "ProductId");

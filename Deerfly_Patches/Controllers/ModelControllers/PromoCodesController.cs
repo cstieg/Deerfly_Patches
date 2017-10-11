@@ -50,7 +50,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PromoCodeId,Code,Description,PromotionalItemId,PromotionalItemPrice,WithPurchaseOfId,MinimumQualifyingPurchase,PercentOffItem,PercentOffOrder,SpecialPrice,CodeStart,CodeEnd")] PromoCode promoCode)
+        public ActionResult Create(PromoCode promoCode)
         {
             if (ModelState.IsValid)
             {
@@ -77,9 +77,9 @@ namespace Deerfly_Patches.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.PromotionalItemList = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
+            ViewBag.WithPurchaseOfIdList = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemIdList = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -88,7 +88,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PromoCodeId,Code,Description,PromotionalItemId,PromotionalItemPrice,WithPurchaseOfId,MinimumQualifyingPurchase,PercentOffItem,PercentOffOrder,SpecialPrice,CodeStart,CodeEnd")] PromoCode promoCode)
+        public ActionResult Edit(PromoCode promoCode)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace Deerfly_Patches.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
+            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name");
             ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
             ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
