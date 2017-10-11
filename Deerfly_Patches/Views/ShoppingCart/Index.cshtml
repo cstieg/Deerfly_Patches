@@ -54,19 +54,31 @@
     <hr />
     <div class="hidden col-md-6"></div>
 
+    <script>
+    window.onload = function () {
+        setCountry();
+    };
+    </script>
     <div id="country-select" class="row">
         <form onchange="countryChange()">
             <input type="radio" name="country" value="US" checked/>US
             <input type="radio" name="country" value="International" />International
         </form>
     </div>
+    
+    <div id="enter-promo-code">
+        <form method="post" action="/ShoppingCart/AddPromoCode">
+            <label for="promocode">Enter Promo Code</label>
+            <input name="promocode" type="text" />
+            <input type="submit" value="Apply" />
+        </form>
+        <div id="promo-codes-applied">
+            <p>Promocodes applied: </p>
+        </div>
+    </div>
 
-    <script>
-        window.onload = function () {
-            setCountry();
-        };
-    </script>
-
+    <div class="clearfix"></div>
+    <hr />
     <div class="text-right">
         <div id="paypal-button-container"></div>
         <p>Please click the PayPal button to pay</p>

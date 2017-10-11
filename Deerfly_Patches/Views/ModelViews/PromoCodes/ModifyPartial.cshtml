@@ -16,6 +16,7 @@
             @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.Code, ViewData).Description
                 @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -24,15 +25,18 @@
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.Description, ViewData).Description
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PromotionalItemId, "PromotionalItemId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PromotionalItem, "PromotionalItemId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("PromotionalItemId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PromotionalItemId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.PromotionalItem, (SelectList)ViewBag.PromotionalItemId, 
+                    "Select an item to add to the shopping cart as a promotional", new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.PromotionalItem, ViewData).Description
+                @Html.ValidationMessageFor(model => model.PromotionalItem, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -40,6 +44,7 @@
             @Html.LabelFor(model => model.PromotionalItemPrice, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PromotionalItemPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.PromotionalItemPrice, ViewData).Description
                 @Html.ValidationMessageFor(model => model.PromotionalItemPrice, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,7 +52,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.WithPurchaseOfId, "WithPurchaseOfId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("WithPurchaseOfId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.WithPurchaseOf, (SelectList)ViewBag.WithPurchaseOfId, 
+                    "Select an item required to purchase to validate the promocode", new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.WithPurchaseOf, ViewData).Description
                 @Html.ValidationMessageFor(model => model.WithPurchaseOfId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -56,15 +63,8 @@
             @Html.LabelFor(model => model.MinimumQualifyingPurchase, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.MinimumQualifyingPurchase, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.MinimumQualifyingPurchase, ViewData).Description
                 @Html.ValidationMessageFor(model => model.MinimumQualifyingPurchase, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PercentOffItem, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PercentOffItem, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PercentOffItem, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -72,7 +72,17 @@
             @Html.LabelFor(model => model.PercentOffOrder, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PercentOffOrder, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.PercentOffOrder, ViewData).Description
                 @Html.ValidationMessageFor(model => model.PercentOffOrder, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PercentOffItem, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PercentOffItem, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.PercentOffItem, ViewData).Description
+                @Html.ValidationMessageFor(model => model.PercentOffItem, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -80,7 +90,18 @@
             @Html.LabelFor(model => model.SpecialPrice, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.SpecialPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.SpecialPrice, ViewData).Description
                 @Html.ValidationMessageFor(model => model.SpecialPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SpecialPriceItem, "SpecialPriceItemId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SpecialPriceItem, (SelectList)ViewBag.SpecialPriceItemId,
+                    "Select an item to be given a Special Price or Percent Off", new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.SpecialPriceItem, ViewData).Description
+                @Html.ValidationMessageFor(model => model.SpecialPriceItem, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -88,6 +109,7 @@
             @Html.LabelFor(model => model.CodeStart, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CodeStart, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.CodeStart, ViewData).Description
                 @Html.ValidationMessageFor(model => model.CodeStart, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -96,6 +118,7 @@
             @Html.LabelFor(model => model.CodeEnd, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CodeEnd, new { htmlAttributes = new { @class = "form-control" } })
+                @ModelMetadata.FromLambdaExpression(model => model.CodeEnd, ViewData).Description
                 @Html.ValidationMessageFor(model => model.CodeEnd, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -43,11 +43,11 @@ namespace DeerflyPatches.Controllers
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
 
             // copy user info to shipping address in shopping cart
-            if (shoppingCart.GetOrder().ShipToAddress == null)
+            if (shoppingCart.Order.ShipToAddress == null)
             {
-                shoppingCart.GetOrder().ShipToAddress = new Address();
+                shoppingCart.Order.ShipToAddress = new Address();
             }
-            Address shippingAddress = shoppingCart.GetOrder().ShipToAddress;
+            Address shippingAddress = shoppingCart.Order.ShipToAddress;
             shippingAddress.Recipient = userInfo.Name;
             shippingAddress.Address1 = userInfo.Address.StreetAddress;
             shippingAddress.City = userInfo.Address.City;
@@ -70,13 +70,13 @@ namespace DeerflyPatches.Controllers
         {
             // Get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
-            if (shoppingCart.GetOrder().ShipToAddress == null)
+            if (shoppingCart.Order.ShipToAddress == null)
             {
-                shoppingCart.GetOrder().ShipToAddress = new Address();
+                shoppingCart.Order.ShipToAddress = new Address();
             }
 
             // TODO: Need to replace this -- need country list
-            shoppingCart.GetOrder().ShipToAddress.Country = "US";
+            shoppingCart.Order.ShipToAddress.Country = "US";
 
             // Create JSON string with order information
             shoppingCart.PayeeEmail = _paypalClient.ClientInfo.ClientAccount;

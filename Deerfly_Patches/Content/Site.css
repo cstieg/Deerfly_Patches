@@ -366,6 +366,17 @@ h2 {
     content: 'A';
 }
 
+/* ******************************** Shopping Cart Page ******************************** */
+#country-select,
+#enter-promo-code {
+    width: 45%;
+    display: inline-block;
+}
+
+#enter-promo-code {
+    float: right;
+}
+
 
 /* ******************************** Model Scaffolding ********************************* */
 #upload-image-preview {

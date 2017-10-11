@@ -1,6 +1,8 @@
 ﻿using System.Web.Mvc;
 using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
+using Deerfly_Patches.Models;
+using System.Linq;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -9,13 +11,34 @@ namespace Deerfly_Patches.Controllers
     /// </summary>
     public class ShoppingCartController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: ShoppingCart
         public ActionResult Index()
         {
-            ClientInfo clientInfo = new PayPalApiClient().GetClientSecrets();
-            ViewBag.ClientInfo = clientInfo;
+            ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
             return View(shoppingCart);
+        }
+
+        [HttpPost]
+        public ActionResult AddPromoCode()
+        {
+            string pc = Request.Params.Get("PromoCode");
+            PromoCode promoCode = db.PromoCodes.Where(p => p.Code == pc).Single();
+
+            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            shoppingCart.AddPromoCode(promoCode);
+
+
+            return Index();
+        }
+
+        [HttpPost]
+        public ActionResult RemovePromoCode()
+        {
+
+            return Index();
         }
     }
 }

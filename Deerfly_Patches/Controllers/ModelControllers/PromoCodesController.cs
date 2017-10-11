@@ -41,6 +41,7 @@ namespace Deerfly_Patches.Controllers
         {
             ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name");
             ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name");
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name");
             return View();
         }
 
@@ -60,6 +61,7 @@ namespace Deerfly_Patches.Controllers
 
             ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
             ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -77,6 +79,7 @@ namespace Deerfly_Patches.Controllers
             }
             ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
             ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -95,6 +98,7 @@ namespace Deerfly_Patches.Controllers
             }
             ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
             ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
