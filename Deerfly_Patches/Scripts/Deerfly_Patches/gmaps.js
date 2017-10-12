@@ -59,7 +59,7 @@ var retailerMap = {
     init: function (userLocation) {
         // reference to retailerMap for use in callbacks
         var self = this;
-
+        
         // div in which to render map
         var mapElement = $('#retailer-map-view')[0];
 
@@ -89,11 +89,14 @@ var retailerMap = {
         var leftLng = mapBounds.b.b;
         var minLat = mapBounds.f.b;
         var rightLng = mapBounds.b.f;
+
         $.getJSON('/retailermap/updateretailerjson' +
             '?maxlat=' + maxLat + 
             '&leftlng=' + leftLng +
             '&minlat=' + minLat +
-            '&rightlng=' + rightLng, function(result) {
+            '&rightlng=' + rightLng +
+            '&currentlat=' + this.location.lat +
+            '&currentlng=' + this.location.lng, function (result) {
                 self.retailers = result;
                 self.showRetailers();
         });
@@ -111,7 +114,7 @@ var retailerMap = {
         $retailerList.html('');
 
         // display message if no retailers in range
-        if (this.retailers.length == 0) {
+        if (this.retailers.length === 0) {
             $('#retailer-list').html('<p>Sorry, no retailers in this area. You may <a href="/order">order here.</a></p>');
         }
 
@@ -152,7 +155,7 @@ var retailerMap = {
         $retailerItemTemplate.find('.retailer-name').text(retailer.Name);
         $retailerItemTemplate.find('.retailer-distance').text(retailer.distance.toPrecision(3) + ' miles from your location');
         $retailerItemTemplate.find('.retailer-address').html(retailer.Address.Address1 + '<br />' +
-            retailer.Address.City + ', ' + retailer.Address.State + '<br />');
+            retailer.Address.City + ', ' + retailer.Address.State + ' ' + retailer.Address.Zip + '<br />');
         if (retailer.Address.Phone) {
             $retailerItemTemplate.find('.retailer-phone')
                 .html(retailer.Address.Phone + '<br />')

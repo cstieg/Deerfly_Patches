@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -74,10 +75,17 @@ namespace Deerfly_Patches.Controllers
         /// <param name="leftLng">Minimum (westernmost) longitude of range</param>
         /// <param name="minLat">Minimum (southernmost) latitude of range</param>
         /// <param name="rightLng">Maximum (easternmost) longitude of range</param>
+        /// <param name="currentLat">Current user latitude</param>
+        /// <param name="currentLng">Current user longitude</param>
         /// <returns></returns>
         [HttpGet]
-        public JsonResult UpdateRetailerJson(float maxLat, float leftLng, float minLat, float rightLng)
+        public JsonResult UpdateRetailerJson(float maxLat, float leftLng, float minLat, float rightLng, float currentLat, float currentLng)
         {
+            try
+            {
+                userLocation = new LatLng(currentLat, currentLng);
+            }
+            catch { }
             var data = GetRetailersInBounds(new GeoRange(maxLat, leftLng, minLat, rightLng));
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -87,13 +95,21 @@ namespace Deerfly_Patches.Controllers
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private IQueryable<Retailer> GetRetailersInBounds(GeoRange range)
+        private List<Retailer> GetRetailersInBounds(GeoRange range)
         {
             var retailers = db.Retailers.Include(r => r.LatLng).Include(r => r.Address)
                 .Where(r => r.LatLng.Lat <= range.TopLeft.Lat &&
                             r.LatLng.Lng >= range.TopLeft.Lng &&
                             r.LatLng.Lat >= range.BottomRight.Lat &&
-                            r.LatLng.Lng <= range.BottomRight.Lng);
+                            r.LatLng.Lng <= range.BottomRight.Lng).ToList();
+            if (userLocation != null)
+            {
+                retailers.Sort(delegate (Retailer r1, Retailer r2)
+                {
+                    return r1.LatLng.MilesTo(userLocation).CompareTo(r2.LatLng.MilesTo(userLocation));
+                });
+            }
+
             return retailers;
         }
 
