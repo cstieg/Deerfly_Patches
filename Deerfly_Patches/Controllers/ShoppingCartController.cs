@@ -3,6 +3,7 @@ using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.Models;
 using System.Linq;
+using System;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -24,14 +25,29 @@ namespace Deerfly_Patches.Controllers
         [HttpPost]
         public ActionResult AddPromoCode()
         {
-            string pc = Request.Params.Get("PromoCode");
-            PromoCode promoCode = db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).Single();
-
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
-            shoppingCart.AddPromoCode(promoCode);
-            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
+            try
+            {
+                string pc = Request.Params.Get("PromoCode");
+                PromoCode promoCode = db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).Single();
 
-            return Redirect("Index");
+                shoppingCart.AddPromoCode(promoCode);
+                HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
+
+                return Redirect("Index");
+            }
+            catch (InvalidOperationException e)
+            {
+                ModelState.AddModelError("PromoCodes", "Failed to add promocode: Invalid promo code");
+                ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
+                return View("Index", shoppingCart);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("PromoCodes", "Failed to add promocode: " + e.Message);
+                ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
+                return View("Index", shoppingCart);
+            }
         }
     }
 }

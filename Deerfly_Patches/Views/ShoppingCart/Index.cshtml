@@ -44,8 +44,8 @@
                 <button onclick="removeItemInShoppingCart(@item.Product.ProductId)">x</button>
             </div>
         </div>
-    }
-
+        }
+    
     <hr />
     <div class="row item-detail-total">
         <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">TOTAL:</div>
@@ -93,7 +93,8 @@
                     }
                 </ul>
             </div>
-        }
+        } 
+        @Html.ValidationMessageFor(model => model.PromoCodes, "", new { @class = "text-danger" })
     </div>
 
     <div class="clearfix"></div>
@@ -166,7 +167,7 @@
 
         }, '#paypal-button-container');
 
-    </script>   
+    </script>
 }
 else
 {
