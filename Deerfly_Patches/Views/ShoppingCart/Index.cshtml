@@ -26,9 +26,15 @@
             <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">@item.Product.Name</div>
             <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price">$@item.UnitPrice</div>
             <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
-                <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
+                @if (!item.IsPromotionalItem)
+                {
+                    <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
+                }
                 <span class="item-qty-ct" id="qty-@item.Product.ProductId">@item.Quantity</span>
-                <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
+                @if (!item.IsPromotionalItem)
+                {
+                    <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
+                }
             </div>
             <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
             <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@item.Shipping</div>

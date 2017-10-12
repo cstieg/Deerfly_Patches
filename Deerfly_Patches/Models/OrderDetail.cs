@@ -16,24 +16,28 @@ namespace Deerfly_Patches.Models
         public Product Product { get; set; }
 
         [Required]
+        [Display(Name = "Placed in Cart")]
         public DateTime PlacedInCart { get; set; }
 
         [Required]
         public int Quantity { get; set; }
 
         [Required]
+        [Display(Name = "Unit Price")]
         public decimal UnitPrice { get; set; }
 
         public decimal Shipping { get; set; }
-
-        public bool CheckedOut { get; set; }
 
         [ForeignKey("Order")]
         [Required]
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
+        [Display(Name = "Promotional Item")]
+        public bool IsPromotionalItem { get; set; }
+
         [ReadOnly(true)]
+        [Display(Name = "Extended Price")]
         public decimal ExtendedPrice
         {
             get
@@ -44,6 +48,7 @@ namespace Deerfly_Patches.Models
         }
 
         [ReadOnly(true)]
+        [Display(Name = "Total Price")]
         public decimal TotalPrice
         {
             get 

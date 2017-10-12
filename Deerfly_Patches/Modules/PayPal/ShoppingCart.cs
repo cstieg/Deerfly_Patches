@@ -149,7 +149,7 @@ namespace Deerfly_Patches.Modules.PayPal
                     Product = promoCode.PromotionalItem,
                     UnitPrice = promoCode.PromotionalItemPrice ?? 0,
                     Quantity = 1,
-                    CheckedOut = false,
+                    IsPromotionalItem = true,
                     PlacedInCart = DateTime.Now,
                     Shipping = 0
                 });
