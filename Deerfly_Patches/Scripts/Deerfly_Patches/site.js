@@ -154,28 +154,6 @@ function recalculate() {
 }
 
 
-function changeShippingAddress() {
-    $('#shipping-address-edit').removeClass('hidden');
-    $('#shipping-address-display').addClass('hidden');
-}
-
-function updateShippingAddress() {
-    var formdata = $('#shipping-address').serializeArray();
-    $.ajax({
-        type: 'POST',
-        url: '/Checkout/UpdateShippingAddress',
-        data: formdata,
-        dataType: 'json',
-        success: function(result, data) {
-            $('#shipping-address-edit').addClass('hidden');
-            $('#shipping-address-display').removeClass('hidden');
-        },
-        error: function(result) {
-            alert("Unable to update shipping address :(");
-        }
-    });
-}
-
 function itemsInDetailCount() {
     var $itemDetailLines = $('.item-detail-line');
     return $itemDetailLines.length;
@@ -231,7 +209,7 @@ function imageUploadPreview(targetId) {
         var reader = new FileReader();
         reader.onloadend = function () {
             $targetImg.attr("src", reader.result);
-        }
+        };
         reader.readAsDataURL(file);
     }
 }
