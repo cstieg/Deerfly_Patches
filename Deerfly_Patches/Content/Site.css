@@ -253,10 +253,8 @@ h2 {
     border: thick ridge green;
 }
 
-
 #retailer-map-view {
     height: 100%;
-    min-height: 100px;
     border: thin black solid;
 }
 
@@ -265,6 +263,10 @@ h2 {
     border: 2px gray inset;
     background-color: beige;
     overflow: scroll;
+}
+
+#retailer-map-container > * {
+    min-height: 90vh;
 }
 
 #retailer-list-view form {
