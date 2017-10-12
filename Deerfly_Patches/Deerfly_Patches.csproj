@@ -331,6 +331,10 @@
     <Compile Include="Migrations\201710112107530_NullableIntPromoCode.Designer.cs">
       <DependentUpon>201710112107530_NullableIntPromoCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710120008525_ProductDoNotDisplay.cs" />
+    <Compile Include="Migrations\201710120008525_ProductDoNotDisplay.Designer.cs">
+      <DependentUpon>201710120008525_ProductDoNotDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -628,6 +632,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710112107530_NullableIntPromoCode.resx">
       <DependentUpon>201710112107530_NullableIntPromoCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710120008525_ProductDoNotDisplay.resx">
+      <DependentUpon>201710120008525_ProductDoNotDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

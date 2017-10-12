@@ -26,10 +26,10 @@ namespace Deerfly_Patches.Models
         [StringLength(50)]
         public string Category { get; set; }
 
+        [Display(Name = "Display on Front Page")]
         public bool DisplayOnFrontPage { get; set; }
 
-        [Url(ErrorMessage = "Enter valid Url beginning with 'http://' or 'https://'")]
-        [DisplayName("PayPal purchase URL")]
-        public string PayPalUrl { get; set; }
+        [Display(Name = "Do Not Display (Promotional Item)")]
+        public bool DoNotDisplay { get; set; }
     }
 }
