@@ -20,8 +20,16 @@ namespace DeerflyPatches.Controllers
 
         public string GetOrderJson()
         {
+            string country = Request.Params.Get("country");
+
             // get shopping cart from session
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+
+            if (country == "US")
+            {
+                shoppingCart.RemoveAllShippingCharges();
+            }
+
             return _paypalClient.CreateOrder(shoppingCart);
         }
 

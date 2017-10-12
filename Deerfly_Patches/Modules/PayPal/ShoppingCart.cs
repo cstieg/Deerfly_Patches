@@ -107,6 +107,19 @@ namespace Deerfly_Patches.Modules.PayPal
             }
         }
 
+        public void RemoveShippingCharges(OrderDetail orderDetail)
+        {
+            orderDetail.Shipping = 0;
+        }
+
+        public void RemoveAllShippingCharges()
+        {
+            for (int i = 0; i < Order.OrderDetails.Count; i++)
+            {
+                RemoveShippingCharges(Order.OrderDetails[i]);
+            }
+        }
+
         public void AddPromoCode(PromoCode promoCode)
         {
             // check constraints

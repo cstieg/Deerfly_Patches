@@ -159,7 +159,6 @@ function itemsInDetailCount() {
     return $itemDetailLines.length;
 }
 
-
 function setCountry() {
     var country = 'US';
     $.getJSON('https://freegeoip.net/json/', function (data) {
@@ -176,8 +175,7 @@ function setCountry() {
 }
 
 function countryChange() {
-    var isUS = $('#country-select input[value="US"]')[0].checked;
-    if (isUS) {
+    if (getCountry() === "US") {
         $('.item-detail-line .item-shipping').text('FREE');
     }
     else {
@@ -187,6 +185,12 @@ function countryChange() {
     }
     recalculate();
 }
+
+function getCountry() {
+    var isUS = $('#country-select input[value="US"]')[0].checked;
+    return isUS ? "US" : "International";
+}
+
 
 
 /* ******************************* Testimonials ************************************************* */

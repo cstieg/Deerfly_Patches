@@ -19,7 +19,7 @@ paypal.Button.render({
     // payment() is called when the button is clicked
     payment: function (data, actions) {
         // Get JSON order information from server
-        return $.get('/paypal/GetOrderJson')
+        return $.get('/paypal/GetOrderJson?country=' + getCountry())
             .then(function (data) {
                 var payment = JSON.parse(data);
 
@@ -27,7 +27,6 @@ paypal.Button.render({
                 return actions.payment.create({ payment: payment });
             })
             .catch(function (data) {
-                debugger;
                 alert("Error processing order :(");
             });
     },
