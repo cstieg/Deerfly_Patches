@@ -13,11 +13,6 @@ namespace DeerflyPatches.Controllers
     {
         private PayPalApiClient _paypalClient = new PayPalApiClient();
 
-        public ActionResult OrderSuccess()
-        {
-            return View();
-        }
-
         public string GetOrderJson()
         {
             string country = Request.Params.Get("country");

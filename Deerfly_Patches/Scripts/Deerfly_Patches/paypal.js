@@ -34,17 +34,14 @@ paypal.Button.render({
     // onAuthorize() is called when the buyer approves the payment
     onAuthorize: function (data, actions) {
         debugger;
-
-
+        // data should contain address?  need to add address to shopping cart & database
+            // verify order information, cancel if incorrect
         // verify country
 
         // Make a call to the REST api to execute the payment
-        return actions.payment.execute().then(function () {
-
-            // verify order information, cancel if incorrect
-
-
-            window.alert('Payment Complete!');
+        return actions.payment.execute()
+            .then(function () {
+                window.location.href = "/ShoppingCart/Success";
         });
     }
 

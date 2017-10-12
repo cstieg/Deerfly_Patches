@@ -22,6 +22,25 @@ namespace Deerfly_Patches.Controllers
             return View(shoppingCart);
         }
 
+
+        public ActionResult OrderSuccess()
+        {
+            // save shopping cart
+            // do we need to set modified state for each nested level?
+            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            db.Orders.Add(shoppingCart.Order);
+            
+            for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
+            {
+                db.OrderDetails.Add(shoppingCart.Order.OrderDetails[i]);
+            }
+            db.SaveChanges();
+
+
+            return View();
+        }
+
+
         [HttpPost]
         public ActionResult AddPromoCode()
         {
