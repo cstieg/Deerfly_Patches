@@ -145,14 +145,13 @@ namespace Deerfly_Patches.Modules.PayPal
                     UnitPrice = promoCode.PromotionalItemPrice ?? 0,
                     Quantity = 1,
                     CheckedOut = false,
-                    Order = Order,
                     PlacedInCart = DateTime.Now,
                     Shipping = 0
                 });
             }
 
             // special price may be zero; only apply if a percentage is not given
-            if (promoCode.PercentOffItem == null || promoCode.PercentOffItem == 0 && promoCode.SpecialPriceItem != null)
+            if ((promoCode.PercentOffItem == null || promoCode.PercentOffItem == 0) && promoCode.SpecialPriceItem != null)
             {
                 OrderDetail item = Order.OrderDetails.Find(o => o.Product.ProductId == promoCode.SpecialPriceItem.ProductId);
                 item.UnitPrice = promoCode.SpecialPrice ?? 0;

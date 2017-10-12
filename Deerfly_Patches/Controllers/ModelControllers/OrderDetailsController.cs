@@ -17,7 +17,7 @@ namespace Deerfly_Patches.Controllers
         // GET: OrderDetails
         public ActionResult Index()
         {
-            var orderDetails = db.OrderDetails.Include(o => o.Order).Include(o => o.Product);
+            var orderDetails = db.OrderDetails.Include(o => o.Product);
             return View(orderDetails.ToList());
         }
 
