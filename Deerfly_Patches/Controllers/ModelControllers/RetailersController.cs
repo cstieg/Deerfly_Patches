@@ -1,13 +1,16 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Mvc;
-using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules.Google;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using CsvHelper;
-using System.IO;
+using Deerfly_Patches.Models;
+using Deerfly_Patches.Modules.Google;
+using System.Net.Mime;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -22,7 +25,7 @@ namespace Deerfly_Patches.Controllers
         // GET: Retailers
         public ActionResult Index()
         {
-            var retailers = db.Retailers.Include(r => r.LatLng);
+            var retailers = db.Retailers.Include(r => r.LatLng).OrderBy(r => r.Address.Zip);
             return View(retailers.ToList());
         }
 
@@ -129,6 +132,10 @@ namespace Deerfly_Patches.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Returns JSON list of retailers
+        /// </summary>
+        /// <returns>JSON list of retailers</returns>
         public JsonResult ListJson()
         {
             //TODO: filter by location
@@ -137,58 +144,116 @@ namespace Deerfly_Patches.Controllers
             return Json(returnval, JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// Renders form to upload retailers csv file
+        /// </summary>
         [HttpGet]
         public ActionResult UploadCsv()
         {
             return View();
         }
 
+        /// <summary>
+        /// Uploads csv list of retailers
+        /// </summary>
+        /// <returns>Redirect to Index</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PostUploadCsv()
         {
+            // Delete current data if requested
             string deleteCurrent = Request.Params.Get("deleteCurrent");
             if (Request.Params.Get("deleteCurrent") == "on")
             {
                 db.Retailers.RemoveRange(db.Retailers.ToList());
             }
- 
-            HttpPostedFileBase file = _ModelControllersHelper.GetFile(ModelState, Request, "RetailersCsv");
-            StreamReader textReader = new StreamReader(file.InputStream);
-            CsvParser csvParser = new CsvParser(textReader);
-            string[] headerRow = csvParser.Read();
-            string[] dataRow = csvParser.Read();
+
+            // List of errors
+            List<string[]> ErrorList = new List<string[]>();
+            HttpPostedFileBase file;
+            StreamReader textReader;
+            CsvParser csvParser;
+            string[] headerRow;
+            string[] dataRow;
+
+            // Load and parse CSV file
+            try
+            {
+                file = _ModelControllersHelper.GetFile(ModelState, Request, "RetailersCsv");
+                textReader = new StreamReader(file.InputStream);
+                csvParser = new CsvParser(textReader);
+                headerRow = csvParser.Read();
+            }
+            catch
+            {
+                throw new Exception("Failure reading file!");
+            }
+
+            // Iterate through rows, adding retailers to table
+            dataRow = csvParser.Read();
             while (dataRow != null)
             {
-                Retailer retailer = new Retailer()
+                try
                 {
-                    Name = dataRow[0],
-                    Address = new Address()
+                    Retailer retailer = new Retailer()
                     {
-                        Address1 = dataRow[1],
-                        City = dataRow[2],
-                        State = dataRow[3],
-                        Zip = dataRow[4],
-                        Phone = dataRow[5]
-                    },
-                    Website = dataRow[6]
-                };
+                        Name = dataRow[0].Trim(),
+                        Address = new Address()
+                        {
+                            Address1 = dataRow[1].Trim(),
+                            City = dataRow[2].Trim(),
+                            State = dataRow[3].Trim(),
+                            Zip = dataRow[4].Trim(),
+                            Phone = dataRow[5].Trim()
+                        },
+                        Website = dataRow[6].Trim()
+                    };
 
-                // fix for empty string failing url validation
-                if (retailer.Website.Equals(""))
-                {
-                    retailer.Website = null;
+                    // fix for empty string failing url validation
+                    if (retailer.Website.Equals(""))
+                    {
+                        retailer.Website = null;
+                    }
+
+                    // add http:// if missing
+                    if (retailer.Website != null && retailer.Website.Length > 4 && retailer.Website.Substring(0, 4) != "http")
+                    {
+                        retailer.Website = "http://" + retailer.Website;
+                    }
+
+                    retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
+
+                    db.Retailers.Add(retailer);
+                    db.SaveChanges();
                 }
-
-                retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
-                db.Retailers.Add(retailer);
-                db.SaveChanges();
-
+                catch
+                {
+                    ErrorList.Add(dataRow);
+                }
+                break;
                 // read next row
                 dataRow = csvParser.Read();
             }
 
+            if (ErrorList.Count > 0)
+            {
+                var writeStream = new MemoryStream();
+                var textWriter = new StreamWriter(writeStream);
+
+                for (int i = 0; i < ErrorList.Count; i++)
+                {
+                    string row = string.Join(", ", ErrorList[i]);
+                    textWriter.WriteLine(row);
+                }
+                textWriter.Flush();
+                writeStream.Position = 0;
+               
+                return new FileStreamResult(writeStream, "application/text")
+                {
+                    FileDownloadName = "errors.txt"
+                };
+            }
+            
             return RedirectToAction("Index");
         }
 

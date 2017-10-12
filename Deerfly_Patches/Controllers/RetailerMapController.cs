@@ -1,12 +1,12 @@
-﻿using Deerfly_Patches.Models;
-using System.Web.Mvc;
-using System.Data.Entity;
-using Deerfly_Patches.Modules.Google;
+﻿using System.Data.Entity;
 using System.Linq;
-using Deerfly_Patches.Modules;
 using System.Threading.Tasks;
-using System;
+using System.Web.Mvc;
+
+using Deerfly_Patches.Models;
+using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.Geography;
+using Deerfly_Patches.Modules.Google;
 
 namespace Deerfly_Patches.Controllers
 {
