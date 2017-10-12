@@ -100,6 +100,11 @@ namespace Deerfly_Patches.Modules.PayPal
             {
                 Order.OrderDetails.Remove(orderDetail);
             }
+
+            if (Order.OrderDetails.Count == 0)
+            {
+                PromoCodes.Clear();
+            }
         }
 
         public void AddPromoCode(PromoCode promoCode)
@@ -191,6 +196,7 @@ namespace Deerfly_Patches.Modules.PayPal
         {
             return PercentOff(originalPrice, (decimal) percentOff);
         }
+        
         
     }
 }
