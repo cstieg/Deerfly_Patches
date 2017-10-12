@@ -33,7 +33,7 @@
             @Html.DisplayNameFor(model => model.DisplayOnFrontPage)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PayPalUrl)
+            @Html.DisplayNameFor(model => model.DoNotDisplay)
         </th>
         <th></th>
     </tr>
@@ -62,7 +62,7 @@
             @Html.DisplayFor(modelItem => item.DisplayOnFrontPage)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PayPalUrl)
+            @Html.DisplayFor(modelItem => item.DoNotDisplay)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ProductId }) |

@@ -15,7 +15,7 @@ namespace Deerfly_Patches.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Products.ToList());
+            return View(db.Products.Where(p => p.DoNotDisplay == false).ToList());
         }
 
         public ActionResult About()

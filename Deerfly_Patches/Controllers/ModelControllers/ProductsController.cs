@@ -55,7 +55,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,DoNotDisplay")] Product product)
         {
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "");
@@ -109,7 +109,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,PayPalUrl")] Product product)
+        public ActionResult Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,DoNotDisplay")] Product product)
         {
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, product.ImageUrl);
