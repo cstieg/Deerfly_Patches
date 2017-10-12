@@ -65,16 +65,29 @@
             <input type="radio" name="country" value="International" />International
         </form>
     </div>
-    
+
     <div id="enter-promo-code">
         <form method="post" action="/ShoppingCart/AddPromoCode">
             <label for="promocode">Enter Promo Code</label>
             <input name="promocode" type="text" />
             <input type="submit" value="Apply" />
         </form>
-        <div id="promo-codes-applied">
-            <p>Promocodes applied: </p>
-        </div>
+        @if (Model.PromoCodes.Count > 0)
+        {
+            <div id="promo-codes-applied">
+                <p>Promocodes applied: </p>
+                <ul>
+                    @foreach (var promoCode in Model.PromoCodes)
+                    {
+                        <li>
+                            <span>@promoCode.Code</span>
+                            <br />
+                            @promoCode.Description
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
     </div>
 
     <div class="clearfix"></div>

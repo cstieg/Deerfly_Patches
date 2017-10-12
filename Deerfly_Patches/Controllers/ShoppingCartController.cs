@@ -33,12 +33,5 @@ namespace Deerfly_Patches.Controllers
 
             return Redirect("Index");
         }
-
-        [HttpPost]
-        public ActionResult RemovePromoCode()
-        {
-
-            return Index();
-        }
     }
 }
