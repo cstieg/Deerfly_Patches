@@ -25,13 +25,13 @@ namespace Deerfly_Patches.Controllers
         public ActionResult AddPromoCode()
         {
             string pc = Request.Params.Get("PromoCode");
-            PromoCode promoCode = db.PromoCodes.Where(p => p.Code == pc).Single();
+            PromoCode promoCode = db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).Single();
 
             ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
             shoppingCart.AddPromoCode(promoCode);
+            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
 
-
-            return Index();
+            return Redirect("Index");
         }
 
         [HttpPost]
