@@ -25,7 +25,7 @@ namespace Deerfly_Patches.Controllers
         // GET: Retailers
         public ActionResult Index()
         {
-            var retailers = db.Retailers.Include(r => r.LatLng).OrderBy(r => r.Address.Zip);
+            var retailers = db.Retailers.Include(r => r.LatLng).OrderBy(r => r.Address.PostalCode);
             return View(retailers.ToList());
         }
 
@@ -203,7 +203,7 @@ namespace Deerfly_Patches.Controllers
                             Address1 = dataRow[1].Trim(),
                             City = dataRow[2].Trim(),
                             State = dataRow[3].Trim(),
-                            Zip = dataRow[4].Trim(),
+                            PostalCode = dataRow[4].Trim(),
                             Phone = dataRow[5].Trim()
                         },
                         Website = dataRow[6].Trim()

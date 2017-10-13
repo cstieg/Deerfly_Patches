@@ -339,6 +339,14 @@
     <Compile Include="Migrations\201710120110137_ItemDetailIsPromotional.Designer.cs">
       <DependentUpon>201710120110137_ItemDetailIsPromotional.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710131555422_ProductDoNotDisplay1.cs" />
+    <Compile Include="Migrations\201710131555422_ProductDoNotDisplay1.Designer.cs">
+      <DependentUpon>201710131555422_ProductDoNotDisplay1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710131937255_removeConstraintsOnAddress.cs" />
+    <Compile Include="Migrations\201710131937255_removeConstraintsOnAddress.Designer.cs">
+      <DependentUpon>201710131937255_removeConstraintsOnAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -367,12 +375,14 @@
     <Compile Include="Modules\FileStorage\ImageResizer.cs" />
     <Compile Include="Modules\FileStorage\IFileManager.cs" />
     <Compile Include="Modules\FileStorage\ImageManager.cs" />
+    <Compile Include="Modules\Geography\AddressBase.cs" />
     <Compile Include="Modules\Geography\GeoLocation.cs" />
     <Compile Include="Modules\Geography\GeoRange.cs" />
     <Compile Include="Modules\Google\GoogleMapsClient.cs" />
     <Compile Include="Modules\JsonDeserializer.cs" />
     <Compile Include="Modules\PayPal\AccessToken.cs" />
     <Compile Include="Modules\PayPal\ClientInfo.cs" />
+    <Compile Include="Modules\PayPal\PaymentDetails.cs" />
     <Compile Include="Modules\PayPal\PayPalAddress.cs" />
     <Compile Include="Modules\PayPal\PayPalApiClient.cs" />
     <Compile Include="Modules\PayPal\UserInfo.cs" />
@@ -643,6 +653,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710120110137_ItemDetailIsPromotional.resx">
       <DependentUpon>201710120110137_ItemDetailIsPromotional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710131555422_ProductDoNotDisplay1.resx">
+      <DependentUpon>201710131555422_ProductDoNotDisplay1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710131937255_removeConstraintsOnAddress.resx">
+      <DependentUpon>201710131937255_removeConstraintsOnAddress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

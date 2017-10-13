@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Deerfly_Patches.Modules.Geography;
 
 namespace Deerfly_Patches.Modules.PayPal
 {
@@ -27,6 +28,29 @@ namespace Deerfly_Patches.Modules.PayPal
 
         [DataMember(Name = "state")]
         public string State { get; set; }
+
+        [DataMember(Name = "redirect_urls")]
+        public RedirectUrls RedirectUrls { get; set; }
+
+        public bool ShouldSerializeId()
+        {
+            return Id != null;
+        }
+
+        public bool ShouldSerializeCreateTime()
+        {
+            return CreateTime != null && CreateTime != DateTime.MinValue;
+        }
+
+        public bool ShouldSerializeCart()
+        {
+            return Cart != null && Cart != "";
+        }
+
+        public bool ShouldSerializeState()
+        {
+            return State != null && State != "";
+        }
     }
 
     [DataContract]
@@ -40,6 +64,16 @@ namespace Deerfly_Patches.Modules.PayPal
 
         [DataMember(Name = "payer_info")]
         public PayerInfo PayerInfo { get; set; }
+
+        public bool ShouldSerializeStatus()
+        {
+            return Status != null;
+        }
+
+        public bool ShouldSerializePayerInfo()
+        {
+            return PayerInfo != null;
+        }
     }
 
     [DataContract]
@@ -68,25 +102,31 @@ namespace Deerfly_Patches.Modules.PayPal
     }
 
     [DataContract]
-    public class ShippingAddress
+    public class ShippingAddress : AddressBase
     {
         [DataMember(Name = "recipient_name")]
-        public string Recipient { get; set; }
+        public override string Recipient { get; set; }
 
         [DataMember(Name = "line1")]
-        public string Address1 { get; set; }
+        public override string Address1 { get; set; }
+
+        [DataMember(Name = "line2")]
+        public override string Address2 { get; set; }
 
         [DataMember(Name = "city")]
-        public string City { get; set; }
+        public override string City { get; set; }
 
         [DataMember(Name = "state")]
-        public string State { get; set; }
+        public override string State { get; set; }
 
         [DataMember(Name = "postal_code")]
-        public string PostalCode { get; set; }
+        public override string PostalCode { get; set; }
 
         [DataMember(Name = "country_code")]
-        public string CountryCode { get; set; }
+        public override string Country { get; set; }
+
+        [DataMember(Name = "phone")]
+        public override string Phone { get; set; }
     }
     
     [DataContract]
@@ -162,5 +202,15 @@ namespace Deerfly_Patches.Modules.PayPal
 
         [DataMember(Name = "currency")]
         public string Currency { get; set; }
+    }
+
+    [DataContract]
+    public class RedirectUrls
+    {
+        [DataMember(Name = "return_url")]
+        public string ReturnUrl { get; set; }
+
+        [DataMember(Name = "cancel_url")]
+        public string CancelUrl { get; set; }
     }
 }

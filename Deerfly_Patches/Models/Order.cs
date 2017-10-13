@@ -31,9 +31,29 @@ namespace Deerfly_Patches.Models
         [InverseProperty("Order")]
         public virtual List<OrderDetail> OrderDetails { get; set; }
 
-        public decimal Subtotal { get; set; }
+        public decimal Subtotal {
+            get
+            {
+                decimal subtotal = 0;
+                for (int i = 0; i < OrderDetails.Count; i++)
+                {
+                    subtotal += OrderDetails[i].ExtendedPrice;
+                }
+                return subtotal;
+            }
+        }
         
-        public decimal Shipping { get; set; }
+        public decimal Shipping {
+            get
+            {
+                decimal shipping = 0;
+                for (int i = 0; i < OrderDetails.Count; i++)
+                {
+                    shipping += OrderDetails[i].Shipping;
+                }
+                return shipping;
+            }
+        }
 
         public decimal Total
         {

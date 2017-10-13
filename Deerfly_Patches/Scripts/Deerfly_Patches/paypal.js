@@ -33,16 +33,24 @@ paypal.Button.render({
 
     // onAuthorize() is called when the buyer approves the payment
     onAuthorize: function (data, actions) {
-        debugger;
-        // data should contain address?  need to add address to shopping cart & database
-            // verify order information, cancel if incorrect
-        // verify country
-
-        // Make a call to the REST api to execute the payment
-        return actions.payment.execute()
-            .then(function () {
-                window.location.href = "/ShoppingCart/Success";
-        });
+        return actions.payment.get()
+            .then(function (paymentDetails) {
+                var verifyData = {
+                    paymentDetails: JSON.stringify(paymentDetails)
+                };
+                $.post("/ShoppingCart/VerifyAndSave", verifyData)
+                    .then(function () {
+                        // Execute the payment
+                        return actions.payment.execute();
+                    })
+                    .then(function () {
+                        // Show a success page to the buyer
+                        window.location.href = "/ShoppingCart/OrderSuccess";
+                    })
+                    .catch(function (data) {
+                        alert("Error processing order :(");
+                    });
+            });
     }
 
 }, '#paypal-button-container');

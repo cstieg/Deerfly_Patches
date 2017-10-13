@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Deerfly_Patches.Models;
+using System.Web;
 
 namespace Deerfly_Patches.Modules.PayPal
 {
@@ -194,6 +195,16 @@ namespace Deerfly_Patches.Modules.PayPal
 
             // Add promocode to list
             PromoCodes.Add(promoCode);
+        }
+
+        public static ShoppingCart GetFromSession(HttpContextBase context)
+        {
+            return context.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+        }
+
+        public void SaveToSession(HttpContextBase context)
+        {
+            context.Session.SetObjectAsJson("_shopping_cart", this);
         }
 
         private decimal PercentOff(decimal originalPrice, decimal percentOff)

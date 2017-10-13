@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
+using Deerfly_Patches.Modules.Geography;
 
 namespace DeerflyPatches.Controllers
 {
@@ -16,15 +17,15 @@ namespace DeerflyPatches.Controllers
         public string GetOrderJson()
         {
             string country = Request.Params.Get("country");
-
-            // get shopping cart from session
-            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
 
             if (country == "US")
             {
+                shoppingCart.Order.ShipToAddress.Country = country;
                 shoppingCart.RemoveAllShippingCharges();
             }
 
+            shoppingCart.SaveToSession(HttpContext);
             return _paypalClient.CreateOrder(shoppingCart);
         }
 
@@ -55,7 +56,7 @@ namespace DeerflyPatches.Controllers
             shippingAddress.Address1 = userInfo.Address.StreetAddress;
             shippingAddress.City = userInfo.Address.City;
             shippingAddress.State = userInfo.Address.State;
-            shippingAddress.Zip = userInfo.Address.PostalCode;
+            shippingAddress.PostalCode = userInfo.Address.PostalCode;
             shippingAddress.Country = userInfo.Address.Country;
             shippingAddress.Type = AddressType.Shipping;
             HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);

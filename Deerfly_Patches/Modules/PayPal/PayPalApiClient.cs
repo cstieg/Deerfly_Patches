@@ -25,6 +25,7 @@ namespace Deerfly_Patches.Modules.PayPal
         public UserAccessToken UserAccessToken { get; set; }
         public string ReturnUrl { get; set; }
         public string CancelUrl { get; set; }
+        public string PayeeEmail { get; set; }
 
         /// <summary>
         /// Constructor for PayPalApiClient which loads urls from paypal.json
@@ -34,6 +35,7 @@ namespace Deerfly_Patches.Modules.PayPal
             ClientInfo = GetClientSecrets();
             ReturnUrl = ClientInfo.ReturnUrl;
             CancelUrl = ClientInfo.CancelUrl;
+            PayeeEmail = ClientInfo.ClientAccount;
             
             // set up http client
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -116,44 +118,44 @@ namespace Deerfly_Patches.Modules.PayPal
             }
 
             // Create JSON order object
-            object data = new
+            PaymentDetails data = new PaymentDetails()
             {
-                intent = "order",
-                payer = new
+                Intent = "order",
+                Payer = new Payer()
                 {
-                    payment_method = "paypal"
+                    PaymentMethod = "paypal"
                 },
-                transactions = new List<object>
+                Transactions = new List<Transaction>
                 {
-                    new
+                    new Transaction()
                     {
-                        amount = new
+                        Amount = new Amount
                         {
-                            currency = "USD",
-                            total = shoppingCart.GrandTotal,
-                            details = new
+                            Currency = "USD",
+                            Total = shoppingCart.GrandTotal,
+                            AmountDetails = new AmountDetails
                             {
-                                shipping = shoppingCart.TotalShipping,
-                                subtotal = shoppingCart.TotalExtendedPrice,
-                                tax = "0.00"
+                                Shipping = shoppingCart.TotalShipping,
+                                Subtotal = shoppingCart.TotalExtendedPrice,
+                                Tax = 0
                             }
                         },
-                        payee = new
+                        Payee = new Payee()
                         {
-                            email = shoppingCart.PayeeEmail
+                            Email = PayeeEmail
                         },
-                        description = description,
-                        item_list = new
+                        Description = description,
+                        ItemList = new ItemList()
                         {
-                            items = GetPayPalItems(shoppingCart),
+                            Items = GetPayPalItems(shoppingCart),
                             //shipping_address = GetPayPalAddress(shoppingCart.GetOrder().ShipToAddress)
                         }
                     }
                 },
-                redirect_urls = new
+                RedirectUrls = new RedirectUrls
                 {
-                    return_url = ReturnUrl,
-                    cancel_url = CancelUrl
+                    ReturnUrl = ReturnUrl,
+                    CancelUrl = CancelUrl
                 }
             };
             string dataJSON = JsonConvert.SerializeObject(data);
@@ -290,18 +292,18 @@ namespace Deerfly_Patches.Modules.PayPal
         /// </summary>
         /// <param name="address">Address to convert</param>
         /// <returns>Object representation of address in PayPal format</returns>
-        private object GetPayPalAddress(Address address)
+        private ShippingAddress GetPayPalAddress(Address address)
         {
-            return new
+            return new ShippingAddress()
             {
-                recipient_name = address.Recipient,
-                line1 = address.Address1,
-                line2 = address.Address2,
-                city = address.City,
-                country_code = address.Country,
-                postal_code = address.Zip,
-                phone = address.Phone,
-                state = address.State
+                Recipient = address.Recipient,
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                City = address.City,
+                State = address.State,
+                PostalCode = address.PostalCode,
+                Country = address.Country,
+                Phone = address.Phone
             };
         }
 
@@ -310,15 +312,15 @@ namespace Deerfly_Patches.Modules.PayPal
         /// </summary>
         /// <param name="orderDetail">OrderDetail object containing item being purchased</param>
         /// <returns>Purchase item in PayPal object format</returns>
-        private object GetPayPalItem(OrderDetail orderDetail)
+        private Item GetPayPalItem(OrderDetail orderDetail)
         {
-            return new
+            return new Item
             {
-                name = orderDetail.Product.Name,
-                quantity = orderDetail.Quantity,
-                price = orderDetail.ExtendedPrice,
-                sku = orderDetail.Product.ProductId,
-                currency = "USD"
+                Name = orderDetail.Product.Name,
+                Quantity = orderDetail.Quantity,
+                Price = orderDetail.ExtendedPrice,
+                Sku = orderDetail.Product.ProductId.ToString(),
+                Currency = "USD"
             };
         }
 
@@ -327,9 +329,9 @@ namespace Deerfly_Patches.Modules.PayPal
         /// </summary>
         /// <param name="shoppingCart">Shopping cart containing items to be purchased</param>
         /// <returns>Shopping cart items in PayPal object format</returns>
-        private List<object> GetPayPalItems(ShoppingCart shoppingCart)
+        private List<Item> GetPayPalItems(ShoppingCart shoppingCart)
         {
-            List<object> items = new List<object>();
+            List<Item> items = new List<Item>();
             List<OrderDetail> shoppingCartItems = shoppingCart.GetItems();
 
             for (int i = 0; i < shoppingCartItems.Count; i++)
