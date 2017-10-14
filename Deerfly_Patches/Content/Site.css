@@ -208,6 +208,11 @@ h2 {
     margin: auto;
 }
 
+.product-image:hover {
+    border: inset green 4px;
+    border-radius: 8px;
+}
+
 .product-item .buy-now{
     background-color: red;
     color: white;
