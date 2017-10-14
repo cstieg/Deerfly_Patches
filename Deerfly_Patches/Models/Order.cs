@@ -15,18 +15,20 @@ namespace Deerfly_Patches.Models
         [Key]
         public int OrderId { get; set; }
 
-        [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+        public virtual Customer Customer { get; set; }
 
         [Required]
         public DateTime DateOrdered { get; set; }
 
+        [ForeignKey("ShipToAddress")]
         public int ShipToAddressId { get; set; }
-        public Address ShipToAddress { get; set; }
+        public virtual Address ShipToAddress { get; set; }
 
+        [ForeignKey("BillToAddress")]
         public int BillToAddressId { get; set; }
-        public Address BillToAddress { get; set; }
+        public virtual Address BillToAddress { get; set; }
 
         [InverseProperty("Order")]
         public virtual List<OrderDetail> OrderDetails { get; set; }

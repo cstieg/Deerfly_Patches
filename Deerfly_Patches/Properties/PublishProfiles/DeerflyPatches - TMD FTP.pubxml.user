@@ -53,10 +53,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
-      <publishTime>10/04/2017 12:32:45</publishTime>
+      <publishTime>10/13/2017 20:03:31</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.pdb">
-      <publishTime>10/04/2017 12:32:45</publishTime>
+      <publishTime>10/13/2017 20:03:31</publishTime>
     </File>
     <File Include="bin/Elmah.dll">
       <publishTime>04/12/2012 19:19:36</publishTime>
@@ -452,7 +452,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/31/2017 14:14:23</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>09/03/2017 17:31:39</publishTime>
+      <publishTime>10/12/2017 17:54:11</publishTime>
+    </File>
+    <File Include="dfp.pfx">
+      <publishTime>10/07/2017 20:20:32</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>08/14/2017 22:10:39</publishTime>
@@ -476,7 +479,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/03/2017 11:30:03</publishTime>
     </File>
     <File Include="PayPal.json">
-      <publishTime>08/22/2017 10:33:43</publishTime>
+      <publishTime>10/09/2017 20:06:42</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>08/14/2017 22:10:48</publishTime>
@@ -485,13 +488,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:48</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/gmaps.js">
-      <publishTime>09/11/2017 11:22:12</publishTime>
+      <publishTime>10/12/2017 17:27:41</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/inputmask.js">
       <publishTime>09/16/2017 00:20:30</publishTime>
     </File>
+    <File Include="Scripts/Deerfly_Patches/paypal.js">
+      <publishTime>10/13/2017 15:44:47</publishTime>
+    </File>
     <File Include="Scripts/Deerfly_Patches/site.js">
-      <publishTime>09/18/2017 13:04:23</publishTime>
+      <publishTime>10/12/2017 10:31:56</publishTime>
     </File>
     <File Include="Scripts/jquery-3.1.1.js">
       <publishTime>09/11/2017 11:16:05</publishTime>
@@ -575,7 +581,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/22/2017 11:13:53</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
-      <publishTime>09/10/2017 17:13:32</publishTime>
+      <publishTime>10/12/2017 15:54:29</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
       <publishTime>09/02/2017 23:43:18</publishTime>
@@ -584,13 +590,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 11:49:45</publishTime>
     </File>
     <File Include="Views/Home/Faq.cshtml">
-      <publishTime>08/30/2017 14:36:28</publishTime>
+      <publishTime>10/12/2017 15:53:48</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>10/03/2017 21:25:31</publishTime>
+      <publishTime>10/12/2017 15:54:05</publishTime>
+    </File>
+    <File Include="Views/Home/Privacy.cshtml">
+      <publishTime>10/10/2017 13:43:17</publishTime>
     </File>
     <File Include="Views/Home/Testimonials.cshtml">
-      <publishTime>09/03/2017 16:34:47</publishTime>
+      <publishTime>10/12/2017 15:54:21</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>08/14/2017 22:11:10</publishTime>
@@ -617,7 +626,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 13:12:10</publishTime>
     </File>
     <File Include="Views/ModelViews/Addresses/DetailPartial.cshtml">
-      <publishTime>08/13/2017 13:11:48</publishTime>
+      <publishTime>10/13/2017 15:42:57</publishTime>
     </File>
     <File Include="Views/ModelViews/Addresses/Details.cshtml">
       <publishTime>08/13/2017 13:13:01</publishTime>
@@ -626,10 +635,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 13:05:47</publishTime>
     </File>
     <File Include="Views/ModelViews/Addresses/Index.cshtml">
-      <publishTime>08/13/2017 13:15:01</publishTime>
+      <publishTime>10/13/2017 15:41:57</publishTime>
     </File>
     <File Include="Views/ModelViews/Addresses/ModifyPartial.cshtml">
-      <publishTime>08/15/2017 10:26:24</publishTime>
+      <publishTime>10/13/2017 15:42:34</publishTime>
     </File>
     <File Include="Views/ModelViews/Customers/Create.cshtml">
       <publishTime>08/13/2017 15:25:25</publishTime>
@@ -668,7 +677,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 16:12:42</publishTime>
     </File>
     <File Include="Views/ModelViews/OrderDetails/Index.cshtml">
-      <publishTime>08/13/2017 16:11:03</publishTime>
+      <publishTime>10/11/2017 18:56:57</publishTime>
     </File>
     <File Include="Views/ModelViews/OrderDetails/ModifyPartial.cshtml">
       <publishTime>08/15/2017 10:27:35</publishTime>
@@ -701,7 +710,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 16:23:11</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/DetailPartial.cshtml">
-      <publishTime>09/01/2017 16:20:23</publishTime>
+      <publishTime>10/11/2017 20:35:15</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/Details.cshtml">
       <publishTime>08/13/2017 16:23:37</publishTime>
@@ -710,10 +719,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 18:03:15</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/Index.cshtml">
-      <publishTime>09/01/2017 17:18:57</publishTime>
+      <publishTime>10/11/2017 20:34:47</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/ModifyPartial.cshtml">
-      <publishTime>09/09/2017 12:10:55</publishTime>
+      <publishTime>10/11/2017 20:34:19</publishTime>
     </File>
     <File Include="Views/ModelViews/PromoCodes/Create.cshtml">
       <publishTime>08/13/2017 16:48:00</publishTime>
@@ -734,7 +743,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/13/2017 16:46:09</publishTime>
     </File>
     <File Include="Views/ModelViews/PromoCodes/ModifyPartial.cshtml">
-      <publishTime>08/15/2017 10:28:11</publishTime>
+      <publishTime>10/11/2017 18:17:05</publishTime>
     </File>
     <File Include="Views/ModelViews/Retailers/Create.cshtml">
       <publishTime>09/11/2017 15:43:39</publishTime>
@@ -749,10 +758,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/11/2017 15:44:00</publishTime>
     </File>
     <File Include="Views/ModelViews/Retailers/Index.cshtml">
-      <publishTime>09/11/2017 17:47:02</publishTime>
+      <publishTime>10/12/2017 13:53:56</publishTime>
     </File>
     <File Include="Views/ModelViews/Retailers/UploadCsv.cshtml">
-      <publishTime>09/11/2017 21:03:37</publishTime>
+      <publishTime>10/12/2017 14:58:05</publishTime>
     </File>
     <File Include="Views/ModelViews/Retailers/_ModifyPartial.cshtml">
       <publishTime>09/16/2017 09:52:54</publishTime>
@@ -779,10 +788,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/02/2017 15:05:05</publishTime>
     </File>
     <File Include="Views/Order/Index.cshtml">
-      <publishTime>08/30/2017 14:39:06</publishTime>
+      <publishTime>10/11/2017 09:05:31</publishTime>
+    </File>
+    <File Include="Views/PayPal/CloseLoginWindow.cshtml">
+      <publishTime>10/09/2017 23:32:09</publishTime>
     </File>
     <File Include="Views/RetailerMap/Index.cshtml">
-      <publishTime>09/11/2017 10:44:46</publishTime>
+      <publishTime>10/12/2017 17:50:18</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>08/14/2017 22:11:09</publishTime>
@@ -791,7 +803,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:11:10</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/11/2017 10:15:59</publishTime>
+      <publishTime>10/11/2017 09:02:06</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>08/14/2017 22:11:10</publishTime>
@@ -800,10 +812,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/02/2017 21:19:34</publishTime>
     </File>
     <File Include="Views/Shared/_ProductPartial.cshtml">
-      <publishTime>09/02/2017 13:05:37</publishTime>
+      <publishTime>10/11/2017 20:22:11</publishTime>
     </File>
     <File Include="Views/ShoppingCart/Index.cshtml">
-      <publishTime>08/22/2017 10:29:48</publishTime>
+      <publishTime>10/12/2017 10:03:41</publishTime>
+    </File>
+    <File Include="Views/ShoppingCart/OrderSuccess.cshtml">
+      <publishTime>10/10/2017 14:11:31</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>08/14/2017 22:10:39</publishTime>
@@ -812,7 +827,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/04/2017 11:04:51</publishTime>
+      <publishTime>10/13/2017 20:04:41</publishTime>
     </File>
   </ItemGroup>
 </Project>

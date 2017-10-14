@@ -49,7 +49,7 @@ namespace Deerfly_Patches.Controllers
 
 
             // verify items
-            List<Item> items = (List<Item>) paymentDetails.Transactions.First().ItemList.Items;
+            List<Item> items = (List<Item>)paymentDetails.Transactions.First().ItemList.Items;
             for (int i = 0; i < items.Count(); i++)
             {
                 if (!shoppingCart.Order.OrderDetails.Exists(o => o.Product.ProductId == int.Parse(items[i].Sku) &&
@@ -76,12 +76,19 @@ namespace Deerfly_Patches.Controllers
                 customer = new Customer()
                 {
                     Registered = DateTime.Now,
-                    EmailAddress = payerInfo.Email
+                    EmailAddress = payerInfo.Email,
+                    CustomerName = payerInfo.FirstName + " " +
+                                    payerInfo.MiddleName + " " +
+                                    payerInfo.LastName
                 };
             }
-            customer.CustomerName = payerInfo.FirstName + " " +
-                                    payerInfo.MiddleName + " " +
-                                    payerInfo.LastName;
+            else
+            {
+                shoppingCart.Order.Customer = customer;
+                shoppingCart.Order.CustomerId = customer.CustomerId;
+            }
+
+
             customer.LastVisited = DateTime.Now;
             if (isNewCustomer)
             {
@@ -97,34 +104,62 @@ namespace Deerfly_Patches.Controllers
             if (!isNewCustomer)
             {
                 AddressBase newAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
-                isNewAddress = db.Addresses.Where(a => a.Address1 == newAddress.Address1)
-                                            .Where(a => a.Address2 == newAddress.Address2)
-                                            .Where(a => a.City == newAddress.City)
-                                            .Where(a => a.State == newAddress.State)
-                                            .Where(a => a.PostalCode == newAddress.PostalCode)
-                                            .Where(a => a.Phone == newAddress.Phone)
-                                            .Where(a => a.Recipient == newAddress.Phone)
-                                            .Where(a => a.CustomerId == customer.CustomerId).Count() == 0;
+                newAddress.SetNullStringsToEmpty();
+                Address addressOnFile = db.Addresses.Where(a => a.Address1 == newAddress.Address1 
+                                                            && a.Address2 == newAddress.Address2
+                                                            && a.City == newAddress.City
+                                                            && a.State == newAddress.State
+                                                            && a.PostalCode == newAddress.PostalCode
+                                                            && a.Phone == newAddress.Phone
+                                                            && a.Recipient == newAddress.Recipient
+                                                            && a.CustomerId == customer.CustomerId).FirstOrDefault();
+                isNewAddress = addressOnFile == null;
+
+                // don't add new address if already in database
+                if (!isNewAddress)
+                {
+                    shoppingCart.Order.ShipToAddressId = addressOnFile.AddressId;
+                }
             }
+
+            shoppingCart.Order.ShipToAddress.Customer = customer;
+            shoppingCart.Order.ShipToAddress.CustomerId = customer.CustomerId;
+            shoppingCart.Order.ShipToAddress.SetNullStringsToEmpty();
+
+            // Add new address to database
             if (isNewAddress)
             {
-                shoppingCart.Order.ShipToAddress.Customer = customer;
-                shoppingCart.Order.ShipToAddress.SetNullStringsToEmpty();
                 db.Addresses.Add(shoppingCart.Order.ShipToAddress);
             }
 
+            // bill to address the same as shipping address
+            if (shoppingCart.Order.BillToAddress == null || shoppingCart.Order.BillToAddress.Address1 == null)
+            {
+                shoppingCart.Order.BillToAddress = shoppingCart.Order.ShipToAddress;
+                shoppingCart.Order.BillToAddressId = shoppingCart.Order.ShipToAddressId;
+            }
+
+            db.SaveChanges();
+
+            // don't add duplicate of product
+            for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
+            {
+                var orderDetail = shoppingCart.Order.OrderDetails[i];
+                orderDetail.ProductId = orderDetail.Product.ProductId;
+                db.Entry(orderDetail.Product).State = EntityState.Unchanged;
+            }
+
+            // add order to database
             shoppingCart.Order.DateOrdered = DateTime.Now;
             db.Orders.Add(shoppingCart.Order);
 
-            for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
-            {
-                db.OrderDetails.Add(shoppingCart.Order.OrderDetails[i]);
-            }
             db.SaveChanges();
 
+            // clear shopping cart
+            shoppingCart = new ShoppingCart();
+            shoppingCart.SaveToSession(HttpContext);
 
-
-
+            // return success
             return this.JOk();
         }
 
