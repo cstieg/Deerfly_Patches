@@ -384,12 +384,10 @@
     <Compile Include="Modules\Geography\GeoRange.cs" />
     <Compile Include="Modules\Google\GoogleMapsClient.cs" />
     <Compile Include="Modules\JsonDeserializer.cs" />
-    <Compile Include="Modules\PayPal\AccessToken.cs" />
     <Compile Include="Modules\PayPal\ClientInfo.cs" />
     <Compile Include="Modules\PayPal\PaymentDetails.cs" />
     <Compile Include="Modules\PayPal\PayPalAddress.cs" />
     <Compile Include="Modules\PayPal\PayPalApiClient.cs" />
-    <Compile Include="Modules\PayPal\UserInfo.cs" />
     <Compile Include="Modules\SessionHelper.cs" />
     <Compile Include="Modules\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

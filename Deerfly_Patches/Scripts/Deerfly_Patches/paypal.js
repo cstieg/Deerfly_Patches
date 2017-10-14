@@ -1,4 +1,12 @@
-﻿var clientInfo = {
+﻿// Paypal.js
+
+// Must have (hidden) divs with:
+//   paypalClientId
+//   paypalMode
+//   paypalLoginReturnId
+// containing as innerText the respective data passed from the server in the ViewBag
+
+var clientInfo = {
     clientId: document.getElementById('paypalClientId').innerText,
     mode: document.getElementById('paypalMode').innerText,
     paypalLoginReturnId: document.getElementById('paypalLoginReturnId').innerText
