@@ -81,7 +81,7 @@ h2 {
     padding: 4px;
     border: 2px outset #b2ff76;
     border-radius: 6px;
-    margin: 12px;
+    margin: 8px;
 }
 
 /* ****************************** Navbar ****************************************** */
@@ -109,7 +109,7 @@ h2 {
 @media screen and (min-width: 1000px){
     .navbar-collapse,
     .navbar > .container {
-        width: 925px;
+        width: 950px;
         margin: auto;
     }
 }
