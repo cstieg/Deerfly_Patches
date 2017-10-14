@@ -230,7 +230,7 @@ namespace Deerfly_Patches.Controllers
                 {
                     ErrorList.Add(dataRow);
                 }
-                break;
+
                 // read next row
                 dataRow = csvParser.Read();
             }
