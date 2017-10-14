@@ -318,7 +318,7 @@ namespace Deerfly_Patches.Modules.PayPal
             {
                 Name = orderDetail.Product.Name,
                 Quantity = orderDetail.Quantity,
-                Price = orderDetail.ExtendedPrice,
+                Price = orderDetail.UnitPrice,
                 Sku = orderDetail.Product.ProductId.ToString(),
                 Currency = "USD"
             };
