@@ -397,6 +397,16 @@ h2 {
     float: right;
 }
 
+#no-paypal {
+    width: 250px;
+    border: ridge thick green;
+    border-radius: 14px;
+    padding: 6px;
+}
+
+#no-paypal h4 {
+    margin: auto;
+}
 
 /* ******************************** Model Scaffolding ********************************* */
 #upload-image-preview {
