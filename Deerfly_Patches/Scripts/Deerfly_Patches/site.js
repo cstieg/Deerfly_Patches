@@ -5,6 +5,14 @@ function antiForgeryToken() {
 
 /* ************************** Shopping Cart **************************************************** */
 
+function shoppingCartPostError(returnval) {
+    var message = 'Error performing this action :( ';
+    if (returnval && returnval.message) {
+        message += returnval.message;
+    }
+    alert(message);
+}
+
 function addToShoppingCart(id) {
     var postData = {
         __RequestVerificationToken: antiForgeryToken(),
@@ -18,9 +26,7 @@ function addToShoppingCart(id) {
         success: function (returnval) {
             alert('Success!');          
         },
-        error: function (returnval) {
-            alert('Error adding item to shopping cart :( ');
-        }
+        error: shoppingCartPostError
     });
 }
 
@@ -37,9 +43,7 @@ function buyNow(id) {
         success: function (returnval) {
             window.location = "/shoppingCart";
         },
-        error: function (returnval) {
-            alert('Error adding item to shopping cart :( ');
-        }
+        error: shoppingCartPostError
     });
 }
 
@@ -50,7 +54,7 @@ function incrementItemInShoppingCart(id) {
     };
     $.ajax({
         type: 'POST',
-        url: '/Order/AddOrderDetailToShoppingCart/',
+        url: '/Order/IncrementItemInShoppingCart/',
         data: postData,
         dataType: 'json',
         success: function (returnval) {
@@ -58,9 +62,7 @@ function incrementItemInShoppingCart(id) {
             $qty.innerText = parseInt($qty.innerText) + 1;
             recalculate();
         },
-        error: function (returnval) {
-            alert('Error incrementing item in shopping cart :( ');
-        }
+        error: shoppingCartPostError
     });
 }
 
@@ -91,9 +93,7 @@ function decrementItemInShoppingCart(id) {
             $qty.innerText = parseInt($qty.innerText) - 1;
             recalculate();
         },
-        error: function (returnval) {
-            alert('Error decrementing item in shopping cart :( ');
-        }
+        error: shoppingCartPostError
     });
 }
 
@@ -115,9 +115,7 @@ function removeItemInShoppingCart(id) {
             }
             recalculate();
         },
-        error: function (returnval) {
-            alert('Error removing item from shopping cart :( ');
-        }
+        error: shoppingCartPostError
     });
 }
 

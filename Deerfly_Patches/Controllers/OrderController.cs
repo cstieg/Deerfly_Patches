@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using Cstieg.ControllerHelper;
 using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.PayPal;
 
 namespace Deerfly_Patches.Controllers
@@ -20,10 +21,10 @@ namespace Deerfly_Patches.Controllers
         }
 
         /// <summary>
-        /// Adds a product to the shopping cart, or increments if already present
+        /// Adds a product to the shopping cart
         /// </summary>
         /// <param name="id">ID of Product model to add</param>
-        /// <returns>JSON success response</returns>
+        /// <returns>JSON success response if successful, error response if product already exists</returns>
         [HttpPost, ActionName("AddOrderDetailToShoppingCart")]
         [ValidateAntiForgeryToken]
         public ActionResult AddOrderDetailToShoppingCart(int id)
@@ -36,18 +37,52 @@ namespace Deerfly_Patches.Controllers
             }
 
             // Retrieve shopping cart from session
-            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
-
-            // Create new shopping cart if none is in session
-            if (shoppingCart == null)
-            {
-                shoppingCart = new ShoppingCart();
-            }
+            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
 
             // Add new order detail to session
-            shoppingCart.AddProduct(product);
-            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
-            return this.JOk();
+            try
+            {
+                shoppingCart.AddProduct(product);
+                shoppingCart.SaveToSession(HttpContext);
+                return this.JOk();
+            }
+            catch (Exception e)
+            {
+                return this.JError(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Increases the quantity of a product in the shopping cart
+        /// </summary>
+        /// <param name="id">ID of Product model to add</param>
+        /// <returns>JSON success response</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult IncrementItemInShoppingCart(int id)
+        {
+            // look up product entity
+            Product product = db.Products.SingleOrDefault(m => m.ProductId == id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Retrieve shopping cart from session
+            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
+
+            // Increment quantity and save shopping cart
+            try
+            {
+                shoppingCart.IncrementProduct(product);
+                shoppingCart.SaveToSession(HttpContext);
+                return this.JOk();
+            }
+            catch (Exception e)
+            {
+                return this.JError(e.Message);
+            }
+
         }
 
         /// <summary>
@@ -67,18 +102,20 @@ namespace Deerfly_Patches.Controllers
             }
 
             // Retrieve shopping cart from session
-            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
-
-            // Create new shopping cart if none is in session
-            if (shoppingCart == null)
-            {
-                return HttpNotFound();
-            }
+            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
 
             // Decrement qty and update shopping cart in session
-            shoppingCart.DecrementProduct(product);
-            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
-            return this.JOk();
+            try
+            {
+                shoppingCart.DecrementProduct(product);
+                shoppingCart.SaveToSession(HttpContext);
+                return this.JOk();
+            }
+            catch (Exception e)
+            {
+                return this.JError(e.Message);
+            }
+
         }
 
         /// <summary>
@@ -98,18 +135,20 @@ namespace Deerfly_Patches.Controllers
             }
 
             // Retrieve shopping cart from session
-            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
-
-            // Create new shopping cart if none is in session
-            if (shoppingCart == null)
-            {
-                return HttpNotFound();
-            }
+            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
 
             // Remove Product and update shopping cart in session
-            shoppingCart.RemoveProduct(product);
-            HttpContext.Session.SetObjectAsJson("_shopping_cart", shoppingCart);
-            return this.JOk();
+            try
+            {
+                shoppingCart.RemoveProduct(product);
+                shoppingCart.SaveToSession(HttpContext);
+                return this.JOk();
+            }
+            catch (Exception e)
+            {
+                return this.JError(e.Message);
+            }
+
         }
 
     }

@@ -77,6 +77,19 @@ namespace Deerfly_Patches.Modules.PayPal
             }
             else
             {
+                throw new Exception("Product is already in shopping cart!");
+            }
+        }
+
+        public void IncrementProduct(Product product)
+        {
+            OrderDetail orderDetail = Order.OrderDetails.Find(p => p.Product.ProductId == product.ProductId);
+            if (orderDetail == null)
+            {
+                throw new Exception("Product is not in shopping cart!");
+            }
+            else
+            {
                 orderDetail.Quantity++;
             }
         }
@@ -199,7 +212,13 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public static ShoppingCart GetFromSession(HttpContextBase context)
         {
-            return context.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            ShoppingCart shoppingCart = context.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            // Create new shopping cart if none is in session
+            if (shoppingCart == null)
+            {
+                shoppingCart = new ShoppingCart();
+            }
+            return shoppingCart;
         }
 
         public void SaveToSession(HttpContextBase context)
