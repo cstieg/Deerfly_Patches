@@ -1,13 +1,15 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
+using Newtonsoft.Json;
+
+using Cstieg.ControllerHelper;
 using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.Geography;
 using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.Models;
-using System.Linq;
-using System;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Data.Entity;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -186,7 +188,7 @@ namespace Deerfly_Patches.Controllers
             }
             catch (InvalidOperationException e)
             {
-                ModelState.AddModelError("PromoCodes", "Failed to add promocode: Invalid promo code");
+                ModelState.AddModelError("PromoCodes", "Failed to add promocode: Invalid promo code - " + e.Message);
                 ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
                 return View("Index", shoppingCart);
             }
