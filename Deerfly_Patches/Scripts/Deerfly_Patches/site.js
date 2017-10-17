@@ -5,10 +5,10 @@ function antiForgeryToken() {
 
 /* ************************** Shopping Cart **************************************************** */
 
-function shoppingCartPostError(returnval) {
-    var message = 'Error performing this action :( ';
-    if (returnval && returnval.message) {
-        message += returnval.message;
+function shoppingCartPostError(xhr, httpStatusMessage) {
+    var message = 'Error: ';
+    if (xhr && xhr.responseJSON.message) {
+        message += '\n' + xhr.responseJSON.message;
     }
     alert(message);
 }
@@ -24,7 +24,7 @@ function addToShoppingCart(id) {
         data: postData,
         dataType: 'json',
         success: function (returnval) {
-            alert('Success!');          
+            alert('Success!');
         },
         error: shoppingCartPostError
     });
