@@ -3,13 +3,11 @@
 // Must have (hidden) divs with:
 //   paypalClientId
 //   paypalMode
-//   paypalLoginReturnId
 // containing as innerText the respective data passed from the server in the ViewBag
 
 var clientInfo = {
     clientId: document.getElementById('paypalClientId').innerText,
     mode: document.getElementById('paypalMode').innerText,
-    paypalLoginReturnId: document.getElementById('paypalLoginReturnId').innerText
 };
 
 paypal.Button.render({
@@ -51,7 +49,7 @@ paypal.Button.render({
                         // Execute the payment
                         return actions.payment.execute();
                     })
-                    .then(function () {
+                    .then(function (data) {
                         // Show a success page to the buyer
                         window.location.href = "/ShoppingCart/OrderSuccess";
                     })
