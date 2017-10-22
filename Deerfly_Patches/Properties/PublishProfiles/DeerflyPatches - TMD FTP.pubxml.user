@@ -37,6 +37,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/AWSSDK.S3.pdb">
       <publishTime>09/12/2017 15:46:08</publishTime>
     </File>
+    <File Include="bin/ControllerHelper.dll">
+      <publishTime>10/22/2017 15:47:31</publishTime>
+    </File>
+    <File Include="bin/ControllerHelper.pdb">
+      <publishTime>10/22/2017 15:47:31</publishTime>
+    </File>
     <File Include="bin/CsvHelper.dll">
       <publishTime>09/09/2016 14:59:46</publishTime>
     </File>
@@ -53,10 +59,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
-      <publishTime>10/13/2017 20:03:31</publishTime>
+      <publishTime>10/22/2017 15:47:59</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.pdb">
-      <publishTime>10/13/2017 20:03:31</publishTime>
+      <publishTime>10/22/2017 15:47:59</publishTime>
     </File>
     <File Include="bin/Elmah.dll">
       <publishTime>04/12/2012 19:19:36</publishTime>
@@ -373,6 +379,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/images/birch-forest-tile.jpg">
       <publishTime>08/30/2017 13:20:39</publishTime>
     </File>
+    <File Include="Content/images/deerfly.png">
+      <publishTime>10/14/2017 20:05:23</publishTime>
+    </File>
     <File Include="Content/images/deerfly1.png">
       <publishTime>08/31/2017 13:57:40</publishTime>
     </File>
@@ -452,7 +461,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/31/2017 14:14:23</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>10/12/2017 17:54:11</publishTime>
+      <publishTime>10/14/2017 20:14:45</publishTime>
     </File>
     <File Include="dfp.pfx">
       <publishTime>10/07/2017 20:20:32</publishTime>
@@ -479,7 +488,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/03/2017 11:30:03</publishTime>
     </File>
     <File Include="PayPal.json">
-      <publishTime>10/09/2017 20:06:42</publishTime>
+      <publishTime>10/22/2017 15:46:50</publishTime>
+    </File>
+    <File Include="PayPal.sandbox.json">
+      <publishTime>10/16/2017 11:13:08</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>08/14/2017 22:10:48</publishTime>
@@ -494,10 +506,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/16/2017 00:20:30</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/paypal.js">
-      <publishTime>10/13/2017 15:44:47</publishTime>
+      <publishTime>10/16/2017 22:01:00</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/site.js">
-      <publishTime>10/12/2017 10:31:56</publishTime>
+      <publishTime>10/16/2017 22:58:20</publishTime>
     </File>
     <File Include="Scripts/jquery-3.1.1.js">
       <publishTime>09/11/2017 11:16:05</publishTime>
@@ -581,7 +593,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/22/2017 11:13:53</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
-      <publishTime>10/12/2017 15:54:29</publishTime>
+      <publishTime>10/14/2017 20:06:35</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
       <publishTime>09/02/2017 23:43:18</publishTime>
@@ -590,13 +602,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 11:49:45</publishTime>
     </File>
     <File Include="Views/Home/Faq.cshtml">
-      <publishTime>10/12/2017 15:53:48</publishTime>
+      <publishTime>10/14/2017 20:11:55</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>10/12/2017 15:54:05</publishTime>
+      <publishTime>10/13/2017 20:29:48</publishTime>
     </File>
     <File Include="Views/Home/Privacy.cshtml">
-      <publishTime>10/10/2017 13:43:17</publishTime>
+      <publishTime>10/14/2017 20:10:20</publishTime>
     </File>
     <File Include="Views/Home/Testimonials.cshtml">
       <publishTime>10/12/2017 15:54:21</publishTime>
@@ -788,7 +800,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/02/2017 15:05:05</publishTime>
     </File>
     <File Include="Views/Order/Index.cshtml">
-      <publishTime>10/11/2017 09:05:31</publishTime>
+      <publishTime>10/18/2017 15:08:36</publishTime>
     </File>
     <File Include="Views/PayPal/CloseLoginWindow.cshtml">
       <publishTime>10/09/2017 23:32:09</publishTime>
@@ -803,7 +815,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:11:10</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/11/2017 09:02:06</publishTime>
+      <publishTime>10/14/2017 20:18:49</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>08/14/2017 22:11:10</publishTime>
@@ -812,13 +824,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/02/2017 21:19:34</publishTime>
     </File>
     <File Include="Views/Shared/_ProductPartial.cshtml">
-      <publishTime>10/11/2017 20:22:11</publishTime>
+      <publishTime>10/18/2017 15:19:25</publishTime>
     </File>
     <File Include="Views/ShoppingCart/Index.cshtml">
-      <publishTime>10/12/2017 10:03:41</publishTime>
+      <publishTime>10/14/2017 19:50:19</publishTime>
     </File>
     <File Include="Views/ShoppingCart/OrderSuccess.cshtml">
-      <publishTime>10/10/2017 14:11:31</publishTime>
+      <publishTime>10/14/2017 20:03:05</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>08/14/2017 22:10:39</publishTime>
@@ -827,7 +839,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/13/2017 20:04:41</publishTime>
+      <publishTime>10/22/2017 15:49:18</publishTime>
     </File>
   </ItemGroup>
 </Project>

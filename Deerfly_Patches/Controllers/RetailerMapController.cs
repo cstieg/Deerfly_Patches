@@ -95,13 +95,13 @@ namespace Deerfly_Patches.Controllers
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private List<Retailer> GetRetailersInBounds(GeoRange range)
+        private async Task<List<Retailer>> GetRetailersInBounds(GeoRange range)
         {
-            var retailers = db.Retailers.Include(r => r.LatLng).Include(r => r.Address)
+            var retailers = await db.Retailers.Include(r => r.LatLng).Include(r => r.Address)
                 .Where(r => r.LatLng.Lat <= range.TopLeft.Lat &&
                             r.LatLng.Lng >= range.TopLeft.Lng &&
                             r.LatLng.Lat >= range.BottomRight.Lat &&
-                            r.LatLng.Lng <= range.BottomRight.Lng).ToList();
+                            r.LatLng.Lng <= range.BottomRight.Lng).ToListAsync();
             if (userLocation != null)
             {
                 retailers.Sort(delegate (Retailer r1, Retailer r2)

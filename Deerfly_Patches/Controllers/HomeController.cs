@@ -1,7 +1,9 @@
 ﻿using Deerfly_Patches.Models;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Deerfly_Patches.Controllers
@@ -13,9 +15,9 @@ namespace Deerfly_Patches.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Products.Where(p => p.DoNotDisplay == false).ToList());
+            return View(await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync());
         }
 
         public ActionResult About()
@@ -28,9 +30,9 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
-        public ActionResult Testimonials()
+        public async Task<ActionResult> Testimonials()
         {
-            return View(db.Testimonials.ToList());
+            return View(await db.Testimonials.ToListAsync());
         }
 
         public ActionResult Faq()

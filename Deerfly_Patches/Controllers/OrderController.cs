@@ -5,6 +5,8 @@ using Cstieg.ControllerHelper;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.PayPal;
 using System.Net;
+using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -16,9 +18,9 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Order
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Products.Where(p => p.DoNotDisplay == false).ToList());
+            return View(await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync());
         }
 
         /// <summary>
@@ -28,10 +30,10 @@ namespace Deerfly_Patches.Controllers
         /// <returns>JSON success response if successful, error response if product already exists</returns>
         [HttpPost, ActionName("AddOrderDetailToShoppingCart")]
         [ValidateAntiForgeryToken]
-        public ActionResult AddOrderDetailToShoppingCart(int id)
+        public async Task<ActionResult> AddOrderDetailToShoppingCart(int id)
         {
             // look up product entity
-            Product product = db.Products.SingleOrDefault(m => m.ProductId == id);
+            Product product = await db.Products.SingleOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -60,10 +62,10 @@ namespace Deerfly_Patches.Controllers
         /// <returns>JSON success response</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult IncrementItemInShoppingCart(int id)
+        public async Task<ActionResult> IncrementItemInShoppingCart(int id)
         {
             // look up product entity
-            Product product = db.Products.SingleOrDefault(m => m.ProductId == id);
+            Product product = await db.Products.SingleOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -93,10 +95,10 @@ namespace Deerfly_Patches.Controllers
         /// <returns>JSON success response</returns>
         [HttpPost, ActionName("DecrementItemInShoppingCart")]
         [ValidateAntiForgeryToken]
-        public ActionResult DecrementItemInShoppingCart(int id)
+        public async Task<ActionResult> DecrementItemInShoppingCart(int id)
         {
             // look up product entity
-            Product product = db.Products.SingleOrDefault(m => m.ProductId == id);
+            Product product = await db.Products.SingleOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -126,10 +128,11 @@ namespace Deerfly_Patches.Controllers
         /// <returns>JSON success response</returns>
         [HttpPost, ActionName("RemoveItemInShoppingCart")]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveItemInShoppingCart(int id)
+        public async Task<ActionResult> RemoveItemInShoppingCart(int id)
         {
+            var x = db.Products;
             // look up product entity
-            Product product = db.Products.SingleOrDefault(m => m.ProductId == id);
+            Product product = await db.Products.SingleOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();

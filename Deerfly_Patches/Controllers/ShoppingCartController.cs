@@ -10,6 +10,7 @@ using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.Geography;
 using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.Models;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -29,7 +30,7 @@ namespace Deerfly_Patches.Controllers
         }
 
         [HttpPost]
-        public JsonResult VerifyAndSave()
+        public async Task<JsonResult> VerifyAndSave()
         {
             string paymentDetailsJson = Request.Params.Get("paymentDetails");
             PaymentDetails paymentDetails = JsonConvert.DeserializeObject<PaymentDetails>(paymentDetailsJson);
@@ -46,9 +47,6 @@ namespace Deerfly_Patches.Controllers
             }
 
             shippingAddress.CopyTo(shoppingCart.Order.ShipToAddress);
-
-
-
 
             // verify items
             List<Item> items = (List<Item>)paymentDetails.Transactions.First().ItemList.Items;
@@ -141,7 +139,7 @@ namespace Deerfly_Patches.Controllers
                 shoppingCart.Order.BillToAddressId = shoppingCart.Order.ShipToAddressId;
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             // don't add duplicate of product
             for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
@@ -155,7 +153,7 @@ namespace Deerfly_Patches.Controllers
             shoppingCart.Order.DateOrdered = DateTime.Now;
             db.Orders.Add(shoppingCart.Order);
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             // clear shopping cart
             shoppingCart = new ShoppingCart();
@@ -173,13 +171,13 @@ namespace Deerfly_Patches.Controllers
 
 
         [HttpPost]
-        public ActionResult AddPromoCode()
+        public async Task<ActionResult> AddPromoCode()
         {
             ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
             try
             {
                 string pc = Request.Params.Get("PromoCode");
-                PromoCode promoCode = db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).Single();
+                PromoCode promoCode = await db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).SingleAsync();
 
                 shoppingCart.AddPromoCode(promoCode);
 
