@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Cstieg.ControllerHelper;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.PayPal;
-using System.Net;
 using System.Data.Entity;
 using System.Threading.Tasks;
 

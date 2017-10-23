@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.FileStorage;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -19,19 +20,19 @@ namespace Deerfly_Patches.Controllers
         private ImageManager imageSaver = new ImageManager("images/testimonials");
 
         // GET: Testimonials
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Testimonials.ToList());
+            return View(await db.Testimonials.ToListAsync());
         }
 
         // GET: Testimonials/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Testimonial testimonial = db.Testimonials.Find(id);
+            Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -56,7 +57,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
+        public async Task<ActionResult> Create([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
         {
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "");
@@ -78,7 +79,7 @@ namespace Deerfly_Patches.Controllers
 
                 // add new model
                 db.Testimonials.Add(testimonial);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -86,13 +87,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Testimonials/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Testimonial testimonial = db.Testimonials.Find(id);
+            Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -110,7 +111,7 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
+        public async Task<ActionResult> Edit([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
         {
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, testimonial.ImageUrl);
@@ -138,7 +139,7 @@ namespace Deerfly_Patches.Controllers
 
                 // edit model
                 db.Entry(testimonial).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -146,13 +147,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Testimonials/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Testimonial testimonial = db.Testimonials.Find(id);
+            Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -168,15 +169,15 @@ namespace Deerfly_Patches.Controllers
         // POST: Testimonials/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Testimonial testimonial = db.Testimonials.Find(id);
+            Testimonial testimonial = await db.Testimonials.FindAsync(id);
 
             // Remove old image when deleting
             imageSaver.DeleteImageWithMultipleSizes(testimonial.ImageUrl);
 
             db.Testimonials.Remove(testimonial);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

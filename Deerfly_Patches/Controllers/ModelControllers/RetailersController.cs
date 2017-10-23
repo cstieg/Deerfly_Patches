@@ -23,20 +23,20 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Retailers
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var retailers = db.Retailers.Include(r => r.LatLng).OrderBy(r => r.Address.PostalCode);
-            return View(retailers.ToList());
+            return View(await retailers.ToListAsync());
         }
 
         // GET: Retailers/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Retailer retailer = db.Retailers.Find(id);
+            Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -63,7 +63,7 @@ namespace Deerfly_Patches.Controllers
                 retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
 
                 db.Retailers.Add(retailer);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -71,13 +71,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Retailers/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Retailer retailer = db.Retailers.Find(id);
+            Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -99,7 +99,7 @@ namespace Deerfly_Patches.Controllers
                 retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
 
                 db.Entry(retailer).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -107,13 +107,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Retailers/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Retailer retailer = db.Retailers.Find(id);
+            Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -124,11 +124,11 @@ namespace Deerfly_Patches.Controllers
         // POST: Retailers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Retailer retailer = db.Retailers.Find(id);
+            Retailer retailer = await db.Retailers.FindAsync(id);
             db.Retailers.Remove(retailer);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -136,11 +136,11 @@ namespace Deerfly_Patches.Controllers
         /// Returns JSON list of retailers
         /// </summary>
         /// <returns>JSON list of retailers</returns>
-        public JsonResult ListJson()
+        public async Task<JsonResult> ListJson()
         {
             //TODO: filter by location
             var retailers = db.Retailers.Include(r => r.LatLng);
-            var returnval = retailers.ToList();
+            var returnval = await retailers.ToListAsync();
             return Json(returnval, JsonRequestBehavior.AllowGet);
         }
 
@@ -165,7 +165,7 @@ namespace Deerfly_Patches.Controllers
             string deleteCurrent = Request.Params.Get("deleteCurrent");
             if (Request.Params.Get("deleteCurrent") == "on")
             {
-                db.Retailers.RemoveRange(db.Retailers.ToList());
+                db.Retailers.RemoveRange(await db.Retailers.ToListAsync());
             }
 
             // List of errors
@@ -224,7 +224,7 @@ namespace Deerfly_Patches.Controllers
                     retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
 
                     db.Retailers.Add(retailer);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 catch
                 {

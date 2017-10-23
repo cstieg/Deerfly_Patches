@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -15,20 +16,20 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: PromoCodes
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var promoCodes = db.PromoCodes.Include(p => p.PromotionalItem).Include(p => p.WithPurchaseOf);
-            return View(promoCodes.ToList());
+            return View(await promoCodes.ToListAsync());
         }
 
         // GET: PromoCodes/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PromoCode promoCode = db.PromoCodes.Find(id);
+            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)
             {
                 return HttpNotFound();
@@ -50,12 +51,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PromoCode promoCode)
+        public async Task<ActionResult> Create(PromoCode promoCode)
         {
             if (ModelState.IsValid)
             {
                 db.PromoCodes.Add(promoCode);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -66,13 +67,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: PromoCodes/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PromoCode promoCode = db.PromoCodes.Find(id);
+            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)
             {
                 return HttpNotFound();
@@ -88,12 +89,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(PromoCode promoCode)
+        public async Task<ActionResult> Edit(PromoCode promoCode)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(promoCode).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name");
@@ -103,13 +104,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: PromoCodes/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PromoCode promoCode = db.PromoCodes.Find(id);
+            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)
             {
                 return HttpNotFound();
@@ -120,11 +121,11 @@ namespace Deerfly_Patches.Controllers
         // POST: PromoCodes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            PromoCode promoCode = db.PromoCodes.Find(id);
+            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             db.PromoCodes.Remove(promoCode);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

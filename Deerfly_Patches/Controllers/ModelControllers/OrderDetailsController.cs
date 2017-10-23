@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -15,20 +16,20 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: OrderDetails
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var orderDetails = db.OrderDetails.Include(o => o.Product);
-            return View(orderDetails.ToList());
+            return View(await orderDetails.ToListAsync());
         }
 
         // GET: OrderDetails/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OrderDetail orderDetail = db.OrderDetails.Find(id);
+            OrderDetail orderDetail = await db.OrderDetails.FindAsync(id);
             if (orderDetail == null)
             {
                 return HttpNotFound();
@@ -49,12 +50,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderDetailId,ProductId,PlacedInCart,Quantity,UnitPrice,Shipping,CheckedOut,OrderId")] OrderDetail orderDetail)
+        public async Task<ActionResult> Create([Bind(Include = "OrderDetailId,ProductId,PlacedInCart,Quantity,UnitPrice,Shipping,CheckedOut,OrderId")] OrderDetail orderDetail)
         {
             if (ModelState.IsValid)
             {
                 db.OrderDetails.Add(orderDetail);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -64,13 +65,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: OrderDetails/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OrderDetail orderDetail = db.OrderDetails.Find(id);
+            OrderDetail orderDetail = await db.OrderDetails.FindAsync(id);
             if (orderDetail == null)
             {
                 return HttpNotFound();
@@ -85,12 +86,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderDetailId,ProductId,PlacedInCart,Quantity,UnitPrice,Shipping,CheckedOut,OrderId")] OrderDetail orderDetail)
+        public async Task<ActionResult> Edit([Bind(Include = "OrderDetailId,ProductId,PlacedInCart,Quantity,UnitPrice,Shipping,CheckedOut,OrderId")] OrderDetail orderDetail)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(orderDetail).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.OrderId = new SelectList(db.Orders, "OrderId", "OrderId", orderDetail.OrderId);
@@ -99,13 +100,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: OrderDetails/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OrderDetail orderDetail = db.OrderDetails.Find(id);
+            OrderDetail orderDetail = await db.OrderDetails.FindAsync(id);
             if (orderDetail == null)
             {
                 return HttpNotFound();
@@ -116,11 +117,11 @@ namespace Deerfly_Patches.Controllers
         // POST: OrderDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            OrderDetail orderDetail = db.OrderDetails.Find(id);
+            OrderDetail orderDetail = await db.OrderDetails.FindAsync(id);
             db.OrderDetails.Remove(orderDetail);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -133,9 +134,9 @@ namespace Deerfly_Patches.Controllers
             base.Dispose(disposing);
         }
 
-        private bool OrderDetailExists(int id)
+        private async Task<bool> OrderDetailExists(int id)
         {
-            return db.OrderDetails.Any(e => e.OrderDetailId == id);
+            return await db.OrderDetails.AnyAsync(e => e.OrderDetailId == id);
         }
     }
 }

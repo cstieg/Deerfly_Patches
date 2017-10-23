@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -15,20 +15,20 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var orders = db.Orders.Include(o => o.Customer);
-            return View(orders.ToList());
+            return View(await orders.ToListAsync());
         }
 
         // GET: Orders/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
+            Order order = await db.Orders.FindAsync(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -48,12 +48,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderId,CustomerId,DateOrdered,ShipToAddressId,BillToAddressId,Subtotal,Shipping")] Order order)
+        public async Task<ActionResult> Create([Bind(Include = "OrderId,CustomerId,DateOrdered,ShipToAddressId,BillToAddressId,Subtotal,Shipping")] Order order)
         {
             if (ModelState.IsValid)
             {
                 db.Orders.Add(order);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -62,13 +62,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Orders/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
+            Order order = await db.Orders.FindAsync(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -82,12 +82,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderId,CustomerId,DateOrdered,ShipToAddressId,BillToAddressId,Subtotal,Shipping")] Order order)
+        public async Task<ActionResult> Edit([Bind(Include = "OrderId,CustomerId,DateOrdered,ShipToAddressId,BillToAddressId,Subtotal,Shipping")] Order order)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.CustomerId = new SelectList(db.Customers, "CustomerId", "CustomerName", order.CustomerId);
@@ -95,13 +95,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Orders/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
+            Order order = await db.Orders.FindAsync(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -112,11 +112,11 @@ namespace Deerfly_Patches.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Order order = db.Orders.Find(id);
+            Order order = await db.Orders.FindAsync(id);
             db.Orders.Remove(order);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

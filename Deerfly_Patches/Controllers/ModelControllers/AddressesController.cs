@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
+using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -15,20 +16,20 @@ namespace Deerfly_Patches.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Addresses
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var addresses = db.Addresses.Include(a => a.Customer);
-            return View(addresses.ToList());
+            return View(await addresses.ToListAsync());
         }
 
         // GET: Addresses/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Address address = db.Addresses.Find(id);
+            Address address = await db.Addresses.FindAsync(id);
             if (address == null)
             {
                 return HttpNotFound();
@@ -48,12 +49,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AddressId,CustomerId,Recipient,Address1,Address2,City,State,Zip,Country,Phone,Type")] Address address)
+        public async Task<ActionResult> Create([Bind(Include = "AddressId,CustomerId,Recipient,Address1,Address2,City,State,Zip,Country,Phone,Type")] Address address)
         {
             if (ModelState.IsValid)
             {
                 db.Addresses.Add(address);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -62,13 +63,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Addresses/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Address address = db.Addresses.Find(id);
+            Address address = await db.Addresses.FindAsync(id);
             if (address == null)
             {
                 return HttpNotFound();
@@ -82,12 +83,12 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AddressId,CustomerId,Recipient,Address1,Address2,City,State,Zip,Country,Phone,Type")] Address address)
+        public async Task<ActionResult> Edit([Bind(Include = "AddressId,CustomerId,Recipient,Address1,Address2,City,State,Zip,Country,Phone,Type")] Address address)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(address).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.CustomerId = new SelectList(db.Customers, "CustomerId", "CustomerName", address.CustomerId);
@@ -95,13 +96,13 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Addresses/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Address address = db.Addresses.Find(id);
+            Address address = await db.Addresses.FindAsync(id);
             if (address == null)
             {
                 return HttpNotFound();
@@ -112,11 +113,11 @@ namespace Deerfly_Patches.Controllers
         // POST: Addresses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Address address = db.Addresses.Find(id);
+            Address address = await db.Addresses.FindAsync(id);
             db.Addresses.Remove(address);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
