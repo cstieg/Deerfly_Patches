@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +6,7 @@ using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.FileStorage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Deerfly_Patches.ActionFilters;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -14,6 +14,7 @@ namespace Deerfly_Patches.Controllers
     /// The controller providing model scaffolding for Testimonials
     /// </summary>
     [Authorize(Roles = "Administrator")]
+    [ClearCache]
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

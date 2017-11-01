@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Deerfly_Patches.Controllers
 {
+    [OutputCache(CacheProfile = "CacheForADay")]
     /// <summary>
     /// Controller for home page
     /// </summary>

@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Deerfly_Patches.Models;
 using System.Threading.Tasks;
+using Deerfly_Patches.ActionFilters;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -11,6 +11,7 @@ namespace Deerfly_Patches.Controllers
     /// The controller providing model scaffolding for PromoCodes
     /// </summary>
     [Authorize(Roles = "Administrator")]
+    [ClearCache]
     public class PromoCodesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

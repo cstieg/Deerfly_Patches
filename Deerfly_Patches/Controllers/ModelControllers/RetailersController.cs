@@ -10,7 +10,7 @@ using System.Web.Mvc;
 using CsvHelper;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.Google;
-using System.Net.Mime;
+using Deerfly_Patches.ActionFilters;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -18,6 +18,7 @@ namespace Deerfly_Patches.Controllers
     /// The controller providing model scaffolding for Retailers
     /// </summary>
     [Authorize(Roles = "Administrator")]
+    [ClearCache]
     public class RetailersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

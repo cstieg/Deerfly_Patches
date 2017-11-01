@@ -6,6 +6,7 @@ using System.Web;
 using Deerfly_Patches.Modules.FileStorage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Deerfly_Patches.ActionFilters;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -13,6 +14,7 @@ namespace Deerfly_Patches.Controllers
     /// The controller providing model scaffolding for Products
     /// </summary>
     [Authorize(Roles = "Administrator")]
+    [ClearCache]
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
