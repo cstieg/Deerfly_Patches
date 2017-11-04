@@ -84,6 +84,12 @@ h2 {
     margin: 6px 2px;
 }
 
+textarea {
+    width: 100%;
+    height: 10em;
+}
+
+
 /* ****************************** Navbar ****************************************** */
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-nav li a {
@@ -213,7 +219,7 @@ h2 {
     border-radius: 8px;
 }
 
-.product-item .buy-now{
+.buy-now{
     background-color: red;
     color: white;
     font-size: larger;
@@ -222,7 +228,7 @@ h2 {
     border: gray 2px outset;
 }
 
-.product-item .add-to-shopping-cart {
+.add-to-shopping-cart {
     margin: 4px;
 }
 
@@ -239,6 +245,19 @@ h2 {
 .image-wrapper {
     width: 100%;
 }
+
+/* ************************* Product page ******************** */
+#product-page-images img {
+    width: auto;
+    max-height: 75vh;
+    margin: auto;
+}
+
+#product-page-description dt,
+#product-page-description dd {
+    margin-bottom: 8px;
+}
+
 
 /* ************************* Order detail page *************** */
 .item-detail-header *,
@@ -420,4 +439,5 @@ h2 {
 .centered {
     margin-left: auto;
     margin-right: auto;
+    display: block;
 }
