@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Deerfly_Patches.ActionFilters
@@ -10,15 +12,24 @@ namespace Deerfly_Patches.ActionFilters
     {
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
+            filterContext.HttpContext.Cache.Insert("Pages", DateTime.Now);
             base.OnResultExecuted(filterContext);
-            var context = filterContext.HttpContext;
-
-            context.Response.RemoveOutputCacheItem("/");
-            // remove each item from cache
-            foreach (DictionaryEntry item in context.Cache)
-            {
-                context.Cache.Remove(item.Key as string);
-            }
         }
+
+        /*
+         * Global.asax.cs must contain:
+        protected void Application_Start()
+        {
+            // Setup to clear cache
+            HttpRuntime.Cache.Insert("Pages", DateTime.Now);
+        }
+         * Controllers (BaseController) must contain:  
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            filterContext.HttpContext.Response.AddCacheItemDependency("Pages");
+        }
+         */
+
     }
 }

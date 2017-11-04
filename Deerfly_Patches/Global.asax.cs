@@ -16,6 +16,9 @@ namespace Deerfly_Patches
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // Setup to clear cache
+            HttpRuntime.Cache.Insert("Pages", DateTime.Now);
         }
     }
 }
