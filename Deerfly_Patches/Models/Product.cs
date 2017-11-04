@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace Deerfly_Patches.Models
 {
@@ -12,24 +14,22 @@ namespace Deerfly_Patches.Models
         [StringLength(50, MinimumLength = 2)]
         public string Name { get; set; }
 
-        [StringLength(100)]
-        public string Description { get; set; }
-
         public decimal Price { get; set; }
 
         public decimal Shipping { get; set; }
 
-        [DisplayName("Upload image file")]
-        public string ImageUrl { get; set; }
-        public string ImageSrcSet { get; set; }
-
-        [StringLength(50)]
-        public string Category { get; set; }
-
         [Display(Name = "Display on Front Page")]
         public bool DisplayOnFrontPage { get; set; }
 
-        [Display(Name = "Do Not Display (Promotional Item)")]
+        [Display(Name = "Do Not Display")]
         public bool DoNotDisplay { get; set; }
+
+        [StringLength(2000)]
+        [AllowHtml]
+        public string ProductInfo { get; set; }
+
+        [Display(Name = "Product Images")]
+        [InverseProperty("Product")]
+        public virtual ICollection<WebImage> WebImages { get; set; }
     }
 }

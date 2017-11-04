@@ -1,12 +1,16 @@
-﻿using System.Data.Entity;
-using System.Net;
-using System.Web.Mvc;
-using Deerfly_Patches.Models;
-using System.Web;
-using Deerfly_Patches.Modules.FileStorage;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using Cstieg.ControllerHelper;
+using Cstieg.WebFiles.Controllers;
+using Cstieg.WebFiles;
 using Deerfly_Patches.ActionFilters;
+using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -18,7 +22,16 @@ namespace Deerfly_Patches.Controllers
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private ImageManager imageManager = new ImageManager("images/products");
+        public static string contentFolder = "/content";
+
+        protected IFileService storageService;
+        protected ImageManager imageManager;
+
+        public ProductsController()
+        {
+            storageService = new FileSystemService(contentFolder);
+            imageManager = new ImageManager("images/products", storageService);
+        }
 
         // GET: Products
         public async Task<ActionResult> Index()
@@ -42,8 +55,18 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Products/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            // delete images that were previously saved to newly created product that was not ultimately saved
+            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == null).ToListAsync())
+            {
+                // remove image files used by product
+                imageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
+
+                db.WebImages.Remove(webImage);
+                await db.SaveChangesAsync();
+            }
+
             return View();
         }
 
@@ -57,29 +80,21 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,DoNotDisplay")] Product product)
+        public async Task<ActionResult> Create([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
         {
-            // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "");
-
             if (ModelState.IsValid)
             {
-                // Save image to disk and store filepath in model
-                try
-                {
-                    string timeStamp = FileManager.GetTimeStamp();
-                    product.ImageUrl = imageManager.SaveFile(imageFile, 200, true, timeStamp);
-                    product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, true, timeStamp);
-                }
-                catch
-                {
-                    ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
-                    return View(product);
-                }
-
-                // add new model
                 db.Products.Add(product);
                 await db.SaveChangesAsync();
+
+                // connect images that were previously saved to product (id = null)
+                foreach (var webImage in await db.WebImages.Where(w => w.ProductId == null).ToListAsync())
+                {
+                    webImage.ProductId = product.ProductId;
+                    db.Entry(webImage).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                }
+
                 return RedirectToAction("Index");
             }
 
@@ -98,6 +113,10 @@ namespace Deerfly_Patches.Controllers
             {
                 return HttpNotFound();
             }
+
+            // Pass in list of images for product
+            product.WebImages = product.WebImages ?? new List<WebImage>();
+
             return View(product);
         }
 
@@ -111,33 +130,10 @@ namespace Deerfly_Patches.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductId,Name,Description,Price,Shipping,ImageUrl,Category,DisplayOnFrontPage,DoNotDisplay")] Product product)
+        public async Task<ActionResult> Edit([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
         {
-            // Check file is exists and is valid image
-            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, product.ImageUrl);
-
             if (ModelState.IsValid)
             {
-                // imageFile is null if no file was uploaded, but previous file exists
-                if (imageFile != null)
-                {
-                    // Save image to disk and store filepath in model
-                    try
-                    {
-                        string oldUrl = product.ImageUrl;
-                        string timeStamp = FileManager.GetTimeStamp();
-                        product.ImageUrl = imageManager.SaveFile(imageFile, 200, true, timeStamp);
-                        product.ImageSrcSet = imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, true, timeStamp);
-                        imageManager.DeleteImageWithMultipleSizes(oldUrl);
-                    }
-                    catch
-                    {
-                        ModelState.AddModelError("ImageUrl", "Failure saving image. Please try again.");
-                        return View(product);
-                    }
-                }
-
-                // edit model
                 db.Entry(product).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -172,13 +168,106 @@ namespace Deerfly_Patches.Controllers
         {
             Product product = await db.Products.FindAsync(id);
 
-            // remove image files used by product
-            imageManager.DeleteImageWithMultipleSizes(product.ImageUrl);
+            // Delete images connected to this product
+            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == product.ProductId).ToListAsync())
+            {
+                // remove image files used by product
+                imageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
+
+                db.WebImages.Remove(webImage);
+                await db.SaveChangesAsync();
+            }
 
             db.Products.Remove(product);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        /// <summary>
+        /// Adds an image to the product model
+        /// </summary>
+        /// <param name="id">Product id</param>
+        /// <returns>Json result containing image id</returns>
+        [HttpPost]
+        public async Task<JsonResult> AddImage(int? id)
+        {
+            if (id != null)
+            {
+                Product product = await db.Products.FindAsync(id);
+                if (product == null)
+                {
+                    return this.JError(404, "Can't find product " + id.ToString());
+                }
+            }
+
+
+            // Check file is exists and is valid image
+            HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "", "file");
+
+            // Save image to disk and store filepath in model
+            try
+            {
+                string timeStamp = FileManager.GetTimeStamp();
+                WebImage image = new WebImage
+                {
+                    ProductId = id,
+                    ImageUrl = await imageManager.SaveFile(imageFile, 200, timeStamp),
+                    ImageSrcSet = await imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, timeStamp)
+                };
+                db.WebImages.Add(image);
+                await db.SaveChangesAsync();
+                return new JsonResult
+                {
+                    Data = new
+                    {
+                        success = "True",
+                        imageId = image.Id
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, "Error saving image: " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an image from the product model
+        /// </summary>
+        /// <param name="id">Product id</param>
+        /// <returns>Json result containing image id</returns>
+        [HttpPost]
+        public async Task<JsonResult> DeleteImage(int id)
+        {
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
+            {
+                return this.JError(404, "Can't find product " + id.ToString());
+            }
+
+            int imageId = int.Parse(Request.Params.Get("imageId"));
+            WebImage image = await db.WebImages.FindAsync(imageId);
+            if (image == null)
+            {
+                return this.JError(404, "Can't find image " + imageId.ToString());
+            }
+
+            // remove image files used by product
+            imageManager.DeleteImageWithMultipleSizes(image.ImageUrl);
+
+            db.WebImages.Remove(image);
+            await db.SaveChangesAsync();
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = "True",
+                    imageId = image.Id
+                }
+            };
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {
