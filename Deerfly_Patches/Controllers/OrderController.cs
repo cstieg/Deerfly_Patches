@@ -32,7 +32,7 @@ namespace Deerfly_Patches.Controllers
         public async Task<ActionResult> AddOrderDetailToShoppingCart(int id)
         {
             // look up product entity
-            Product product = await db.Products.SingleOrDefaultAsync(m => m.ProductId == id);
+            Product product = await db.Products.Include(p => p.WebImages).SingleOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return HttpNotFound();

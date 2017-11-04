@@ -214,6 +214,10 @@ textarea {
     margin: auto;
 }
 
+.product-image img {
+    max-width: 200px;
+}
+
 .product-image:hover {
     border: inset green 4px;
     border-radius: 8px;
@@ -406,6 +410,10 @@ textarea {
 }
 
 /* ******************************** Shopping Cart Page ******************************** */
+.shopping-cart-product-image {
+    max-width: 100%;
+}
+
 #country-select,
 #enter-promo-code {
     width: 45%;

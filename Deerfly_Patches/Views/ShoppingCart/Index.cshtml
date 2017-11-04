@@ -23,7 +23,17 @@
     foreach (var item in Model.GetItems())
     {
         <div class="row item-detail-line" id="item-@item.Product.ProductId">
-            <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">@item.Product.Name</div>
+            @if (item.Product.WebImages != null && item.Product.WebImages.Count > 0)
+            {
+                <div class="hidden-xs hidden-sm hidden-md col-lg-1 item-image">
+                    <img class="shopping-cart-product-image" src="@item.Product.WebImages.First().ImageUrl" />
+                </div>
+                <div class="col-xs-5 col-sm-6 col-md-5 col-lg-4 item-name">@item.Product.Name</div>
+            }
+            else
+            {
+                <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">@item.Product.Name</div>
+            }
             <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price">$@item.UnitPrice</div>
             <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
                 @if (!item.IsPromotionalItem)

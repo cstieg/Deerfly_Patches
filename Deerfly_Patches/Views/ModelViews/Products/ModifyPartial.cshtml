@@ -3,7 +3,7 @@
 @Scripts.Render("~/bundles/nicedit")
 <script type="text/javascript">bkLib.onDomLoaded(nicEditors.allTextAreas);</script>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
