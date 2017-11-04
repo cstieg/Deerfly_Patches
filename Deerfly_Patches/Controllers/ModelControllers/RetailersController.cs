@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CsvHelper;
+using Cstieg.Telephony;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.Google;
 using Deerfly_Patches.ActionFilters;
+using Cstieg.WebFiles.Controllers;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -162,79 +164,23 @@ namespace Deerfly_Patches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PostUploadCsv()
         {
+            // allow longer time for processing
+            int previousTimeout = HttpContext.Server.ScriptTimeout;
+            HttpContext.Server.ScriptTimeout = 3600;
+
             // Delete current data if requested
-            string deleteCurrent = Request.Params.Get("deleteCurrent");
-            if (Request.Params.Get("deleteCurrent") == "on")
+            bool deleteCurrent = Request.Params.Get("deleteCurrent") == "on";
+            if (deleteCurrent)
             {
                 db.Retailers.RemoveRange(await db.Retailers.ToListAsync());
             }
 
             // List of errors
-            List<string[]> ErrorList = new List<string[]>();
-            HttpPostedFileBase file;
-            StreamReader textReader;
-            CsvParser csvParser;
-            string[] headerRow;
-            string[] dataRow;
+            List<string> ErrorList = new List<string>();
+            HttpPostedFileBase file = _ModelControllersHelper.GetFile(ModelState, Request, "RetailersCsv");
 
-            // Load and parse CSV file
-            try
-            {
-                file = _ModelControllersHelper.GetFile(ModelState, Request, "RetailersCsv");
-                textReader = new StreamReader(file.InputStream);
-                csvParser = new CsvParser(textReader);
-                headerRow = csvParser.Read();
-            }
-            catch
-            {
-                throw new Exception("Failure reading file!");
-            }
-
-            // Iterate through rows, adding retailers to table
-            dataRow = csvParser.Read();
-            while (dataRow != null)
-            {
-                try
-                {
-                    Retailer retailer = new Retailer()
-                    {
-                        Name = dataRow[0].Trim(),
-                        Address = new Address()
-                        {
-                            Address1 = dataRow[1].Trim(),
-                            City = dataRow[2].Trim(),
-                            State = dataRow[3].Trim(),
-                            PostalCode = dataRow[4].Trim(),
-                            Phone = dataRow[5].Trim()
-                        },
-                        Website = dataRow[6].Trim()
-                    };
-
-                    // fix for empty string failing url validation
-                    if (retailer.Website.Equals(""))
-                    {
-                        retailer.Website = null;
-                    }
-
-                    // add http:// if missing
-                    if (retailer.Website != null && retailer.Website.Length > 4 && retailer.Website.Substring(0, 4) != "http")
-                    {
-                        retailer.Website = "http://" + retailer.Website;
-                    }
-
-                    retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
-
-                    db.Retailers.Add(retailer);
-                    await db.SaveChangesAsync();
-                }
-                catch
-                {
-                    ErrorList.Add(dataRow);
-                }
-
-                // read next row
-                dataRow = csvParser.Read();
-            }
+            await UploadRetailersList(file, deleteCurrent, ErrorList);
+            await GeocodeRetailers(ErrorList);
 
             if (ErrorList.Count > 0)
             {
@@ -248,15 +194,128 @@ namespace Deerfly_Patches.Controllers
                 }
                 textWriter.Flush();
                 writeStream.Position = 0;
-               
+
+                HttpContext.Server.ScriptTimeout = previousTimeout;
                 return new FileStreamResult(writeStream, "application/text")
                 {
                     FileDownloadName = "errors.txt"
                 };
             }
-            
+
+            HttpContext.Server.ScriptTimeout = previousTimeout;
             return RedirectToAction("Index");
         }
+
+        private async Task UploadRetailersList(HttpPostedFileBase file, bool deleteCurrent, List<string> ErrorList)
+        {
+            StreamReader textReader;
+            CsvParser csvParser;
+            string[] headerRow;
+            string[] dataRow;
+
+            // Load and parse CSV file
+            try
+            {
+                textReader = new StreamReader(file.InputStream);
+                csvParser = new CsvParser(textReader);
+                headerRow = csvParser.Read();
+            }
+            catch
+            {
+                throw new Exception("Failure reading file!");
+            }
+
+            // Iterate through rows, adding retailers to table
+            dataRow = csvParser.Read();
+            while (dataRow != null)
+            {
+                await AddRetailer(dataRow, deleteCurrent, ErrorList);
+
+                // read next row
+                dataRow = csvParser.Read();
+            }
+        }
+
+        private async Task AddRetailer(string[] dataRow, bool deleteCurrent, List<string> ErrorList)
+        {
+            try
+            {
+                Retailer retailer = new Retailer()
+                {
+                    Name = dataRow[0].Trim(),
+                    Address = new Address()
+                    {
+                        Address1 = dataRow[1].Trim(),
+                        City = dataRow[2].Trim(),
+                        State = dataRow[3].Trim(),
+                        PostalCode = dataRow[4].Trim(),
+                        Phone = Phone.FormatDigits(dataRow[5].Trim())
+                    },
+                    Website = dataRow[6].Trim()
+                };
+
+                // skip if retailer is already in database
+                if (!deleteCurrent)
+                {
+                    Retailer existingRetailer = await db.Retailers.Where(r => r.Address.Phone == retailer.Address.Phone).FirstOrDefaultAsync();
+                    if (existingRetailer != null)
+                    {
+                        // if address is the same, skip
+                        if (retailer.Address.AddressIsSame(existingRetailer.Address))
+                        {
+                            return;
+                        }
+                        // if address is different, replace
+                        else
+                        {
+                            db.Retailers.Remove(existingRetailer);
+                        }
+                    }
+                }
+
+                // fix for empty string failing url validation
+                if (retailer.Website.Equals(""))
+                {
+                    retailer.Website = null;
+                }
+
+                // add http:// if missing
+                if (retailer.Website != null && retailer.Website.Length > 4 && retailer.Website.Substring(0, 4) != "http")
+                {
+                    retailer.Website = "http://" + retailer.Website;
+                }
+
+                db.Retailers.Add(retailer);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                ErrorList.Add(string.Join(",", dataRow));
+            }
+
+        }
+
+        private async Task GeocodeRetailers(List<string> ErrorList)
+        {
+            var retailers = await db.Retailers.ToListAsync();
+            foreach (var retailer in retailers)
+            {
+                if (retailer.LatLngId == null)
+                {
+                    try
+                    {
+                        retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorList.Add("Error: " + e.Message + "  Retailer: " + retailer.ToString());
+                    }
+                    db.Entry(retailer).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {

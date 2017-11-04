@@ -155,7 +155,7 @@ var retailerMap = {
         $retailerItemTemplate.find('.retailer-name').text(retailer.Name);
         $retailerItemTemplate.find('.retailer-distance').text(retailer.distance.toPrecision(3) + ' miles from your location');
         $retailerItemTemplate.find('.retailer-address').html(retailer.Address.Address1 + '<br />' +
-            retailer.Address.City + ', ' + retailer.Address.State + ' ' + retailer.Address.Zip + '<br />');
+            retailer.Address.City + ', ' + retailer.Address.State + ' ' + retailer.Address.PostalCode + '<br />');
         if (retailer.Address.Phone) {
             $retailerItemTemplate.find('.retailer-phone')
                 .html(retailer.Address.Phone + '<br />')

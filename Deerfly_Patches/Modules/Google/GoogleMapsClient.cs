@@ -54,6 +54,10 @@ namespace Deerfly_Patches.Modules.Google
                 var response = await client.SendAsync(request);
                 var result = response.Content.ReadAsStringAsync().Result;
                 GeocodingResponse geocodingResponse = JsonConvert.DeserializeObject<GeocodingResponse>(result);
+                if (geocodingResponse == null)
+                {
+                    throw new Exception("Error: " + response.ReasonPhrase);
+                }
                 return geocodingResponse.Results.First<GeocodingResult>().Geometry.Location;
             }
         }

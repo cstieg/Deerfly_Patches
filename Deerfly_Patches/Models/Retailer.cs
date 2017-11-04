@@ -26,5 +26,10 @@ namespace Deerfly_Patches.Models
 
         [Url]
         public string Website { get; set; }
+
+        public override string ToString()
+        {
+            return string.Join(",", new string[] { Name, Address.ToString() });
+        }
     }
 }

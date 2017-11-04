@@ -79,14 +79,14 @@ namespace Deerfly_Patches.Controllers
         /// <param name="currentLng">Current user longitude</param>
         /// <returns></returns>
         [HttpGet]
-        public JsonResult UpdateRetailerJson(float maxLat, float leftLng, float minLat, float rightLng, float currentLat, float currentLng)
+        public async Task<JsonResult> UpdateRetailerJson(float maxLat, float leftLng, float minLat, float rightLng, float currentLat, float currentLng)
         {
             try
             {
                 userLocation = new LatLng(currentLat, currentLng);
             }
             catch { }
-            var data = GetRetailersInBounds(new GeoRange(maxLat, leftLng, minLat, rightLng));
+            var data = await GetRetailersInBounds(new GeoRange(maxLat, leftLng, minLat, rightLng));
             return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

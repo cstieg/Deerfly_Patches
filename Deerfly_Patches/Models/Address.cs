@@ -35,6 +35,7 @@ namespace Deerfly_Patches.Models
         public override string Country { get; set; }
 
         [StringLength(25)]
+        [Index]
         public override string Phone { get; set; }
 
         public override AddressType Type { get; set; }
