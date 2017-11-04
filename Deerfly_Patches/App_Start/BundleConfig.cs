@@ -25,7 +25,12 @@ namespace Deerfly_Patches
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                       "~/Scripts/Deerfly_Patches/site.js",
                       "~/Scripts/Deerfly_Patches/gmaps.js",
-                      "~/Scripts/Deerfly_Patches/inputmask.js"));
+                      "~/Scripts/Deerfly_Patches/inputmask.js",
+                      "~/Scripts/Deerfly_Patches/ImageUpload.js",
+                      "~/Scripts/Deerfly_Patches/LightboxMessage.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
+                      "~/Scripts/NicEdit/nicEdit.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

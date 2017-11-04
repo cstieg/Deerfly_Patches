@@ -226,13 +226,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ModelControllers\AddressesController.cs" />
     <Compile Include="Controllers\ModelControllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
     <Compile Include="Controllers\ModelControllers\TestimonialsController.cs" />
-    <Compile Include="Controllers\ModelControllers\_ModelControllersHelper.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ModelControllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
@@ -344,6 +344,14 @@
     <Compile Include="Migrations\201710140216029_FixOrderForeignKeys.Designer.cs">
       <DependentUpon>201710140216029_FixOrderForeignKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711031910088_DoNotDisplayIndex.cs" />
+    <Compile Include="Migrations\201711031910088_DoNotDisplayIndex.Designer.cs">
+      <DependentUpon>201711031910088_DoNotDisplayIndex.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711040330572_WebImage.cs" />
+    <Compile Include="Migrations\201711040330572_WebImage.Designer.cs">
+      <DependentUpon>201711040330572_WebImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
@@ -357,6 +365,7 @@
     <Compile Include="Models\PromoCode.cs" />
     <Compile Include="Models\Retailer.cs" />
     <Compile Include="Models\Testimonial.cs" />
+    <Compile Include="Models\WebImage.cs" />
     <Compile Include="Modules\FileStorage\FileEmptyException.cs" />
     <Compile Include="Modules\FileStorage\Filepath.cs" />
     <Compile Include="Modules\FileStorage\IFileService.cs" />
@@ -442,7 +451,9 @@
     <None Include="Properties\PublishProfiles\DeerflyPatches - TMD FTP.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - Web Deploy.pubxml" />
     <Content Include="Scripts\Deerfly_Patches\gmaps.js" />
+    <Content Include="Scripts\Deerfly_Patches\ImageUpload.js" />
     <Content Include="Scripts\Deerfly_Patches\inputmask.js" />
+    <Content Include="Scripts\Deerfly_Patches\LightboxMessage.js" />
     <Content Include="Scripts\Deerfly_Patches\paypal.js" />
     <Content Include="Scripts\Deerfly_Patches\site.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -458,6 +469,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\NicEdit\nicEdit.js" />
+    <Content Include="Scripts\NicEdit\nicEditorIcons.gif" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Web.config">
@@ -564,11 +577,13 @@
     <Content Include="Views\PayPal\CloseLoginWindow.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\ShoppingCart\OrderSuccess.cshtml" />
+    <Content Include="Views\Home\Product.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\products\" />
     <Folder Include="Content\images\testimonials\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -658,6 +673,12 @@
     <EmbeddedResource Include="Migrations\201710140216029_FixOrderForeignKeys.resx">
       <DependentUpon>201710140216029_FixOrderForeignKeys.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711031910088_DoNotDisplayIndex.resx">
+      <DependentUpon>201711031910088_DoNotDisplayIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711040330572_WebImage.resx">
+      <DependentUpon>201711040330572_WebImage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -670,6 +691,22 @@
     <ProjectReference Include="..\..\_Reusables\C#\ControllerHelper\ControllerHelper\ControllerHelper.csproj">
       <Project>{c8db3f11-651c-4a00-b2d6-650700d0007f}</Project>
       <Name>ControllerHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\Image\Image.csproj">
+      <Project>{ea5294a7-7f80-4da0-960b-0ae3d376c841}</Project>
+      <Name>Image</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\StringHelper\StringHelper.csproj">
+      <Project>{dff3ef94-9144-45eb-be2d-9bde93671212}</Project>
+      <Name>StringHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\Telephony\Telephony\Telephony.csproj">
+      <Project>{67784c04-8a88-430b-83be-ee3a52ce0677}</Project>
+      <Name>Telephony</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\WebFiles\WebFiles\WebFiles.csproj">
+      <Project>{5612c6e4-f55c-4120-b33d-bcfcc2bda4bd}</Project>
+      <Name>WebFiles</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
