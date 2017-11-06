@@ -1,13 +1,13 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules.FileStorage;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Deerfly_Patches.ActionFilters;
+using Cstieg.WebFiles;
 using Cstieg.WebFiles.Controllers;
+using Deerfly_Patches.ActionFilters;
+using Deerfly_Patches.Models;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -19,7 +19,7 @@ namespace Deerfly_Patches.Controllers
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private ImageManager imageSaver = new ImageManager("images/testimonials");
+        private ImageManager imageSaver = new ImageManager("images/testimonials", new FileSystemService("/content"));
 
         // GET: Testimonials
         public async Task<ActionResult> Index()
@@ -48,7 +48,6 @@ namespace Deerfly_Patches.Controllers
             return View();
         }
 
-
         /// <summary>
         /// Creates a new Testimonial model, saving an image to the default imageManager
         /// </summary>
@@ -70,8 +69,8 @@ namespace Deerfly_Patches.Controllers
                 try
                 {
                     string timeStamp = FileManager.GetTimeStamp();
-                    testimonial.ImageUrl = imageSaver.SaveFile(imageFile, 1600, true, timeStamp);
-                    testimonial.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 }, true, timeStamp);
+                    testimonial.ImageUrl = await imageSaver.SaveFile(imageFile, 200, timeStamp);
+                    testimonial.ImageSrcSet = await imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 }, timeStamp);
                 }
                 catch
                 {
@@ -128,8 +127,8 @@ namespace Deerfly_Patches.Controllers
                     {
                         string oldUrl = testimonial.ImageUrl;
                         string timeStamp = FileManager.GetTimeStamp();
-                        testimonial.ImageUrl = imageSaver.SaveFile(imageFile, 1600, true, timeStamp);
-                        testimonial.ImageSrcSet = imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 }, true, timeStamp);
+                        testimonial.ImageUrl = await imageSaver.SaveFile(imageFile, 200, timeStamp);
+                        testimonial.ImageSrcSet = await imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 }, timeStamp);
                         imageSaver.DeleteImageWithMultipleSizes(oldUrl);
                     }
                     catch
