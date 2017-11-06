@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 
@@ -10,7 +11,6 @@ using Deerfly_Patches.Modules;
 using Deerfly_Patches.Modules.Geography;
 using Deerfly_Patches.Modules.PayPal;
 using Deerfly_Patches.Models;
-using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -29,6 +29,11 @@ namespace Deerfly_Patches.Controllers
             return View(shoppingCart);
         }
 
+
+        /// <summary>
+        /// Verifies and saves the shopping cart
+        /// </summary>
+        /// <returns>Json success code</returns>
         [HttpPost]
         public async Task<JsonResult> VerifyAndSave()
         {
@@ -38,38 +43,41 @@ namespace Deerfly_Patches.Controllers
 
             // get address and add to shopping cart
             AddressBase shippingAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
-
-            if ((shoppingCart.Order.ShipToAddress.Country == "US" && shippingAddress.Country != "US") ||
-                (shoppingCart.Order.ShipToAddress.Country != "US" && shippingAddress.Country == "US"))
-            {
-                // change to JSON error
-                throw new ArgumentException("Your country does not match the country selected!");
-            }
-
             shippingAddress.CopyTo(shoppingCart.Order.ShipToAddress);
 
-            // verify items
-            List<Item> items = (List<Item>)paymentDetails.Transactions.First().ItemList.Items;
-            for (int i = 0; i < items.Count(); i++)
+            try
             {
-                if (!shoppingCart.Order.OrderDetails.Exists(o => o.Product.ProductId == int.Parse(items[i].Sku) &&
-                    o.Quantity == items[i].Quantity &&
-                    o.UnitPrice == items[i].Price))
-                {
-                    throw new ArgumentException("Your shopping cart has been changed!  Please try again.");
-                }
+                paymentDetails.VerifyShoppingCart(shoppingCart);
+                CustomVerification(shoppingCart, paymentDetails);
+
+                await SaveShoppingCartToDbAsync(shoppingCart, paymentDetails.Payer.PayerInfo);
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
             }
 
-            if (paymentDetails.Transactions.First().Amount.Total != shoppingCart.GrandTotal)
-            {
-                throw new ArgumentException("Your shopping cart has been changed! Please try again.");
-            }
+            // clear shopping cart
+            shoppingCart = new ShoppingCart();
+            shoppingCart.SaveToSession(HttpContext);
 
+            // return success
+            return this.JOk();
+        }
 
-            // SAVE SHOPPING CART
+        /// <summary>
+        /// Saves the shopping cart to the database.
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart stored in session</param>
+        /// <param name="payerInfo">Payer info received from PayPal API</param>
+        protected async Task SaveShoppingCartToDbAsync(ShoppingCart shoppingCart, PayerInfo payerInfo)
+        {
+            var customersDb = db.Customers;
+            var addressesDb = db.Addresses;
+            var ordersDb = db.Orders;
+
             // update customer
-            PayerInfo payerInfo = paymentDetails.Payer.PayerInfo;
-            Customer customer = db.Customers.SingleOrDefault(c => c.EmailAddress == payerInfo.Email);
+            Customer customer = await customersDb.SingleOrDefaultAsync(c => c.EmailAddress == payerInfo.Email);
             bool isNewCustomer = customer == null;
             if (isNewCustomer)
             {
@@ -92,7 +100,7 @@ namespace Deerfly_Patches.Controllers
             customer.LastVisited = DateTime.Now;
             if (isNewCustomer)
             {
-                db.Customers.Add(customer);
+                customersDb.Add(customer);
             }
             else
             {
@@ -103,16 +111,16 @@ namespace Deerfly_Patches.Controllers
             bool isNewAddress = true;
             if (!isNewCustomer)
             {
-                AddressBase newAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
+                AddressBase newAddress = payerInfo.ShippingAddress;
                 newAddress.SetNullStringsToEmpty();
-                Address addressOnFile = db.Addresses.Where(a => a.Address1 == newAddress.Address1 
+                Address addressOnFile = await addressesDb.Where(a => a.Address1 == newAddress.Address1
                                                             && a.Address2 == newAddress.Address2
                                                             && a.City == newAddress.City
                                                             && a.State == newAddress.State
                                                             && a.PostalCode == newAddress.PostalCode
                                                             && a.Phone == newAddress.Phone
                                                             && a.Recipient == newAddress.Recipient
-                                                            && a.CustomerId == customer.CustomerId).FirstOrDefault();
+                                                            && a.CustomerId == customer.CustomerId).FirstOrDefaultAsync();
                 isNewAddress = addressOnFile == null;
 
                 // don't add new address if already in database
@@ -129,7 +137,7 @@ namespace Deerfly_Patches.Controllers
             // Add new address to database
             if (isNewAddress)
             {
-                db.Addresses.Add(shoppingCart.Order.ShipToAddress);
+                addressesDb.Add(shoppingCart.Order.ShipToAddress);
             }
 
             // bill to address the same as shipping address
@@ -151,18 +159,27 @@ namespace Deerfly_Patches.Controllers
 
             // add order to database
             shoppingCart.Order.DateOrdered = DateTime.Now;
-            db.Orders.Add(shoppingCart.Order);
+            ordersDb.Add(shoppingCart.Order);
 
             await db.SaveChangesAsync();
-
-            // clear shopping cart
-            shoppingCart = new ShoppingCart();
-            shoppingCart.SaveToSession(HttpContext);
-
-            // return success
-            return this.JOk();
         }
 
+        /// <summary>
+        /// Custom verification of shopping cart
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart stored in session</param>
+        /// <param name="paymentDetails">Payment details received from PayPal API</param>
+        protected void CustomVerification(ShoppingCart shoppingCart, PaymentDetails paymentDetails)
+        {
+            AddressBase shippingAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
+            if ((shoppingCart.Country == "US" && shippingAddress.Country != "US") ||
+                (shoppingCart.Country != "US" && shippingAddress.Country == "US"))
+            {
+                // change to JSON error
+                throw new ArgumentException("Your country does not match the country selected!");
+            }
+        }
+        
 
         public ActionResult OrderSuccess()
         {

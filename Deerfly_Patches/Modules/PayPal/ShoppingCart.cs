@@ -21,6 +21,8 @@ namespace Deerfly_Patches.Modules.PayPal
 
         public Order Order { get; set; }
 
+        public string Country { get; set; }
+
         public string PayeeEmail { get; set; }
 
         public List<PromoCode> PromoCodes { get; set; }

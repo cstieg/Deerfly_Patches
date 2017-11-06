@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Deerfly_Patches.Modules.Geography;
+
 
 namespace Deerfly_Patches.Modules.PayPal
 {
@@ -50,6 +52,32 @@ namespace Deerfly_Patches.Modules.PayPal
         public bool ShouldSerializeState()
         {
             return State != null && State != "";
+        }
+
+
+        /// <summary>
+        /// Protect against malicious changing of shopping cart items before payment was formed 
+        /// by checking items against items in shoppingCart on server
+        /// </summary>
+        /// <param name="shoppingCart">Shopping cart on server</param>
+        public void VerifyShoppingCart(ShoppingCart shoppingCart)
+        {
+            // verify items
+            List<Item> items = (List<Item>)Transactions.First().ItemList.Items;
+            for (int i = 0; i < items.Count(); i++)
+            {
+                if (!shoppingCart.Order.OrderDetails.Exists(o => o.Product.ProductId == int.Parse(items[i].Sku) &&
+                    o.Quantity == items[i].Quantity &&
+                    o.UnitPrice == items[i].Price))
+                {
+                    throw new ArgumentException("Your shopping cart has been changed!  Please try again.");
+                }
+            }
+
+            if (Transactions.First().Amount.Total != shoppingCart.GrandTotal)
+            {
+                throw new ArgumentException("Your shopping cart has been changed! Please try again.");
+            }
         }
     }
 
