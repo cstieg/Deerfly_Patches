@@ -2,7 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="deerfly control, natural repellent, non-toxic" />
+    <meta name="description" content="Tred-Not Deerfly Patches are 2&quot; by 6&quot;
+          flesh-colored strips that attach to the back of the cap or hat.
+          Attacking deer flies target the patch, land, and stay.
+          The deer flies are no longer a nuisance.  Order Here." />
     <title>@ViewBag.Title - Deerfly Patches</title>
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/css")
@@ -36,16 +41,13 @@
                 <ul class="nav navbar-nav mynav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Products", "Index", "Order")</li>
                     <li>@Html.ActionLink("Retailer Map", "Index", "RetailerMap")</li>
                     <li>@Html.ActionLink("Testimonials", "Testimonials", "Home")</li>
                     <li>@Html.ActionLink("FAQ", "Faq", "Home")</li>
-                    <!--
-                    <li>@Html.ActionLink("Order", "Index", "Order")</li>
                     <li>
                         <a href="/shoppingcart"><span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart</a>
                     </li>
-                        -->
                 </ul>
                 <!--
                 @Html.Partial("_LoginPartial")
@@ -54,14 +56,23 @@
         </div>
     </div>
     <div class="model-views-container">
-        @RenderBody()
+        <main>@RenderBody()</main>
         <hr />
+        <div id="navbar-bottom" class="navbar navbar-inverse">
+            <div class="container">
+                <ul class="nav navbar-nav mynav">
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Privacy Policy", "Privacy", "Home")</li>
+                </ul>
+            </div>
+        </div>
+
         <footer>
             <span>&copy; @DateTime.Now.Year - Detex</span>
             <span class="pull-right">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></span>
         </footer>
-        <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
     </div>
+    <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
