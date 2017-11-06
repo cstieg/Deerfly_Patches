@@ -180,7 +180,7 @@ textarea {
     /* 100% divided by number of items */
     width: 50%;
 }
-
+        
 #navbar-bottom .navbar-nav li a {
     padding: 2px;
     margin: 0 auto;
@@ -253,6 +253,7 @@ textarea {
 /* ************************* Product page ******************** */
 #product-page-images img {
     width: auto;
+    max-width: 100%;
     max-height: 75vh;
     margin: auto;
 }
@@ -328,8 +329,9 @@ textarea {
 
 
 /* **************************** Testimonials page ******************************* */
-#testimonial-item {
-    overflow: scroll;
+#testimonial-list {
+    overflow: auto;
+    height: 75vh;
 }
 
 #testimonial-display {
