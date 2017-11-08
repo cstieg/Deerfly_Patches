@@ -67,9 +67,12 @@
             </div>
         </div>
 
-        <footer>
-            <span>&copy; @DateTime.Now.Year - Detex</span>
-            <span class="pull-right">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></span>
+        <footer class="container">
+            <div class="row text-center">
+                <div class="col-sm-4">&copy; @DateTime.Now.Year - Detex</div>
+                <div class="col-sm-4"><a href="mailto:webmaster@deerflypatches.com">Website feedback</a></div>
+                <div class="col-sm-4">Website created by <a href="http://www.christopherstieg.com">Christopher Stieg</a></div>
+            </div>
         </footer>
     </div>
     <span class="hidden-md" id="anti-forgery-token">@Html.AntiForgeryToken()</span>
