@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Cstieg.ControllerHelper;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.PayPal;
-using System.Data.Entity;
-using System.Threading.Tasks;
 
 namespace Deerfly_Patches.Controllers
 {
     /// <summary>
     /// Controller for Order page
     /// </summary>
+    [OutputCache(CacheProfile = "CacheForADay")]
     public class OrderController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
