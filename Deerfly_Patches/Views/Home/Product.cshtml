@@ -20,7 +20,7 @@
             case 1:
                 {
                     <picture>
-                        <img src="@Model.WebImages.Single().ImageUrl" srcset="@Model.WebImages.Single().ImageSrcSet" />
+                        <img src="@Model.WebImages.Single().ImageUrl" srcset="@Model.WebImages.Single().ImageSrcSet" sizes="(min-width: 768px) 50vw, 100vw" />
                     </picture>
                     break;
                 }
@@ -40,6 +40,7 @@
                             <div class="item active">
                                 <img src="@Model.WebImages.First().ImageUrl"
                                      srcset="@Model.WebImages.First().ImageSrcSet"
+                                     sizes="(min-width: 768px) 50vw, 100vw" 
                                      alt="@Model.Name - image 1">
                                 <div class="carousel-caption">@Model.WebImages.First().Caption</div>
                             </div>
@@ -48,6 +49,7 @@
                                 <div class="item">
                                     <img src="@Model.WebImages.ElementAt(i).ImageUrl"
                                          srcset="@Model.WebImages.ElementAt(i).ImageSrcSet"
+                                         sizes="(min-width: 768px) 50vw, 100vw" 
                                          alt="@Model.Name - image @i">
                                     <div class="carousel-caption">@Model.WebImages.ElementAt(i).Caption</div>
                                 </div>
