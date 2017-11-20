@@ -161,7 +161,7 @@ function setCountry() {
     var country = 'US';
     $.getJSON('https://freegeoip.net/json/', function (data) {
         var $countrySelect = $('#country-select');
-        if (country === 'US') {
+        if (data.country_code === 'US') {
             $countrySelect.find('input[value="US"]').attr('checked', 'checked');
         }
         else {
