@@ -149,11 +149,14 @@ namespace Deerfly_Patches.Controllers
 
             await db.SaveChangesAsync();
 
-            // don't add duplicate of product
             for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
             {
                 var orderDetail = shoppingCart.Order.OrderDetails[i];
                 orderDetail.ProductId = orderDetail.Product.ProductId;
+
+                db.Entry(orderDetail).State = EntityState.Added;
+
+                // don't add duplicate of product
                 db.Entry(orderDetail.Product).State = EntityState.Unchanged;
             }
 
