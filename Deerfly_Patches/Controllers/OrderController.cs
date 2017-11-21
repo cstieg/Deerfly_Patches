@@ -12,12 +12,12 @@ namespace Deerfly_Patches.Controllers
     /// <summary>
     /// Controller for Order page
     /// </summary>
-    [OutputCache(CacheProfile = "CacheForADay")]
     public class OrderController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Order
+        [OutputCache(CacheProfile = "CacheForADay")]
         public async Task<ActionResult> Index()
         {
             return View(await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync());
