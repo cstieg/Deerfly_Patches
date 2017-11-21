@@ -4,12 +4,44 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Order Details</h2>
+<hr />
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.DateOrdered)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.DateOrdered)
+    </dd>
 
-<div>
-    @Html.Partial("DetailPartial")
-</div>
+    @Html.Partial("_AddressDetailPartial", Model.ShipToAddress)
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Subtotal)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Subtotal)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Shipping)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Shipping)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Total)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Total)
+    </dd>
+
+</dl>
+<hr />
+<h3>Items</h3>
+@Html.Partial("_OrderDetailPartial", Model.OrderDetails)
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

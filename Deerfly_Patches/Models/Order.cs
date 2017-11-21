@@ -64,5 +64,28 @@ namespace Deerfly_Patches.Models
                 return Subtotal + Shipping;
             }
         }
+
+        public string Description
+        {
+            get
+            {
+                switch (OrderDetails.Count)
+                {
+                    case 0:
+                        return "Invalid order with no products";
+
+                    case 1:
+                        return OrderDetails[0].Product.Name + " Qty: " + OrderDetails[0].Quantity.ToString();
+
+                    default:
+                        string productList = "";
+                        foreach (var orderDetail in OrderDetails)
+                        {
+                            productList += '\n' + orderDetail.Product.Name;
+                        }
+                        return "Multiple: " + productList;
+                }
+            }
+        }
     }
 }

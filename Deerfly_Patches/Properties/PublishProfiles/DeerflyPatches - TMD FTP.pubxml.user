@@ -38,10 +38,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/12/2017 15:46:08</publishTime>
     </File>
     <File Include="bin/ControllerHelper.dll">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/ControllerHelper.pdb">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/CsvHelper.dll">
       <publishTime>09/09/2016 14:59:46</publishTime>
@@ -59,10 +59,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
-      <publishTime>11/06/2017 10:37:18</publishTime>
+      <publishTime>11/17/2017 15:43:03</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.pdb">
-      <publishTime>11/06/2017 10:37:18</publishTime>
+      <publishTime>11/17/2017 15:43:03</publishTime>
     </File>
     <File Include="bin/Elmah.dll">
       <publishTime>04/12/2012 19:19:36</publishTime>
@@ -86,13 +86,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/FileManager.dll">
-      <publishTime>11/04/2017 14:18:39</publishTime>
+      <publishTime>11/11/2017 14:15:37</publishTime>
     </File>
     <File Include="bin/FileManager.dll.config">
       <publishTime>11/04/2017 13:14:55</publishTime>
     </File>
     <File Include="bin/FileManager.pdb">
-      <publishTime>11/04/2017 14:18:39</publishTime>
+      <publishTime>11/11/2017 14:15:37</publishTime>
     </File>
     <File Include="bin/fr/Microsoft.Data.Edm.resources.dll">
       <publishTime>02/01/2017 14:00:38</publishTime>
@@ -107,10 +107,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Image.dll">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/Image.pdb">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
       <publishTime>02/01/2017 14:00:38</publishTime>
@@ -320,10 +320,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/StringHelper.dll">
-      <publishTime>11/04/2017 14:18:39</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/StringHelper.pdb">
-      <publishTime>11/04/2017 14:18:39</publishTime>
+      <publishTime>11/17/2017 15:26:34</publishTime>
     </File>
     <File Include="bin/System.Diagnostics.DiagnosticSource.dll">
       <publishTime>06/27/2017 11:17:34</publishTime>
@@ -353,10 +353,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 03:04:30</publishTime>
     </File>
     <File Include="bin/Telephony.dll">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:41:44</publishTime>
     </File>
     <File Include="bin/Telephony.pdb">
-      <publishTime>11/06/2017 10:36:46</publishTime>
+      <publishTime>11/17/2017 15:41:44</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>09/10/2013 17:28:38</publishTime>
@@ -545,10 +545,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/03/2017 20:08:52</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/paypal.js">
-      <publishTime>10/26/2017 10:50:30</publishTime>
+      <publishTime>11/06/2017 15:55:05</publishTime>
     </File>
     <File Include="Scripts/Deerfly_Patches/site.js">
-      <publishTime>10/27/2017 09:40:47</publishTime>
+      <publishTime>11/16/2017 09:48:04</publishTime>
     </File>
     <File Include="Scripts/jquery-3.1.1.js">
       <publishTime>09/11/2017 11:16:05</publishTime>
@@ -650,13 +650,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/27/2017 09:40:26</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>11/06/2017 10:04:39</publishTime>
+      <publishTime>11/16/2017 10:55:00</publishTime>
     </File>
     <File Include="Views/Home/Privacy.cshtml">
       <publishTime>10/26/2017 10:50:30</publishTime>
     </File>
     <File Include="Views/Home/Product.cshtml">
-      <publishTime>11/04/2017 11:31:10</publishTime>
+      <publishTime>11/16/2017 10:52:19</publishTime>
     </File>
     <File Include="Views/Home/Testimonials.cshtml">
       <publishTime>10/27/2017 09:40:45</publishTime>
@@ -770,7 +770,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/26/2017 10:50:55</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/DetailPartial.cshtml">
-      <publishTime>10/27/2017 09:40:34</publishTime>
+      <publishTime>11/06/2017 14:11:05</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/Details.cshtml">
       <publishTime>10/26/2017 10:50:54</publishTime>
@@ -848,7 +848,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/05/2017 18:19:14</publishTime>
     </File>
     <File Include="Views/Order/Index.cshtml">
-      <publishTime>10/27/2017 09:40:40</publishTime>
+      <publishTime>11/16/2017 10:37:21</publishTime>
     </File>
     <File Include="Views/PayPal/CloseLoginWindow.cshtml">
       <publishTime>10/26/2017 10:50:31</publishTime>
@@ -863,7 +863,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:11:10</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/27/2017 09:40:42</publishTime>
+      <publishTime>11/08/2017 09:04:51</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>08/14/2017 22:11:10</publishTime>
@@ -872,7 +872,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/05/2017 18:30:02</publishTime>
     </File>
     <File Include="Views/Shared/_ProductPartial.cshtml">
-      <publishTime>11/04/2017 10:20:05</publishTime>
+      <publishTime>11/16/2017 10:34:35</publishTime>
     </File>
     <File Include="Views/ShoppingCart/Index.cshtml">
       <publishTime>11/04/2017 14:16:01</publishTime>
@@ -887,7 +887,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/06/2017 10:44:25</publishTime>
+      <publishTime>11/17/2017 15:49:51</publishTime>
     </File>
   </ItemGroup>
 </Project>

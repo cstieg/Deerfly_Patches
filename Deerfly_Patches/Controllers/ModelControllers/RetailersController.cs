@@ -64,7 +64,7 @@ namespace Deerfly_Patches.Controllers
             {
                 // Geocode address of retailer
                 retailer.LatLng = await new GoogleMapsClient().GeocodeAddress(retailer.Address);
-
+                
                 db.Retailers.Add(retailer);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");

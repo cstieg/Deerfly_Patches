@@ -149,6 +149,7 @@ namespace Deerfly_Patches.Controllers
 
             await db.SaveChangesAsync();
 
+            // add order details to database
             for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
             {
                 var orderDetail = shoppingCart.Order.OrderDetails[i];
