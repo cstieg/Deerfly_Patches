@@ -41,16 +41,16 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.WebImages, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10 container">
-                <div id="product-images" class="row">
+            <div class="col-md-10">
+                <div id="product-images">
                     @if (ViewBag.Title == "Edit")
                     {
                         if (Model.WebImages != null)
                         {
                             foreach (var webImage in Model.WebImages)
                             {
-                                <picture id="image-@webImage.Id" class="col-md-4 col-sm-6">
-                                    <img src="@webImage.ImageUrl" />
+                                <picture id="image-@webImage.Id" class="flex">
+                                    <img src="@webImage.ImageUrl" class="thumbnail" />
                                     <p>@webImage.Caption</p>
                                     <button onclick="imageDelete(@webImage.ProductId, @webImage.Id);return false;">
                                         Delete Image
@@ -79,6 +79,7 @@
                         Please keep in mind the following guidelines:
                     </p>
                     <ul>
+                        <li>You can upload PNG, JPG, or GIF files.</li>
                         <li>Optimally, filenames should be descriptive -- dfp12pack.jpg</li>
                         <li>Files will be automatically resized down as necessary; file sizes of 1MB to 5MB are optimal.</li>
                     </ul>
