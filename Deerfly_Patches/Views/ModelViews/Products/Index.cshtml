@@ -5,10 +5,11 @@
 }
 
 <h2>Index</h2>
-
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<button class="pull-right" onclick="editIndex.toggleEditable(this, '/Products/Update');">Edit Values As Table</button>
 <table class="table">
     <tr>
         <th>
@@ -33,26 +34,26 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
+    <tr model-id="@item.ProductId">
+        <td field-name="Name" field-type="string">
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
             @if (item.WebImages != null && item.WebImages.Count > 0)
             {
-                <img src="@item.WebImages.First().ImageUrl" />
+                <img src="@item.WebImages.First().ImageUrl" class="thumbnail" />
             }
         </td>
-        <td>
+        <td field-name="Price" field-type="decimal">
             @Html.DisplayFor(modelItem => item.Price)
         </td>
-        <td>
+        <td field-name="Shipping" field-type="decimal">
             @Html.DisplayFor(modelItem => item.Shipping)
         </td>
-        <td>
+        <td field-name="DisplayOnFrontPage" field-type="boolean">
             @Html.DisplayFor(modelItem => item.DisplayOnFrontPage)
         </td>
-        <td>
+        <td field-name="DoNotDisplay" field-type="boolean">
             @Html.DisplayFor(modelItem => item.DoNotDisplay)
         </td>
         <td>

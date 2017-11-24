@@ -11,6 +11,7 @@ using Cstieg.WebFiles.Controllers;
 using Cstieg.WebFiles;
 using Deerfly_Patches.ActionFilters;
 using Deerfly_Patches.Models;
+using Newtonsoft.Json;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -267,6 +268,42 @@ namespace Deerfly_Patches.Controllers
             };
         }
 
+        /// <summary>
+        /// Updates the model from the Index table using EditIndex.js
+        /// </summary>
+        /// <param name="id">The Id of the model to update</param>
+        /// <returns>A Json object indicating success status.  In case of error, returns object with data member containing the old product model,
+        /// and the field causing the error if possible</returns>
+        [HttpPost]
+        public async Task<JsonResult> Update(int id)
+        {
+            Product existingProduct = await db.Products.FindAsync(id);
+            if (existingProduct == null)
+            {
+                return this.JError(404, "Can't find this product to update!");
+            }
+
+            try
+            {
+                Product newProduct = JsonConvert.DeserializeObject<Product>(Request.Params.Get("data"));
+                newProduct.ProductId = id;
+
+                db.Entry(existingProduct).State = EntityState.Detached;
+                db.Entry(newProduct).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            catch (JsonReaderException e)
+            {
+                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message, field = e.Path});
+                return this.JError(400, "Invalid data!", returnData);
+            }
+            catch (Exception e)
+            {
+                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message });
+                return this.JError(400, "Unable to save!", returnData);
+            }
+            return this.JOk();
+        }
 
 
         protected override void Dispose(bool disposing)
