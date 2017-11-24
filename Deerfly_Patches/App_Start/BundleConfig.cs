@@ -4,7 +4,6 @@ namespace Deerfly_Patches
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -12,11 +11,6 @@ namespace Deerfly_Patches
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
-
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
@@ -27,7 +21,9 @@ namespace Deerfly_Patches
                       "~/Scripts/Deerfly_Patches/gmaps.js",
                       "~/Scripts/Deerfly_Patches/inputmask.js",
                       "~/Scripts/Deerfly_Patches/ImageUpload.js",
-                      "~/Scripts/Deerfly_Patches/LightboxMessage.js"));
+                      "~/Scripts/Deerfly_Patches/LightboxMessage.js",
+                      "~/Scripts/Deerfly_Patches/ShoppingCart.js",
+                      "~/Scripts/Deerfly_Patches/EditIndex.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
                       "~/Scripts/NicEdit/nicEdit.js"));

@@ -435,11 +435,13 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - TMD FTP.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - Web Deploy.pubxml" />
+    <Content Include="Scripts\Deerfly_Patches\EditIndex.js" />
     <Content Include="Scripts\Deerfly_Patches\gmaps.js" />
     <Content Include="Scripts\Deerfly_Patches\ImageUpload.js" />
     <Content Include="Scripts\Deerfly_Patches\inputmask.js" />
     <Content Include="Scripts\Deerfly_Patches\LightboxMessage.js" />
     <Content Include="Scripts\Deerfly_Patches\paypal.js" />
+    <Content Include="Scripts\Deerfly_Patches\ShoppingCart.js" />
     <Content Include="Scripts\Deerfly_Patches\site.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
@@ -453,7 +455,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\NicEdit\nicEdit.js" />
     <Content Include="Scripts\NicEdit\nicEditorIcons.gif" />
     <Content Include="Scripts\respond.js" />
