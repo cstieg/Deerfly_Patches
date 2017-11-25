@@ -33,11 +33,6 @@ namespace Deerfly_Patches.Controllers
             return View(products);
         }
 
-        public ActionResult About()
-        {
-            return View();
-        }
-
         public async Task<ActionResult> Product(int id)
         {
             var product = await db.Products.FindAsync(id);
