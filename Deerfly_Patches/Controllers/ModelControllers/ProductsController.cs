@@ -37,7 +37,12 @@ namespace Deerfly_Patches.Controllers
         // GET: Products
         public async Task<ActionResult> Index()
         {
-            return View(await db.Products.ToListAsync());
+            var products = await db.Products.ToListAsync();
+            foreach (var product in products)
+            {
+                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+            }
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -77,8 +82,6 @@ namespace Deerfly_Patches.Controllers
         /// <param name="product">The Product model passed from the client</param>
         /// <returns>If valid POST, redirect to Product Index; otherwise rerender the Create form</returns>
         // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
@@ -117,6 +120,7 @@ namespace Deerfly_Patches.Controllers
 
             // Pass in list of images for product
             product.WebImages = product.WebImages ?? new List<WebImage>();
+            product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
 
             return View(product);
         }
@@ -127,8 +131,6 @@ namespace Deerfly_Patches.Controllers
         /// <param name="product">The Product model passed from the POST request</param>
         /// <returns>If valid POST, redirect to Product Index; otherwise rerender the Edit form</returns>
         // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
@@ -305,6 +307,22 @@ namespace Deerfly_Patches.Controllers
             return this.JOk();
         }
 
+        [HttpPost]
+        public async Task<JsonResult> OrderWebImages(int id)
+        {
+            List <WebImage> webImages= await db.WebImages.Where(w => w.ProductId == id).ToListAsync();
+
+            List<string> imageOrder = JsonConvert.DeserializeObject<List<string>>(Request.Params.Get("imageOrder"));
+            for (int i = 0; i < imageOrder.Count(); i++)
+            {
+                string imageId = imageOrder[i];
+                WebImage webImage = await db.WebImages.FindAsync(int.Parse(imageId));
+                webImage.Order = i;
+                db.Entry(webImage).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            return this.JOk();
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -25,7 +25,12 @@ namespace Deerfly_Patches.Controllers
 
         public async Task<ActionResult> Index()
         {
-            return View(await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync());
+            var products = await db.Products.Where(p => p.DisplayOnFrontPage).ToListAsync();
+            foreach (var product in products)
+            {
+                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+            }
+            return View(products);
         }
 
         public ActionResult About()
@@ -40,6 +45,7 @@ namespace Deerfly_Patches.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+            product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
             return View(product);
         }
 

@@ -20,7 +20,12 @@ namespace Deerfly_Patches.Controllers
         [OutputCache(CacheProfile = "CacheForADay")]
         public async Task<ActionResult> Index()
         {
-            return View(await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync());
+            var products = await db.Products.Where(p => p.DoNotDisplay == false).ToListAsync();
+            foreach (var product in products)
+            {
+                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+            }
+            return View(products);
         }
 
         /// <summary>
