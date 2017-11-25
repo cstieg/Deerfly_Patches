@@ -42,10 +42,7 @@
             <h2 class="text-center">@Html.ActionLink("Buy Here", "Index", "Order")</h2>
             @foreach (var item in Model)
             {
-                if (item.DisplayOnFrontPage)
-                {
-                    @Html.Partial("_ProductPartial", item)
-                }
+                @Html.Partial("_ProductPartial", item)
             }
 
             <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
