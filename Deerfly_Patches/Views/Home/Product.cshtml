@@ -29,10 +29,10 @@
                     <div id="product-image-carousel" data-interval="5000" data-ride="carousel" class="carousel slide">
                         <!-- Carousel indicators -->
                         <ol class="carousel-indicators">
-                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#product-image-carousel" data-slide-to="0" class="active"></li>
                             @for (var i = 1; i < Model.WebImages.Count(); i++)
                         {
-                                <li data-target="#myCarousel" data-slide-to="@i"></li>
+                                <li data-target="#product-image-carousel" data-slide-to="@i"></li>
                             }
                         </ol>
                         <!-- Carousel items -->
@@ -56,9 +56,9 @@
                             }
                         </div>
                         <!-- Carousel nav -->
-                        <a class="carousel-control left" href="#myCarousel"
+                        <a class="carousel-control left" href="#product-image-carousel"
                            data-slide="prev">&lsaquo;</a>
-                        <a class="carousel-control right" href="#myCarousel"
+                        <a class="carousel-control right" href="#product-image-carousel"
                            data-slide="next">&rsaquo;</a>
                     </div>
                     break;
