@@ -452,19 +452,7 @@ textarea {
 }
 
 
-/* ********************* Overrides ******************************* */
-.centered {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-.flex {
-    flex-wrap: wrap;
-}
-
-
-
+/* ******************** EditIndex.js ***************************************** */
 
 .input-text {
     background-color: white;
@@ -495,3 +483,15 @@ textarea {
     transition-duration: 3s;
     transition-timing-function: ease;
 }
+
+/* ********************* Overrides ******************************* */
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.flex {
+    flex-wrap: wrap;
+}
+
