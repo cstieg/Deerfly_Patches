@@ -20,6 +20,7 @@ namespace Deerfly_Patches.Controllers
     /// </summary>
     [Authorize(Roles = "Administrator")]
     [ClearCache]
+    [ValidateInput(false)]
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
