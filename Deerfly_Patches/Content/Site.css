@@ -449,6 +449,7 @@ textarea {
 
 #product-images {
     display: flex;
+    flex-wrap: wrap;
 }
 
 
@@ -490,8 +491,3 @@ textarea {
     margin-right: auto;
     display: block;
 }
-
-.flex {
-    flex-wrap: wrap;
-}
-

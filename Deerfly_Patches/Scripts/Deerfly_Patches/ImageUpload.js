@@ -40,7 +40,7 @@ function imageUploadSingle(file, productId, $container) {
             success: function (response) {
                 imageUploadFinished();
                 var $newPicture = $(`
-                            <picture id="image-${response.imageId}" class="flex">
+                            <picture id="image-${response.imageId}">
                                 <img src="${reader.result}" class="thumbnail"/>
                                 <button onclick="imageDelete(${productId}, ${response.imageId});return false;">
                                     Delete Image
