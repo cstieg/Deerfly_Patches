@@ -70,7 +70,7 @@ namespace Deerfly_Patches.Controllers
                 {
                     string timeStamp = FileManager.GetTimeStamp();
                     testimonial.ImageUrl = await imageSaver.SaveFile(imageFile, 200, timeStamp);
-                    testimonial.ImageSrcSet = await imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200, 100 }, timeStamp);
+                    testimonial.ImageSrcSet = await imageSaver.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200 }, timeStamp);
                 }
                 catch
                 {

@@ -215,7 +215,7 @@ namespace Deerfly_Patches.Controllers
                 {
                     ProductId = id,
                     ImageUrl = await imageManager.SaveFile(imageFile, 200, timeStamp),
-                    ImageSrcSet = await imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 800, 400, 200, 100 }, timeStamp)
+                    ImageSrcSet = await imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200 }, timeStamp)
                 };
                 db.WebImages.Add(image);
                 await db.SaveChangesAsync();
@@ -307,8 +307,13 @@ namespace Deerfly_Patches.Controllers
             return this.JOk();
         }
 
+        /// <summary>
+        /// Saves an image sort to database by numbering the Order field
+        /// </summary>
+        /// <param name="id">Id of the product whose images to sort</param>
+        /// <returns>JSON object indicating success</returns>
         [HttpPost]
-        public async Task<JsonResult> OrderWebImages(int id)
+        public async Task<JsonResult> OrderWebImages(int? id)
         {
             List <WebImage> webImages= await db.WebImages.Where(w => w.ProductId == id).ToListAsync();
 
