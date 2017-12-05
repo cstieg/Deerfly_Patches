@@ -9,10 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 using CsvHelper;
 using Cstieg.Telephony;
+using Cstieg.WebFiles.Controllers;
 using Deerfly_Patches.Models;
 using Deerfly_Patches.Modules.Google;
 using Deerfly_Patches.ActionFilters;
-using Cstieg.WebFiles.Controllers;
 
 namespace Deerfly_Patches.Controllers
 {
@@ -37,7 +37,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)
@@ -54,8 +54,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: Retailers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "RetailerId,Name,Address,Website")] Retailer retailer)
@@ -78,7 +76,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)
@@ -90,8 +88,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: Retailers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "RetailerId,Name,LatLngId")] Retailer retailer)
@@ -114,7 +110,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Retailer retailer = await db.Retailers.FindAsync(id);
             if (retailer == null)

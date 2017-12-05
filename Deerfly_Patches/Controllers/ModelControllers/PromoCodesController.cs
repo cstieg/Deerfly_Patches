@@ -28,7 +28,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)
@@ -48,8 +48,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: PromoCodes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(PromoCode promoCode)
@@ -72,7 +70,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)
@@ -86,8 +84,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: PromoCodes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(PromoCode promoCode)
@@ -109,7 +105,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             PromoCode promoCode = await db.PromoCodes.FindAsync(id);
             if (promoCode == null)

@@ -51,7 +51,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Product product = await db.Products.FindAsync(id);
             if (product == null)
@@ -111,7 +111,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Product product = await db.Products.FindAsync(id);
             if (product == null)
@@ -150,7 +150,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Product product = await db.Products.FindAsync(id);
             if (product == null)

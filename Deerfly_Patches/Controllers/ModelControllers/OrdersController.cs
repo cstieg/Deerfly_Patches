@@ -32,7 +32,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Order order = await db.Orders.FindAsync(id);
             if (order == null)

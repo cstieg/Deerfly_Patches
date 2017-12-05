@@ -26,7 +26,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Customer customer = await db.Customers.FindAsync(id);
             if (customer == null)
@@ -43,8 +43,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "CustomerId,CustomerName,Registered,LastVisited,TimesVisited,EmailAddress")] Customer customer)
@@ -64,7 +62,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Customer customer = await db.Customers.FindAsync(id);
             if (customer == null)
@@ -75,8 +73,6 @@ namespace Deerfly_Patches.Controllers
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "CustomerId,CustomerName,Registered,LastVisited,TimesVisited,EmailAddress")] Customer customer)
@@ -95,7 +91,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Customer customer = await db.Customers.FindAsync(id);
             if (customer == null)

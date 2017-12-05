@@ -32,7 +32,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
@@ -54,8 +54,6 @@ namespace Deerfly_Patches.Controllers
         /// <param name="testimonial">The Testimonial model passed from the client</param>
         /// <returns>If valid POST, redirect to Testimonial Index; otherwise rerender the Create form</returns>
         // POST: Testimonials/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
@@ -92,7 +90,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
@@ -108,8 +106,6 @@ namespace Deerfly_Patches.Controllers
         /// <param name="testimonial">The Testimonial model passed from the client</param>
         /// <returns>If valid POST, redirect to Testimonial Index; otherwise rerender the Edit form</returns>
         // POST: Testimonials/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "TestimonialId,Label,Date,ImageUrl")] Testimonial testimonial)
@@ -152,7 +148,7 @@ namespace Deerfly_Patches.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Testimonial testimonial = await db.Testimonials.FindAsync(id);
             if (testimonial == null)
