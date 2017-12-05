@@ -39,7 +39,7 @@ function initialMap() {
         },
             function (err) {
                 // location from ip
-                $.getJSON('http://freegeoip.net/json/', function (data) {
+                $.getJSON('https://freegeoip.net/json/', function (data) {
                     var position = new LatLng(data.latitude, data.longitude);
                     retailerMap.init(data);
                 });
@@ -48,7 +48,7 @@ function initialMap() {
     }
     else {
         // location from ip
-        $.getJSON('http://freegeoip.net/json/', function (data) {
+        $.getJSON('https://freegeoip.net/json/', function (data) {
             retailerMap.init(data);
         });
     }
@@ -254,7 +254,7 @@ class GMap {
     }
 
     setMapToCurrentLocation(map = this._map) {
-        $.getJSON('http://freegeoip.net/json/', function (data) {
+        $.getJSON('https://freegeoip.net/json/', function (data) {
             map.setCenter(new google.maps.LatLng(data.latitude, data.longitude));
         });
     }
