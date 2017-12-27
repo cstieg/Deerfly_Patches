@@ -3,6 +3,20 @@
     ViewBag.Title = "Faq";
 }
 
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Faq" itemprop="item">Frequently Asked Questions</a>
+            <meta itemprop="position" content="2" />
+        </li>
+    </ul>
+}
+
 <h2>Faq</h2>
 <div class="container">
     <div class="row">

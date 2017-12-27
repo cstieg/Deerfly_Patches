@@ -1,14 +1,24 @@
 ﻿@model IEnumerable<Deerfly_Patches.Models.Product>
 
-@section AdditionalMeta 
+@section AdditionalMeta
 {
     <meta name="keywords" content="deer fly control,natural repellent,non-toxic,stop deer flies" />
     <meta name="description" content="Tred-Not Deerfly Patches are flesh-colored strips that attach to the back of the cap or hat,
-              catch the deer flies and stop them from biting. Order here." />    
+              catch the deer flies and stop them from biting. Order here." />
 }
 
 @{
     ViewBag.Title = "Home Page";
+}
+
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+    </ul>
 }
 
 <div class="container main-page">
@@ -16,7 +26,7 @@
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 front-display-item">
             <img class="image-square-rounded centered" alt="Deerfly Patches header graphic"
                  src="~/content/images/deerflypatchheader.jpg"
-                 srcset="~/content/images/deerflypatchheader.jpg 409w, ~/content/images/deerflypatchheader-small.jpg 164w" 
+                 srcset="~/content/images/deerflypatchheader.jpg 409w, ~/content/images/deerflypatchheader-small.jpg 164w"
                  sizes="300px" />
         </div>
 
@@ -31,8 +41,8 @@
                 <li>Safe with children</li>
             </ul>
             <p>
-                Easily attach the 2" by 6" patches to the back of your hat or cap.  
-                Attacking deer flies will land on the patch.  
+                Easily attach the 2" by 6" patches to the back of your hat or cap.
+                Attacking deer flies will land on the patch.
                 When they do, they stay, and bother you no more.
             </p>
         </div>
@@ -40,7 +50,7 @@
 
 
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 front-display-item">
-            <img class="image-square-rounded centered" alt="Deerfly Patches are the best deerfly bite prevention!" 
+            <img class="image-square-rounded centered" alt="Deerfly Patches are the best deerfly bite prevention!"
                  src="~/content/images/starburst-box-dfp.png" />
         </div>
         <div class="clearfix"></div>
@@ -54,11 +64,11 @@
 
             <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
                 <div class="image-wrapper">
-                    <img class="product-image" alt="Retail display carton image" 
-                         src="~/content/images/20170914142128-Deerfly_Patches_Retail-w200.png" 
-                         srcset="~/content/images/20170914142128-Deerfly_Patches_Retail-w800.png 800w, 
-                                 ~/content/images/20170914142128-Deerfly_Patches_Retail-w400.png 400w, 
-                                 ~/content/images/20170914142128-Deerfly_Patches_Retail-w200.png 200w, 
+                    <img class="product-image" alt="Retail display carton image"
+                         src="~/content/images/20170914142128-Deerfly_Patches_Retail-w200.png"
+                         srcset="~/content/images/20170914142128-Deerfly_Patches_Retail-w800.png 800w,
+                                 ~/content/images/20170914142128-Deerfly_Patches_Retail-w400.png 400w,
+                                 ~/content/images/20170914142128-Deerfly_Patches_Retail-w200.png 200w,
                                  ~/content/images/20170914142128-Deerfly_Patches_Retail-w100.png 100w"
                          sizes="200px" />
                 </div>
@@ -125,7 +135,7 @@
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6" id="about-deerflies">
             <p>
                 Deerfly Patches are 2" by 6" flesh-colored traps that attach to the back of the cap or hat.
-                Deer flies target the patch and are quickly caught. 
+                Deer flies target the patch and are quickly caught.
                 They are no longer a nuisance flying around your head or biting.
             </p>
             <p>

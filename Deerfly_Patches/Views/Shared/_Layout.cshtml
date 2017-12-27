@@ -62,6 +62,7 @@
         </div>
     </div>
     <div class="container body-content">
+        @RenderSection("BreadCrumbs", false)
         <main>@RenderBody()</main>
         <hr />
         <div id="navbar-bottom" class="navbar navbar-inverse">

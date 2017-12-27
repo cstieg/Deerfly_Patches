@@ -3,6 +3,20 @@
 }
 <h2>@ViewBag.Title</h2>
 
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Contact" itemprop="item">Contact</a>
+            <meta itemprop="position" content="2" />
+        </li>
+    </ul>
+}
+
 <main class="container">
     <div class="row">
         <div class="col-sm-12">

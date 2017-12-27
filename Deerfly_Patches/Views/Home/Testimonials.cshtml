@@ -6,12 +6,26 @@
 
 <h2>Testimonials</h2>
 
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Testimonials" itemprop="item">Testimonials</a>
+            <meta itemprop="position" content="2" />
+        </li>
+    </ul>
+}
+
 <div class="container">
     <div class="row">
         <ul id="testimonial-list" class="col-xs-12 col-sm-4">
             @foreach (var testimonial in Model)
             {
-                <li class="testimonial-item" 
+                <li class="testimonial-item"
                     onmouseover="displayTestimonial(@testimonial.TestimonialId, '@testimonial.ImageUrl',
                     '@testimonial.ImageSrcSet')">
                     <a href="@testimonial.ImageUrl">

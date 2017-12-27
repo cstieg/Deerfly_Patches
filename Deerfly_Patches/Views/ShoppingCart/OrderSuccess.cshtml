@@ -3,6 +3,24 @@
     ViewBag.Title = "Order Success";
 }
 
+@section BreadCrumbs
+{
+<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <a href="/" itemprop="item">Deerfly Patches</a>
+        <meta itemprop="position" content="1" />
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <a href="/ShoppingCart" itemprop="item">Shopping Cart</a>
+        <meta itemprop="position" content="2" />
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <a href="/ShoppingCart/OrderSuccess" itemprop="item">Order Success</a>
+        <meta itemprop="position" content="3" />
+    </li>
+</ul>
+}
+
 <h2>Order Success</h2>
 <br />
 <br />

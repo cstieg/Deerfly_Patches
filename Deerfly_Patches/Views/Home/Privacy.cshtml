@@ -3,6 +3,20 @@
     ViewBag.Title = "Privacy Policy";
 }
 
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Privacy" itemprop="item">Privacy Policy</a>
+            <meta itemprop="position" content="2" />
+        </li>
+    </ul>
+}
+
 <h2>Privacy Policy</h2>
 
 <h3>How We Use Your Information</h3>
@@ -16,9 +30,15 @@
 
 <h3>What Information We Collect</h3>
 <p>We may collect your contact information such as name, address, email, and phone in order to ship your order.</p>
-<p>We also may store the contents of your shopping cart and orders.  
-    We may identify you with a cookie in order to accomplish this.</p>
-<p>We may use your IP address to identify your general geographic location in order to display retailers near you.
-    However, we do not retain or store your IP or physical location.</p>
-<p>We do NOT store your credit card numbers; in fact, we never receive them.  
-   Your credit card order is process through the security of PayPal payment services.</p>
+<p>
+    We also may store the contents of your shopping cart and orders.
+    We may identify you with a cookie in order to accomplish this.
+</p>
+<p>
+    We may use your IP address to identify your general geographic location in order to display retailers near you.
+    However, we do not retain or store your IP or physical location.
+</p>
+<p>
+    We do NOT store your credit card numbers; in fact, we never receive them.
+    Your credit card order is process through the security of PayPal payment services.
+</p>

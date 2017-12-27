@@ -18,123 +18,123 @@
         <div class="col-xs-1"></div>
     </div>
     <hr />
-@if (Model != null && Model.GetItems().Count != 0)
-{
-    foreach (var item in Model.GetItems())
+    @if (Model != null && Model.GetItems().Count != 0)
     {
-        <div class="row item-detail-line" id="item-@item.Product.ProductId">
-            @if (item.Product.WebImages != null && item.Product.WebImages.Count > 0)
-            {
-                <div class="hidden-xs hidden-sm hidden-md col-lg-1 item-image">
-                    <img class="shopping-cart-product-image" src="@item.Product.WebImages.First().ImageUrl" />
-                </div>
-                <div class="col-xs-5 col-sm-6 col-md-5 col-lg-4 item-name">@item.Product.Name</div>
-            }
-            else
-            {
-                <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">@item.Product.Name</div>
-            }
-            <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price">$@item.UnitPrice</div>
-            <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
-                @if (!item.IsPromotionalItem)
-                {
-                    <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
-                }
-                <span class="item-qty-ct" id="qty-@item.Product.ProductId">@item.Quantity</span>
-                @if (!item.IsPromotionalItem)
-                {
-                    <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
-                }
-            </div>
-            <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
-            <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@item.Shipping</div>
-            <div class="item-shipping-saved hidden">@item.Shipping</div>
-            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@item.TotalPrice</div>
-            <div class="col-xs-1">
-                <button onclick="removeItemInShoppingCart(@item.Product.ProductId)">x</button>
-            </div>
-        </div>
-        }
-    
-    <hr />
-    <div class="row item-detail-total">
-        <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">TOTAL:</div>
-        <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price"></div>
-        <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity"></div>
-        <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@Model.TotalExtendedPrice</div>
-        <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@Model.TotalShipping</div>
-        <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@Model.GrandTotal</div>
-        <div class="col-xs-1"></div>
-    </div>
-
-    <hr />
-    <div class="hidden col-md-6"></div>
-
-    <script>
-    window.onload = function () {
-        setCountry();
-    };
-    </script>
-    <div id="country-select" class="row">
-        <form onchange="countryChange()">
-            <input type="radio" name="country" value="US" checked/>US
-            <input type="radio" name="country" value="International" />International
-        </form>
-    </div>
-
-    <div id="enter-promo-code">
-        <form method="post" action="/ShoppingCart/AddPromoCode">
-            <label for="promocode">Enter Promo Code</label>
-            <input name="promocode" type="text" />
-            <input type="submit" value="Apply" />
-        </form>
-        @if (Model.PromoCodes.Count > 0)
+        foreach (var item in Model.GetItems())
         {
-            <div id="promo-codes-applied">
-                <p>Promocodes applied: </p>
-                <ul>
-                    @foreach (var promoCode in Model.PromoCodes)
+            <div class="row item-detail-line" id="item-@item.Product.ProductId">
+                @if (item.Product.WebImages != null && item.Product.WebImages.Count > 0)
+                {
+                    <div class="hidden-xs hidden-sm hidden-md col-lg-1 item-image">
+                        <img class="shopping-cart-product-image" src="@item.Product.WebImages.First().ImageUrl" />
+                    </div>
+                    <div class="col-xs-5 col-sm-6 col-md-5 col-lg-4 item-name">@item.Product.Name</div>
+                }
+                else
+                {
+                    <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">@item.Product.Name</div>
+                }
+                <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price">$@item.UnitPrice</div>
+                <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
+                    @if (!item.IsPromotionalItem)
                     {
-                        <li>
-                            <span>@promoCode.Code</span>
-                            <br />
-                            @promoCode.Description
-                        </li>
+                        <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
                     }
-                </ul>
+                    <span class="item-qty-ct" id="qty-@item.Product.ProductId">@item.Quantity</span>
+                    @if (!item.IsPromotionalItem)
+                    {
+                        <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
+                    }
+                </div>
+                <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
+                <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@item.Shipping</div>
+                <div class="item-shipping-saved hidden">@item.Shipping</div>
+                <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@item.TotalPrice</div>
+                <div class="col-xs-1">
+                    <button onclick="removeItemInShoppingCart(@item.Product.ProductId)">x</button>
+                </div>
             </div>
-        } 
-        @Html.ValidationMessageFor(model => model.PromoCodes, "", new { @class = "text-danger" })
-    </div>
+        }
 
-    <div class="clearfix"></div>
-    <hr />
-    <div class="pull-right">
-        <div id="paypal-button-container"></div>
-        <p class="text-right">Please click the PayPal button to pay</p>
-        <br />
-        <div class="pull-right" id="no-paypal">
-            <h4 class="text-center">No PayPal?</h4>
-            <p>To pay with credit card, click on the PayPal button above, and choose the Pay with Debit or Credit Card option.</p>
+        <hr />
+        <div class="row item-detail-total">
+            <div class="col-xs-5 col-sm-6 col-md-5 col-lg-5 item-name">TOTAL:</div>
+            <div class="hidden-xs col-sm-2 col-md-1 col-lg-1 item-unit-price"></div>
+            <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity"></div>
+            <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@Model.TotalExtendedPrice</div>
+            <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-shipping">$@Model.TotalShipping</div>
+            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@Model.GrandTotal</div>
+            <div class="col-xs-1"></div>
         </div>
 
-    </div>
-    
-    <div class="hidden">
-        <span id="paypalClientId">@ViewBag.ClientInfo.ClientId</span>
-        <span id="paypalMode">@ViewBag.ClientInfo.Mode</span>
-        <span id="paypalLoginReturnId">@ViewBag.ClientInfo.ReturnUrl</span>
-    </div>
+        <hr />
+        <div class="hidden col-md-6"></div>
 
-    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    <script src="~/Scripts/Deerfly_Patches/paypal.js"></script>
-}
-else
-{
-    <div class="row">
-        <h3>No Items in Shopping Cart</h3>
-        <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
-    </div>
-}
+        <script>
+            window.onload = function () {
+                setCountry();
+            };
+        </script>
+        <div id="country-select" class="row">
+            <form onchange="countryChange()">
+                <input type="radio" name="country" value="US" checked />US
+                <input type="radio" name="country" value="International" />International
+            </form>
+        </div>
+
+        <div id="enter-promo-code">
+            <form method="post" action="/ShoppingCart/AddPromoCode">
+                <label for="promocode">Enter Promo Code</label>
+                <input name="promocode" type="text" />
+                <input type="submit" value="Apply" />
+            </form>
+            @if (Model.PromoCodes.Count > 0)
+            {
+                <div id="promo-codes-applied">
+                    <p>Promocodes applied: </p>
+                    <ul>
+                        @foreach (var promoCode in Model.PromoCodes)
+                        {
+                            <li>
+                                <span>@promoCode.Code</span>
+                                <br />
+                                @promoCode.Description
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.PromoCodes, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="clearfix"></div>
+        <hr />
+        <div class="pull-right">
+            <div id="paypal-button-container"></div>
+            <p class="text-right">Please click the PayPal button to pay</p>
+            <br />
+            <div class="pull-right" id="no-paypal">
+                <h4 class="text-center">No PayPal?</h4>
+                <p>To pay with credit card, click on the PayPal button above, and choose the Pay with Debit or Credit Card option.</p>
+            </div>
+
+        </div>
+
+        <div class="hidden">
+            <span id="paypalClientId">@ViewBag.ClientInfo.ClientId</span>
+            <span id="paypalMode">@ViewBag.ClientInfo.Mode</span>
+            <span id="paypalLoginReturnId">@ViewBag.ClientInfo.ReturnUrl</span>
+        </div>
+
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="~/Scripts/Deerfly_Patches/paypal.js"></script>
+    }
+    else
+    {
+        <div class="row">
+            <h3>No Items in Shopping Cart</h3>
+            <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
+        </div>
+    }
 
 </div>

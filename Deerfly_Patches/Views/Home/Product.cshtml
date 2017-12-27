@@ -1,27 +1,44 @@
 ﻿@model Deerfly_Patches.Models.Product
 
 @{
-    ViewBag.Title = "Product";
+    ViewBag.Title = Model.Name;
+}
+
+@section BreadCrumbs
+{
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Products" itemprop="item">Products</a>
+            <meta itemprop="position" content="2" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/Product/@Model.ProductId" itemprop="item">@Model.Name</a>
+            <meta itemprop="position" content="3" />
+        </li>
+    </ul>
 }
 
 <h1>@Model.Name</h1>
 
-<div class="row">
+<div class="row" itemscope itemtype="http://schema.org/Product">
     <section id="product-page-images" class="col-md-6">
         @switch (Model.WebImages.Count())
         {
             case 0:
                 {
-                    <picture>
-                        <img src="~/Content/images/ImageUnavailable.png" alt="@Model.Name image" />
-                    </picture>
+                    <img src="~/Content/images/ImageUnavailable.png" alt="@Model.Name image unavailable" />
                     break;
                 }
             case 1:
                 {
-                    <picture>
-                        <img src="@Model.WebImages.Single().ImageUrl" srcset="@Model.WebImages.Single().ImageSrcSet" sizes="(min-width: 768px) 50vw, 100vw" />
-                    </picture>
+                    <img src="@Model.WebImages.Single().ImageUrl" srcset="@Model.WebImages.Single().ImageSrcSet" 
+                         sizes="(min-width: 768px) 50vw, 100vw"
+                         alt="@Model.Name image"
+                         itemprop="image"/>
                     break;
                 }
             default:
@@ -31,7 +48,7 @@
                         <ol class="carousel-indicators">
                             <li data-target="#product-image-carousel" data-slide-to="0" class="active"></li>
                             @for (var i = 1; i < Model.WebImages.Count(); i++)
-                        {
+                            {
                                 <li data-target="#product-image-carousel" data-slide-to="@i"></li>
                             }
                         </ol>
@@ -40,17 +57,19 @@
                             <div class="item active">
                                 <img src="@Model.WebImages.First().ImageUrl"
                                      srcset="@Model.WebImages.First().ImageSrcSet"
-                                     sizes="(min-width: 768px) 50vw, 100vw" 
-                                     alt="@Model.Name - image 1">
+                                     sizes="(min-width: 768px) 50vw, 100vw"
+                                     alt="@Model.Name - image 1"
+                                     itemprop="image">
                                 <div class="carousel-caption">@Model.WebImages.First().Caption</div>
                             </div>
                             @for (var i = 1; i < Model.WebImages.Count(); i++)
-                        {
+                            {
                                 <div class="item">
                                     <img src="@Model.WebImages.ElementAt(i).ImageUrl"
                                          srcset="@Model.WebImages.ElementAt(i).ImageSrcSet"
-                                         sizes="(min-width: 768px) 50vw, 100vw" 
-                                         alt="@Model.Name - image @i">
+                                         sizes="(min-width: 768px) 50vw, 100vw"
+                                         alt="@Model.Name - image @i"
+                                         itemprop="image">
                                     <div class="carousel-caption">@Model.WebImages.ElementAt(i).Caption</div>
                                 </div>
                             }
@@ -69,18 +88,19 @@
 
 
     <section id="product-page-description" class="col-md-6">
+        <meta itemprop="priceCurrency" content="USD" />
         <dl class="dl-horizontal">
             <dt>
                 @Html.LabelFor(model => model.Name)
             </dt>
-            <dd>
+            <dd itemprop="name">
                 @Html.DisplayFor(model => model.Name)
             </dd>
 
             <dt>
                 @Html.LabelFor(model => model.Price)
             </dt>
-            <dd>
+            <dd itemprop="price">
                 $@Html.DisplayFor(model => model.Price)
             </dd>
 
@@ -101,7 +121,7 @@
             <dt>
                 Availability
             </dt>
-            <dd>
+            <dd itemprop="availability">
                 In stock
             </dd>
 
@@ -114,15 +134,17 @@
 
         </dl>
         <div class="button-container">
-            <button class="btn buy-now centered" onclick="buyNow(@Model.ProductId)">Buy Now</button>
-            <br />
-            <button class="btn add-to-shopping-cart centered" onclick="addToShoppingCart(@Model.ProductId)">Add to Shopping Cart</button>
-        </div>
-    </section>
-</div>
+            <button class="btn buy-now centered" onclick="buyNow(@Model.ProductId)">Add to Shopping Cart</button>
+            <!--
+                <br />
+                <button class="btn add-to-shopping-cart centered" onclick="addToShoppingCart(@Model.ProductId)">Add to Shopping Cart</button>
+            -->
+            </div>
+        </section>
+    </div>
 
-<section id="product-page-productinfo" class="row">
-    <h3>Product information</h3>
-    @Html.Raw(Model.ProductInfo)
-</section>
+    <section id="product-page-productinfo" class="row">
+        <h3>Product information</h3>
+        @Html.Raw(Model.ProductInfo)
+    </section>
 
