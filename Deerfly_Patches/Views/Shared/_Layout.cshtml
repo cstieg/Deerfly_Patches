@@ -20,12 +20,24 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/Content/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111288491-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-111288491-1');
+    </script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="container">
-            <div class="navbar-header">
-                <a href="/"><img class="logo" src="~/Content/images/deerflypatches-logo.png" /></a>
+            <div class="navbar-header" itemscope itemtype="http://schema.org/Organization">
+                <a itemprop="url" href="/">
+                    <img class="logo" itemprop="logo" src="~/Content/images/deerflypatches-logo.png" />
+                </a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>

@@ -5,6 +5,8 @@
 //   paypalMode
 // containing as innerText the respective data passed from the server in the ViewBag
 
+// REQUIRES: JQUERY 3.1 !!
+
 var clientInfo = {
     clientId: document.getElementById('paypalClientId').innerText,
     mode: document.getElementById('paypalMode').innerText,

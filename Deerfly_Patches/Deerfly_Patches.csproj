@@ -438,7 +438,6 @@
     <Content Include="Content\images\favicon\manifest.json" />
     <Content Include="dfp.pfx" />
     <Content Include="PayPal.json" />
-    <Content Include="PayPal.live.json" />
     <None Include="Properties\PublishProfiles\christopherstieg.com - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - TMD FTP.pubxml" />
