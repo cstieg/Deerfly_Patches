@@ -62,10 +62,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
-      <publishTime>12/26/2017 19:31:11</publishTime>
+      <publishTime>12/27/2017 20:38:58</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.pdb">
-      <publishTime>12/26/2017 19:31:11</publishTime>
+      <publishTime>12/27/2017 20:38:58</publishTime>
     </File>
     <File Include="bin/Elmah.dll">
       <publishTime>04/12/2012 19:19:36</publishTime>
@@ -409,6 +409,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/images/birch-forest-tile.jpg">
       <publishTime>08/30/2017 13:20:39</publishTime>
     </File>
+    <File Include="Content/images/deerfly.jpg">
+      <publishTime>12/27/2017 13:04:26</publishTime>
+    </File>
     <File Include="Content/images/deerfly.png">
       <publishTime>10/26/2017 10:50:28</publishTime>
     </File>
@@ -668,7 +671,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/27/2017 10:22:57</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>12/27/2017 10:21:28</publishTime>
+      <publishTime>12/27/2017 20:17:35</publishTime>
     </File>
     <File Include="Views/Home/Privacy.cshtml">
       <publishTime>12/27/2017 10:22:31</publishTime>
@@ -872,7 +875,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/05/2017 18:19:14</publishTime>
     </File>
     <File Include="Views/Order/Index.cshtml">
-      <publishTime>11/16/2017 10:37:21</publishTime>
+      <publishTime>12/27/2017 10:46:13</publishTime>
     </File>
     <File Include="Views/PayPal/CloseLoginWindow.cshtml">
       <publishTime>10/26/2017 10:50:31</publishTime>
@@ -887,7 +890,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:11:10</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/27/2017 10:33:09</publishTime>
+      <publishTime>12/27/2017 14:37:34</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>08/14/2017 22:11:10</publishTime>
@@ -896,7 +899,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/01/2017 09:05:42</publishTime>
     </File>
     <File Include="Views/Shared/_ProductPartial.cshtml">
-      <publishTime>11/16/2017 10:34:35</publishTime>
+      <publishTime>12/27/2017 11:54:30</publishTime>
     </File>
     <File Include="Views/ShoppingCart/Index.cshtml">
       <publishTime>12/27/2017 10:41:03</publishTime>
@@ -911,7 +914,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/27/2017 10:43:48</publishTime>
+      <publishTime>12/27/2017 20:22:00</publishTime>
     </File>
   </ItemGroup>
 </Project>
