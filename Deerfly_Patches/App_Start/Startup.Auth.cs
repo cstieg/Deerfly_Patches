@@ -5,9 +5,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using Deerfly_Patches.Models;
+using DeerflyPatches.Models;
 
-namespace Deerfly_Patches
+namespace DeerflyPatches
 {
     public partial class Startup
     {

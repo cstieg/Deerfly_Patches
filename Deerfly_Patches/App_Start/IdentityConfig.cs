@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using Deerfly_Patches.Models;
+using DeerflyPatches.Models;
 
-namespace Deerfly_Patches
+namespace DeerflyPatches
 {
     public class EmailService : IIdentityMessageService
     {

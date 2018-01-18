@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using CsvHelper;
 using Cstieg.Telephony;
 using Cstieg.WebFiles.Controllers;
-using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules.Google;
-using Deerfly_Patches.ActionFilters;
+using DeerflyPatches.Models;
+using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.Geography.GoogleMaps;
+using Cstieg.Geography;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Retailers
     /// </summary>
     [Authorize(Roles = "Administrator")]
     [ClearCache]
+    [RoutePrefix("edit/retailers")]
+    [Route("{action}/{id?}")]
     public class RetailersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Retailers
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             var retailers = db.Retailers.Include(r => r.LatLng).OrderBy(r => r.Address.PostalCode);
@@ -239,7 +242,7 @@ namespace Deerfly_Patches.Controllers
                 Retailer retailer = new Retailer()
                 {
                     Name = dataRow[0].Trim(),
-                    Address = new Address()
+                    Address = new AddressBase()
                     {
                         Address1 = dataRow[1].Trim(),
                         City = dataRow[2].Trim(),

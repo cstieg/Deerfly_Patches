@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Deerfly_Patches
+namespace DeerflyPatches
 {
     public class FilterConfig
     {

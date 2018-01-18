@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Deerfly_Patches.Models.PromoCode>
+﻿@model IEnumerable<Cstieg.Sales.Models.PromoCode>
 
 @{
     ViewBag.Title = "Index";
@@ -83,9 +83,9 @@
             @Html.DisplayFor(modelItem => item.CodeEnd)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PromoCodeId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PromoCodeId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PromoCodeId })
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
 }

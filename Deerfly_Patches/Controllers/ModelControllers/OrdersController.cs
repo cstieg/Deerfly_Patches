@@ -1,28 +1,32 @@
-﻿using System.Data.Entity;
-using System.Net;
-using System.Web.Mvc;
-using Deerfly_Patches.Models;
-using System.Threading.Tasks;
+﻿using Cstieg.Sales.Models;
+using DeerflyPatches.Models;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Orders
     /// </summary>
+    [RoutePrefix("edit/orders")]
+    [Route("{action}/{id?}")]
     [Authorize(Roles = "Administrator")]
     public class OrdersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Orders
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             var orders = db.Orders.Include(o => o.Customer).OrderByDescending(o => o.DateOrdered);
             var orderList = await orders.ToListAsync();
             foreach (var order in orderList)
             {
-                order.OrderDetails = await db.OrderDetails.Where(o => o.OrderId == order.OrderId).Include(o => o.Product).ToListAsync();
+                order.OrderDetails = await db.OrderDetails.Where(o => o.OrderId == order.Id).Include(o => o.Product).ToListAsync();
             }
             return View(orderList);
         }

@@ -1,4 +1,4 @@
-﻿@model Deerfly_Patches.Models.PromoCode
+﻿@model Cstieg.Sales.Models.PromoCode
 
 @using (Html.BeginForm())
 {
@@ -10,7 +10,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @if (ViewBag.Title == "Edit")
         {
-            @Html.HiddenFor(model => model.PromoCodeId)
+            @Html.HiddenFor(model => model.Id)
         }
 
         <div class="form-group">

@@ -1,4 +1,4 @@
-namespace Deerfly_Patches.Migrations
+namespace DeerflyPatches.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

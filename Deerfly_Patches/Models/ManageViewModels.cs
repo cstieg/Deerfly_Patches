@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Deerfly_Patches.Models
+namespace DeerflyPatches.Models
 {
     public class IndexViewModel
     {

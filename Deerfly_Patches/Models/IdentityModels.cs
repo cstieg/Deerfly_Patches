@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Configuration;
+using Cstieg.Sales.Models;
+using Cstieg.Geography;
 
-namespace Deerfly_Patches.Models
+namespace DeerflyPatches.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
@@ -35,15 +37,16 @@ namespace Deerfly_Patches.Models
             return new ApplicationDbContext();
         }
 
-        public DbSet<Deerfly_Patches.Models.Address> Addresses { get; set; }
-        public DbSet<Deerfly_Patches.Models.Customer> Customers { get; set; }
-        public DbSet<Deerfly_Patches.Models.Order> Orders { get; set; }
-        public DbSet<Deerfly_Patches.Models.OrderDetail> OrderDetails { get; set; }
-        public DbSet<Deerfly_Patches.Models.Product> Products { get; set; }
-        public DbSet<Deerfly_Patches.Models.PromoCode> PromoCodes { get; set; }
-        public DbSet<Deerfly_Patches.Models.Retailer> Retailers { get; set; }
-        public DbSet<Deerfly_Patches.Models.LatLng> LatLngs { get; set; }
-        public DbSet<Deerfly_Patches.Models.Testimonial> Testimonials { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ShipToAddress> Addresses { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<PromoCode> PromoCodes { get; set; }
+        public DbSet<Retailer> Retailers { get; set; }
+        public DbSet<LatLng> LatLngs { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
         public DbSet<WebImage> WebImages { get; set; }
     }
 }

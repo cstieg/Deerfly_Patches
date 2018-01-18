@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Cstieg.ControllerHelper.ActionFilters;
 using Cstieg.WebFiles;
 using Cstieg.WebFiles.Controllers;
-using Deerfly_Patches.ActionFilters;
-using Deerfly_Patches.Models;
+using DeerflyPatches.Models;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Testimonials
     /// </summary>
     [Authorize(Roles = "Administrator")]
     [ClearCache]
+    [RoutePrefix("edit/testimonials")]
+    [Route("{action}/{id?}")]
     public class TestimonialsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ImageManager imageSaver = new ImageManager("images/testimonials", new FileSystemService("/content"));
 
         // GET: Testimonials
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             return View(await db.Testimonials.ToListAsync());

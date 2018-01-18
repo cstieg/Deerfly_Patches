@@ -1,18 +1,18 @@
-namespace Deerfly_Patches.Migrations
+namespace DeerflyPatches.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Deerfly_Patches.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DeerflyPatches.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Deerfly_Patches.Models.ApplicationDbContext context)
+        protected override void Seed(DeerflyPatches.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

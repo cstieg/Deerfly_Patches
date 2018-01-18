@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Cstieg.Geography;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
-namespace Deerfly_Patches.Models
+namespace DeerflyPatches.Models
 {
     public class Retailer
     {
@@ -18,7 +15,7 @@ namespace Deerfly_Patches.Models
 
         [ForeignKey("Address")]
         public virtual int AddressId { get; set; }
-        public virtual Address Address { get; set; }
+        public virtual AddressBase Address { get; set; }
 
         [ForeignKey("LatLng")]
         public virtual int ?LatLngId { get; set; }

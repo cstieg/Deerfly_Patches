@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace Deerfly_Patches
+namespace DeerflyPatches
 {
     public class BundleConfig
     {
@@ -17,13 +17,13 @@ namespace Deerfly_Patches
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                      "~/Scripts/Deerfly_Patches/site.js",
-                      "~/Scripts/Deerfly_Patches/gmaps.js",
-                      "~/Scripts/Deerfly_Patches/inputmask.js",
-                      "~/Scripts/Deerfly_Patches/ImageUpload.js",
-                      "~/Scripts/Deerfly_Patches/LightboxMessage.js",
-                      "~/Scripts/Deerfly_Patches/ShoppingCart.js",
-                      "~/Scripts/Deerfly_Patches/EditIndex.js"));
+                      "~/Scripts/Site/site.js",
+                      "~/Scripts/Site/gmaps.js",
+                      "~/Scripts/Site/inputmask.js",
+                      "~/Scripts/Site/ImageUpload.js",
+                      "~/Scripts/Site/LightboxMessage.js",
+                      "~/Scripts/Site/ShoppingCart.js",
+                      "~/Scripts/Site/EditIndex.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
                       "~/Scripts/NicEdit/nicEdit.js"));

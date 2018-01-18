@@ -33,7 +33,7 @@ function imageUploadSingle(file, productId, $container) {
         myFormData.append('file', file);
         $.ajax({
             type: 'POST',
-            url: '/Products/AddImage/' + productId,
+            url: '/Edit/Products/AddImage/' + productId,
             data: myFormData,
             processData: false, // important
             contentType: false, // important
@@ -62,7 +62,7 @@ function imageUploadSingle(file, productId, $container) {
 function imageDelete(productId, imageId) {
     $.ajax({
         type: 'POST',
-        url: '/Products/DeleteImage/' + productId,
+        url: '/Edit/Products/DeleteImage/' + productId,
         data: { imageId: imageId },
         success: function (response) {
             $('#image-' + imageId).remove();

@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Cstieg.ControllerHelper;
 using Cstieg.WebFiles.Controllers;
 using Cstieg.WebFiles;
-using Deerfly_Patches.ActionFilters;
-using Deerfly_Patches.Models;
+using DeerflyPatches.Models;
 using Newtonsoft.Json;
+using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.Sales.Models;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for Products
     /// </summary>
     [Authorize(Roles = "Administrator")]
     [ClearCache]
+    [RoutePrefix("edit/products")]
+    [Route("{action}/{id?}")]
     [ValidateInput(false)]
     public class ProductsController : Controller
     {
@@ -36,6 +38,7 @@ namespace Deerfly_Patches.Controllers
         }
 
         // GET: Products
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             var products = await db.Products.ToListAsync();
@@ -95,7 +98,7 @@ namespace Deerfly_Patches.Controllers
                 // connect images that were previously saved to product (id = null)
                 foreach (var webImage in await db.WebImages.Where(w => w.ProductId == null).ToListAsync())
                 {
-                    webImage.ProductId = product.ProductId;
+                    webImage.ProductId = product.Id;
                     db.Entry(webImage).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                 }
@@ -173,7 +176,7 @@ namespace Deerfly_Patches.Controllers
             Product product = await db.Products.FindAsync(id);
 
             // Delete images connected to this product
-            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == product.ProductId).ToListAsync())
+            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == product.Id).ToListAsync())
             {
                 // remove image files used by product
                 imageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
@@ -289,7 +292,7 @@ namespace Deerfly_Patches.Controllers
             try
             {
                 Product newProduct = JsonConvert.DeserializeObject<Product>(Request.Params.Get("data"));
-                newProduct.ProductId = id;
+                newProduct.Id = id;
 
                 db.Entry(existingProduct).State = EntityState.Detached;
                 db.Entry(newProduct).State = EntityState.Modified;

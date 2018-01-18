@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Deerfly_Patches.Models
+namespace DeerflyPatches.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-using Deerfly_Patches.Models;
-using Deerfly_Patches.Modules.Geography;
-using Deerfly_Patches.Modules.Google;
+using DeerflyPatches.Models;
 using Cstieg.ControllerHelper;
+using Cstieg.Geography;
+using Cstieg.Geography.GoogleMaps;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// Controller to display retailer map

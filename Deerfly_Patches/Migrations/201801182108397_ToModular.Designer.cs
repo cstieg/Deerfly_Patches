@@ -7,13 +7,13 @@ namespace DeerflyPatches.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class testimonials1 : IMigrationMetadata
+    public sealed partial class ToModular : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(testimonials1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ToModular));
         
         string IMigrationMetadata.Id
         {
-            get { return "201708291726240_testimonials1"; }
+            get { return "201801182108397_ToModular"; }
         }
         
         string IMigrationMetadata.Source

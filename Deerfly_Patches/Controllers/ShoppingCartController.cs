@@ -1,208 +1,220 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
-
 using Cstieg.ControllerHelper;
-using Deerfly_Patches.Modules;
-using Deerfly_Patches.Modules.Geography;
-using Deerfly_Patches.Modules.PayPal;
-using Deerfly_Patches.Models;
+using Cstieg.Sales.Models;
+using Cstieg.Sales.PayPal;
+using DeerflyPatches.Models;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// Controller to provide shopping cart view
     /// </summary>
-    public class ShoppingCartController : Controller
+    public class ShoppingCartController : BaseController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+       ClientInfo ClientInfo = new PayPalApiClient().GetClientSecrets();
 
         // GET: ShoppingCart
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
-            ShoppingCart shoppingCart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("_shopping_cart");
+            var db = new ApplicationDbContext();
+            ViewBag.ClientInfo = ClientInfo;
+            //ViewBag.Countries = await db.Countries.ToListAsync();
+            ShoppingCart shoppingCart = await GetShoppingCart(db);
             return View(shoppingCart);
         }
 
+        // GET: ShoppingCart/OrderSuccess?cart=DF39FEI314040
+        /// <summary>
+        /// Displays confirmation for completed order
+        /// </summary>
+        /// <param name="cart">Alphanumeric cart id assigned to order by PayPal</param>
+        public async Task<ActionResult> OrderSuccess()
+        {
+            var db = new ApplicationDbContext();
+            string id = Request.Params.Get("cart");
+            Order order = await db.Orders.Include(o => o.Customer).Where(o => o.Cart == id).SingleOrDefaultAsync();
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+            int addressId = (int) order.ShipToAddressId;
+            ShipToAddress address = await db.Addresses.FindAsync(addressId);
+            order.ShipToAddress = address;
+            return View(order);
+        }
+        
+        /// <summary>
+        /// Gets the number of items in the shopping cart
+        /// </summary>
+        /// <returns>A JSON object containing the number of items in the shopping cart in the field shoppingCartCount</returns>
+        public async Task<JsonResult> ShoppingCartCount()
+        {
+            var db = new ApplicationDbContext();
+            ShoppingCart shoppingCart = await GetShoppingCart(db);
+            return Json(new { shoppingCartCount = shoppingCart.Order.OrderDetails.Count }, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
-        /// Verifies and saves the shopping cart
+        /// Adds a product to the shopping cart
         /// </summary>
-        /// <returns>Json success code</returns>
+        /// <param name="id">ID of Product model to add</param>
+        /// <returns>JSON success response if successful, error response if product already exists</returns>
         [HttpPost]
-        public async Task<JsonResult> VerifyAndSave()
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddItem(int id)
         {
-            string paymentDetailsJson = Request.Params.Get("paymentDetails");
-            PaymentDetails paymentDetails = JsonConvert.DeserializeObject<PaymentDetails>(paymentDetailsJson);
-            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
-
-            // get address and add to shopping cart
-            AddressBase shippingAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
-            shippingAddress.CopyTo(shoppingCart.Order.ShipToAddress);
+            var db = new ApplicationDbContext();
+            // look up product entity
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
 
             try
             {
-                paymentDetails.VerifyShoppingCart(shoppingCart);
-                CustomVerification(shoppingCart, paymentDetails);
-
-                await SaveShoppingCartToDbAsync(shoppingCart, paymentDetails.Payer.PayerInfo);
+                ShoppingCart shoppingCart = await GetShoppingCart(db);
+                shoppingCart.AddProduct(product);
+                await SaveShoppingCart(shoppingCart, db);
+                return this.JOk();
             }
             catch (Exception e)
             {
                 return this.JError(400, e.Message);
             }
-
-            // clear shopping cart
-            shoppingCart = new ShoppingCart();
-            shoppingCart.SaveToSession(HttpContext);
-
-            // return success
-            return this.JOk();
         }
 
         /// <summary>
-        /// Saves the shopping cart to the database.
+        /// Increases the quantity of a product in the shopping cart
         /// </summary>
-        /// <param name="shoppingCart">Shopping cart stored in session</param>
-        /// <param name="payerInfo">Payer info received from PayPal API</param>
-        protected async Task SaveShoppingCartToDbAsync(ShoppingCart shoppingCart, PayerInfo payerInfo)
+        /// <param name="id">ID of Product model to add</param>
+        /// <returns>JSON success response</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> IncrementItem(int id)
         {
-            var customersDb = db.Customers;
-            var addressesDb = db.Addresses;
-            var ordersDb = db.Orders;
-
-            // update customer
-            Customer customer = await customersDb.SingleOrDefaultAsync(c => c.EmailAddress == payerInfo.Email);
-            bool isNewCustomer = customer == null;
-            if (isNewCustomer)
+            var db = new ApplicationDbContext();
+            // look up product entity
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
             {
-                customer = new Customer()
+                return HttpNotFound();
+            }
+
+            // Increment quantity and save shopping cart
+            try
+            {
+                ShoppingCart shoppingCart = await GetShoppingCart(db);
+                var orderDetail = shoppingCart.IncrementProduct(product);
+                await SaveShoppingCart(shoppingCart, db);
+                return this.JOk(orderDetail);
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Decreases the quantity of an item in the shopping cart
+        /// </summary>
+        /// <param name="id">ID of the Product model qty to decrement</param>
+        /// <returns>JSON success response</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DecrementItem(int id)
+        {
+            var db = new ApplicationDbContext();
+            // look up product entity
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Decrement qty and update shopping cart
+            try
+            {
+                ShoppingCart shoppingCart = await GetShoppingCart(db);
+                var orderDetail = shoppingCart.DecrementProduct(product);
+                await SaveShoppingCart(shoppingCart, db);
+                return this.JOk(orderDetail);
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes a Product from the shopping cart
+        /// </summary>
+        /// <param name="id">ID of Product model to remove</param>
+        /// <returns>JSON success response</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveItem(int id)
+        {
+            var db = new ApplicationDbContext();
+            try
+            {
+                ShoppingCart shoppingCart = await GetShoppingCart(db);
+                OrderDetail orderDetail = shoppingCart.Order.OrderDetails.Find(o => o.ProductId == id);
+                if (orderDetail == null)
                 {
-                    Registered = DateTime.Now,
-                    EmailAddress = payerInfo.Email,
-                    CustomerName = payerInfo.FirstName + " " +
-                                    payerInfo.MiddleName + " " +
-                                    payerInfo.LastName
-                };
-            }
-            else
-            {
-                shoppingCart.Order.Customer = customer;
-                shoppingCart.Order.CustomerId = customer.CustomerId;
-            }
-
-
-            customer.LastVisited = DateTime.Now;
-            if (isNewCustomer)
-            {
-                customersDb.Add(customer);
-            }
-            else
-            {
-                db.Entry(customer).State = EntityState.Modified;
-            }
-
-            // update address
-            bool isNewAddress = true;
-            if (!isNewCustomer)
-            {
-                AddressBase newAddress = payerInfo.ShippingAddress;
-                newAddress.SetNullStringsToEmpty();
-                Address addressOnFile = await addressesDb.Where(a => a.Address1 == newAddress.Address1
-                                                            && a.Address2 == newAddress.Address2
-                                                            && a.City == newAddress.City
-                                                            && a.State == newAddress.State
-                                                            && a.PostalCode == newAddress.PostalCode
-                                                            && a.Phone == newAddress.Phone
-                                                            && a.Recipient == newAddress.Recipient
-                                                            && a.CustomerId == customer.CustomerId).FirstOrDefaultAsync();
-                isNewAddress = addressOnFile == null;
-
-                // don't add new address if already in database
-                if (!isNewAddress)
-                {
-                    shoppingCart.Order.ShipToAddressId = addressOnFile.AddressId;
+                    return HttpNotFound();
                 }
+
+                db.OrderDetails.Remove(orderDetail);
+                await db.SaveChangesAsync();
+
+                return this.JOk();
             }
-
-            shoppingCart.Order.ShipToAddress.Customer = customer;
-            shoppingCart.Order.ShipToAddress.CustomerId = customer.CustomerId;
-            shoppingCart.Order.ShipToAddress.SetNullStringsToEmpty();
-
-            // Add new address to database
-            if (isNewAddress)
+            catch (Exception e)
             {
-                addressesDb.Add(shoppingCart.Order.ShipToAddress);
+                return this.JError(403, e.Message);
             }
-
-            // bill to address the same as shipping address
-            if (shoppingCart.Order.BillToAddress == null || shoppingCart.Order.BillToAddress.Address1 == null)
-            {
-                shoppingCart.Order.BillToAddress = shoppingCart.Order.ShipToAddress;
-                shoppingCart.Order.BillToAddressId = shoppingCart.Order.ShipToAddressId;
-            }
-
-            await db.SaveChangesAsync();
-
-            // add order details to database
-            for (int i = 0; i < shoppingCart.Order.OrderDetails.Count; i++)
-            {
-                var orderDetail = shoppingCart.Order.OrderDetails[i];
-                orderDetail.ProductId = orderDetail.Product.ProductId;
-
-                db.Entry(orderDetail).State = EntityState.Added;
-
-                // don't add duplicate of product
-                db.Entry(orderDetail.Product).State = EntityState.Unchanged;
-            }
-
-            // add order to database
-            shoppingCart.Order.DateOrdered = DateTime.Now;
-            ordersDb.Add(shoppingCart.Order);
-
-            await db.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Custom verification of shopping cart
-        /// </summary>
-        /// <param name="shoppingCart">Shopping cart stored in session</param>
-        /// <param name="paymentDetails">Payment details received from PayPal API</param>
-        protected void CustomVerification(ShoppingCart shoppingCart, PaymentDetails paymentDetails)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetCountry()
         {
-            AddressBase shippingAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
-            if ((shoppingCart.Country == "US" && shippingAddress.Country != "US") ||
-                (shoppingCart.Country != "US" && shippingAddress.Country == "US"))
+            var db = new ApplicationDbContext();
+            string country = Request.Params.Get("country");
+            ShoppingCart shoppingCart = await GetShoppingCart(db);
+
+            shoppingCart.Country = country;
+            shoppingCart.UpdateShippingCharges();
+
+            try
             {
-                // change to JSON error
-                throw new ArgumentException("Your country does not match the country selected!");
+                await SaveShoppingCart(shoppingCart, db);
             }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
+            }
+            return this.JOk(shoppingCart);
         }
-        
-
-        public ActionResult OrderSuccess()
-        {
-            return View();
-        }
-
 
         [HttpPost]
         public async Task<ActionResult> AddPromoCode()
         {
-            ShoppingCart shoppingCart = ShoppingCart.GetFromSession(HttpContext);
+            var db = new ApplicationDbContext();
+            ShoppingCart shoppingCart = await GetShoppingCart(db);
             try
             {
                 string pc = Request.Params.Get("PromoCode");
                 PromoCode promoCode = await db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).SingleAsync();
-
+                
                 shoppingCart.AddPromoCode(promoCode);
 
-                shoppingCart.SaveToSession(HttpContext);
+                await SaveShoppingCart(shoppingCart, db);
                 return Redirect("Index");
             }
             catch (InvalidOperationException e)
@@ -218,5 +230,6 @@ namespace Deerfly_Patches.Controllers
                 return View("Index", shoppingCart);
             }
         }
+
     }
 }

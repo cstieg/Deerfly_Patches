@@ -3,8 +3,8 @@ using Owin;
 using System.Linq;
 using System.Web.Mvc;
 
-[assembly: OwinStartupAttribute(typeof(Deerfly_Patches.Startup))]
-namespace Deerfly_Patches
+[assembly: OwinStartupAttribute(typeof(DeerflyPatches.Startup))]
+namespace DeerflyPatches
 {
     public partial class Startup
     {

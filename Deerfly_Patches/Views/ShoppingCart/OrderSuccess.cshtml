@@ -1,25 +1,50 @@
-﻿
+﻿@model Cstieg.Sales.Models.Order
+
 @{
     ViewBag.Title = "Order Success";
 }
 
 @section BreadCrumbs
 {
-<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-        <a href="/" itemprop="item">Deerfly Patches</a>
-        <meta itemprop="position" content="1" />
-    </li>
-    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-        <a href="/ShoppingCart" itemprop="item">Shopping Cart</a>
-        <meta itemprop="position" content="2" />
-    </li>
-    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-        <a href="/ShoppingCart/OrderSuccess" itemprop="item">Order Success</a>
-        <meta itemprop="position" content="3" />
-    </li>
-</ul>
+    <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item">Deerfly Patches</a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/ShoppingCart" itemprop="item">Shopping Cart</a>
+            <meta itemprop="position" content="2" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/ShoppingCart/OrderSuccess" itemprop="item">Order Success</a>
+            <meta itemprop="position" content="3" />
+        </li>
+    </ul>
 }
+
+<h2>Order Success</h2>
+<br />
+<br />
+<br />
+<p class="larger-text">You have successfully placed your order.  We will ship to @Model.ShipToAddress via US Postal Service.</p>
+<br />
+<h3>Order Details</h3>
+<hr />
+@foreach (var orderDetails in Model.OrderDetails)
+{
+    if (orderDetails.Product.WebImages.Count > 0)
+    {
+        <img src="@orderDetails.Product.WebImages.First().ImageUrl" />
+    }
+    <p>Item: @orderDetails.Product.Name</p>
+    <p>Quantity: @orderDetails.Quantity</p>
+    <p>Paid: @orderDetails.TotalPrice</p>
+    <br />
+}
+<hr />
+<p>Total: $@Model.Total</p>
+
+
 
 <h2>Order Success</h2>
 <br />

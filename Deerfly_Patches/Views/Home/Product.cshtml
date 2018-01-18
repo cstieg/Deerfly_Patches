@@ -1,4 +1,4 @@
-﻿@model Deerfly_Patches.Models.Product
+﻿@model DeerflyPatches.Models.Product
 
 @{
     ViewBag.Title = Model.Name;
@@ -16,7 +16,7 @@
             <meta itemprop="position" content="2" />
         </li>
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-            <a href="/Product/@Model.ProductId" itemprop="item">@Model.Name</a>
+            <a href="/Product/@Model.Id" itemprop="item">@Model.Name</a>
             <meta itemprop="position" content="3" />
         </li>
     </ul>
@@ -134,10 +134,10 @@
 
         </dl>
         <div class="button-container">
-            <button class="btn buy-now centered" onclick="buyNow(@Model.ProductId)">Add to Shopping Cart</button>
+            <button class="btn buy-now centered" onclick="buyNow(@Model.Id)">Add to Shopping Cart</button>
             <!--
                 <br />
-                <button class="btn add-to-shopping-cart centered" onclick="addToShoppingCart(@Model.ProductId)">Add to Shopping Cart</button>
+                <button class="btn add-to-shopping-cart centered" onclick="addToShoppingCart(@Model.Id)">Add to Shopping Cart</button>
             -->
             </div>
         </section>

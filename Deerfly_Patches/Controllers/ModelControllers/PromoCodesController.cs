@@ -1,22 +1,25 @@
 ﻿using System.Data.Entity;
-using System.Net;
 using System.Web.Mvc;
-using Deerfly_Patches.Models;
+using DeerflyPatches.Models;
 using System.Threading.Tasks;
-using Deerfly_Patches.ActionFilters;
+using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.Sales.Models;
 
-namespace Deerfly_Patches.Controllers
+namespace DeerflyPatches.Controllers
 {
     /// <summary>
     /// The controller providing model scaffolding for PromoCodes
     /// </summary>
     [Authorize(Roles = "Administrator")]
+    [RoutePrefix("edit/promocodes")]
+    [Route("{action}/{id?}")]
     [ClearCache]
     public class PromoCodesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: PromoCodes
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             var promoCodes = db.PromoCodes.Include(p => p.PromotionalItem).Include(p => p.WithPurchaseOf);
@@ -41,9 +44,9 @@ namespace Deerfly_Patches.Controllers
         // GET: PromoCodes/Create
         public ActionResult Create()
         {
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name");
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name");
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name");
+            ViewBag.PromotionalItemId = new SelectList(db.Products, "Id", "Name");
+            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "Id", "Name");
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "Id", "Name");
             return View();
         }
 
@@ -59,9 +62,9 @@ namespace Deerfly_Patches.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.PromotionalItemId = new SelectList(db.Products, "Id", "Name", promoCode.PromotionalItemId);
+            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -77,9 +80,9 @@ namespace Deerfly_Patches.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.PromotionalItemList = new SelectList(db.Products, "ProductId", "Name", promoCode.PromotionalItemId);
-            ViewBag.WithPurchaseOfIdList = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemIdList = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.PromotionalItemList = new SelectList(db.Products, "Id", "Name", promoCode.PromotionalItemId);
+            ViewBag.WithPurchaseOfIdList = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemIdList = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -94,9 +97,9 @@ namespace Deerfly_Patches.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "ProductId", "Name");
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "ProductId", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "ProductId", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.PromotionalItemId = new SelectList(db.Products, "Id", "Name");
+            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 

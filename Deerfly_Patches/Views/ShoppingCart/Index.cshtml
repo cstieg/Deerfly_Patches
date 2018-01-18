@@ -1,4 +1,4 @@
-﻿@model Deerfly_Patches.Modules.PayPal.ShoppingCart
+﻿@model Cstieg.Sales.Models.ShoppingCart
 
 @{
     ViewData["Title"] = "Shopping Cart";
@@ -22,7 +22,7 @@
     {
         foreach (var item in Model.GetItems())
         {
-            <div class="row item-detail-line" id="item-@item.Product.ProductId">
+            <div class="row item-detail-line" id="item-@item.Product.Id">
                 @if (item.Product.WebImages != null && item.Product.WebImages.Count > 0)
                 {
                     <div class="hidden-xs hidden-sm hidden-md col-lg-1 item-image">
@@ -38,12 +38,12 @@
                 <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
                     @if (!item.IsPromotionalItem)
                     {
-                        <button onclick="decrementItemInShoppingCart(@item.Product.ProductId)">-</button>
+                        <button onclick="decrementItem(@item.Product.Id)">-</button>
                     }
-                    <span class="item-qty-ct" id="qty-@item.Product.ProductId">@item.Quantity</span>
+                    <span class="item-qty-ct" id="qty-@item.Product.Id">@item.Quantity</span>
                     @if (!item.IsPromotionalItem)
                     {
-                        <button onclick="incrementItemInShoppingCart(@item.Product.ProductId)">+</button>
+                        <button onclick="incrementItem(@item.Product.Id)">+</button>
                     }
                 </div>
                 <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
@@ -51,7 +51,7 @@
                 <div class="item-shipping-saved hidden">@item.Shipping</div>
                 <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@item.TotalPrice</div>
                 <div class="col-xs-1">
-                    <button onclick="removeItemInShoppingCart(@item.Product.ProductId)">x</button>
+                    <button onclick="removeItem(@item.Product.Id)">x</button>
                 </div>
             </div>
         }
@@ -127,13 +127,13 @@
         </div>
 
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-        <script src="~/Scripts/Deerfly_Patches/paypal.js"></script>
+        <script src="~/Scripts/DeerflyPatches/paypal.js"></script>
     }
     else
     {
         <div class="row">
             <h3>No Items in Shopping Cart</h3>
-            <p>Go back to @Html.ActionLink("orders", "Index", "Order")</p>
+            <p>Go back to @Html.ActionLink("products", "Products", "Home")</p>
         </div>
     }
 
