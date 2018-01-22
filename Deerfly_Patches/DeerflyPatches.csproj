@@ -102,6 +102,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.10.0\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -226,6 +229,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
     <Compile Include="Controllers\ModelControllers\TestimonialsController.cs" />
@@ -431,6 +435,7 @@
     <Content Include="Scripts\Site\inputmask.js" />
     <Content Include="Scripts\Site\LightboxMessage.js" />
     <Content Include="Scripts\Site\paypal.js" />
+    <Content Include="Scripts\Site\RandomId.js" />
     <Content Include="Scripts\Site\ShoppingCart.js" />
     <Content Include="Scripts\Site\site.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -531,6 +536,7 @@
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\ShoppingCart\OrderSuccess.cshtml" />
     <Content Include="Views\Home\Product.cshtml" />
+    <Content Include="Views\Mail\OrderSuccessEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,30 @@
+﻿@model Cstieg.Sales.Models.Order
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Order Success - @Model.ToString()</title>
+    </head>
+    <body>
+        <h1>Thank you for your order, @Model.Customer.FirstName!</h1>
+        <br />
+        <p>You have successfully placed your order.  We will ship to @Model.ShipToAddress via US Postal Service.</p>
+        <br />
+        <h2>Order Details</h2>
+        <hr />
+        @foreach (var orderDetails in Model.OrderDetails)
+        {
+            if (orderDetails.Product.WebImages.Count > 0)
+            {
+                <img src="@ViewBag.baseURL@orderDetails.Product.WebImages.First().ImageUrl" />
+            }
+            <p>Item: @orderDetails.Product.Name</p>
+            <p>Quantity: @orderDetails.Quantity</p>
+            <p>Paid: $@orderDetails.TotalPrice</p>
+            <br />
+        }
+        <hr />
+        <p>Total: $@Model.Total</p>
+    </body>
+</html>
