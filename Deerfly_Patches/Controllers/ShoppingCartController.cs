@@ -189,7 +189,17 @@ namespace DeerflyPatches.Controllers
             ShoppingCart shoppingCart = await GetShoppingCart(db);
 
             shoppingCart.Country = country;
-            shoppingCart.UpdateShippingCharges();
+            //shoppingCart.UpdateShippingCharges();
+            // ************************************* Deerflypatches.com specific ***********************************
+            if (country == "US")
+            {
+                shoppingCart.RemoveAllShippingCharges();
+            }
+            else
+            {
+                shoppingCart.ResetShippingCharges();
+            }
+
 
             try
             {

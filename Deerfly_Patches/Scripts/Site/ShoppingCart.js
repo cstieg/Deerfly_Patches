@@ -198,24 +198,27 @@ function decrementShoppingCartBadge() {
 
 /* ***************************** Country ************************************** */
 // Sets the country selection from freegeoip.net
-function setCountry() {
+(function setCountry() {
     $.getJSON('https://freegeoip.net/json/', function (data) {
         var country = data.country_code;
         var $countrySelect = $('#country-select');
-        var $countryOption = $countrySelect.find('option[value="' + country + '"]');
+        var $countryOption = $countrySelect.find('input[value="' + country + '"]');
 
         // Select 'other' if country is not in the list
         if ($countryOption.length === 0) {
-            $countryOption = $countrySelect.find('option[value="--"]');
+            $countryOption = $countrySelect.find('input[value="--"]');
         }
-        $countryOption.attr('selected', 'selected');
+        $countryOption.attr('checked', true);
         updateCountryInShoppingCart(country);
+    }).fail(function () {
+        updateCountryInShoppingCart("US");
     });
-}
+})();
 
 // Event called when country is manually changed
 function countryChange() {
-    var country = $('#country-select option:selected').val();
+    // CHANGED FOR DEERFLYPATCHES.COM **************************************************
+    var country = $('#country-select input[name=country]:checked').val();
     updateCountryInShoppingCart(country);
 }
 
@@ -236,5 +239,5 @@ function updateCountryInShoppingCart(country) {
 }
 
 function getCountry() {
-    return $('#country-select option:selected').val();
+    return $('#country-select input[name=country]').val();
 }

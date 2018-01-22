@@ -33,7 +33,16 @@ namespace DeerflyPatches.Controllers
                 
                 // apply country-specific charges
                 shoppingCart.Country = country;
-                shoppingCart.UpdateShippingCharges();
+                //shoppingCart.UpdateShippingCharges();
+                // ************************************* Deerflypatches.com specific ***********************************
+                if (country == "US")
+                {
+                    shoppingCart.RemoveAllShippingCharges();
+                }
+                else
+                {
+                    shoppingCart.ResetShippingCharges();
+                }
 
                 await SaveShoppingCart(shoppingCart, db);
 
