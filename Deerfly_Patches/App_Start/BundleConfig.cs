@@ -18,18 +18,22 @@ namespace DeerflyPatches
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                       "~/Scripts/Site/site.js",
-                      "~/Scripts/Site/gmaps.js",
+                      "~/Scripts/Site/LightboxMessage.js",
+                      "~/Scripts/Site/RandomId.js",
+                      "~/Scripts/Site/ShoppingCart.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/shoppingCart").Include(
+                "~/Scripts/Site/PayPal.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/retailers").Include(
+                      "~/Scripts/Site/gmaps.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/edit").Include(
+                      "~/Scripts/NicEdit/nicEdit.js",
                       "~/Scripts/Site/inputmask.js",
                       "~/Scripts/Site/ImageUpload.js",
-                      "~/Scripts/Site/LightboxMessage.js",
-                      "~/Scripts/Site/ShoppingCart.js",
+                      "~/Scripts/Sortable/sortable.js",
                       "~/Scripts/Site/EditIndex.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
-                      "~/Scripts/NicEdit/nicEdit.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/sortable").Include(
-                      "~/Scripts/Sortable/sortable.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

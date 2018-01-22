@@ -6,30 +6,33 @@
 
 <div class="row" id="retailer-map-container">
     <div id="retailer-map-view" class="col-sm-8 col-sm-push-4">
-            <p class="text-center">Loading map; please wait...</p>
+        <p class="text-center">Loading map; please wait...</p>
     </div>
     <div id="retailer-list-view" class="col-sm-4 col-sm-pull-8">
-            <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
-                <label for="zip">Enter your zip</label>
-                <input type="text" name="zip" value="@ViewBag.Zip" /><br />
+        <form id="retailer-list-filter" action="@Url.Action("Index", "RetailerMap")" method="get">
+            <label for="zip">Enter your zip</label>
+            <input type="text" name="zip" value="@ViewBag.Zip" /><br />
 
-                <label for="range">Search within </label>
-                <input type="text" name="range" value="@ViewBag.Range" /> miles
+            <label for="range">Search within </label>
+            <input type="text" name="range" value="@ViewBag.Range" /> miles
 
-                <input type="hidden" name="location" />
+            <input type="hidden" name="location" />
 
-                <input type="submit" value="Filter" />
-                <hr />
-            </form><!--    No whitespace
-         --><ul id="retailer-list">
-                Loading retailer data; please wait...
-            </ul>
+            <input type="submit" value="Filter" />
+            <hr />
+        </form>
+        <!--    No whitespace
+        -->
+        <ul id="retailer-list">
+            Loading retailer data; please wait...
+        </ul>
     </div>
 </div>
 
 <div class="hidden" id="retailerJsonUrl">@Url.Action("ListJson", "Retailers")</div>
 <div class="hidden" id="zoom">@ViewBag.Zoom</div>
-<div class="hidden" id="location">@if (ViewBag.Location != null)
+<div class="hidden" id="location">
+    @if (ViewBag.Location != null)
     {
         @ViewBag.Location.ToJson()
     }
@@ -49,3 +52,8 @@
 
 
 <div id="google-maps-url-info" class="hidden">@ViewBag.GoogleMapsUrl</div>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/retailers")
+}
