@@ -11,7 +11,7 @@
     if ($gmapsUrl) {
         $.getScript($gmapsUrl).fail(function (jqxhr, settings, exception) {
             alert("Wasn't able to load map :(");
-            window.location = "/order";
+            window.location = "/products";
         });
     }
 })();

@@ -88,7 +88,7 @@ namespace DeerflyPatches.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +137,7 @@ namespace DeerflyPatches.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductId,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
         {
             if (ModelState.IsValid)
             {
