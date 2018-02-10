@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DeerflyPatches.Models.Product>
+﻿@model IEnumerable<Cstieg.Sales.Models.Product>
 
 @{
     ViewBag.Title = "Index";
@@ -17,6 +17,15 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.WebImages)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sku)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UrlName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetaDescription)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
@@ -40,9 +49,18 @@
         </td>
         <td>
             @if (item.WebImages != null && item.WebImages.Count > 0)
-            {
-                <img src="@item.WebImages.First().ImageUrl" class="thumbnail" />
-            }
+        {
+            <img src="@item.WebImages.First().ImageUrl" class="thumbnail" />
+    }
+        </td>
+        <td field-name="Sku" field-type="string">
+            @Html.DisplayFor(modelItem => item.Sku)
+        </td>
+        <td field-name="UrlName" field-type="string">
+            @Html.DisplayFor(modelItem => item.UrlName)
+        </td>
+        <td field-name="MetaDescription" field-type="string">
+            @Html.DisplayFor(modelItem => item.MetaDescription)
         </td>
         <td field-name="Price" field-type="decimal">
             @Html.DisplayFor(modelItem => item.Price)
@@ -57,9 +75,9 @@
             @Html.DisplayFor(modelItem => item.DoNotDisplay)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }

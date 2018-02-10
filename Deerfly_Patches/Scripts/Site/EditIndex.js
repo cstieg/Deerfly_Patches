@@ -34,7 +34,7 @@
         [HttpPost]
         public async Task<JsonResult> Update(int id)
         {
-            Product existingProduct = await db.Products.FindAsync(id);
+            Product existingProduct = await db.Products.FirstOrDefaultAsync(s => s.Id == id);
             if (existingProduct == null)
             {
                 return this.JError(404, "Can't find this product to update!");

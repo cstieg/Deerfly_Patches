@@ -10,7 +10,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @if (ViewBag.Title == "Edit")
         {
-            @Html.HiddenFor(model => model.TestimonialId)
+            @Html.HiddenFor(model => model.Id)
         }
         <div class="form-group">
             @Html.LabelFor(model => model.Label, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -44,7 +44,7 @@
                     <img id="upload-image-preview" />
                 }
                 <label for="imageFile" class="btn btn-default">Select new image</label>
-                <input id="imageFile" type="file" name="imageFile" class="hidden" onchange="imageUploadPreview('#upload-image-preview')" />
+                <input id="imageFile" type="file" name="imageFile" class="hidden" onchange="ImageUpload.previewImage('#upload-image-preview')" />
                 <p>
                     Please keep in mind the following guidelines:
                 </p>

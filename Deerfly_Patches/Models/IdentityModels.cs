@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Configuration;
 using Cstieg.Sales.Models;
 using Cstieg.Geography;
+using Cstieg.Sales.Repositories;
 
 namespace DeerflyPatches.Models
 {
@@ -21,7 +22,7 @@ namespace DeerflyPatches.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, ISalesDbContext
     {
         public ApplicationDbContext()
             : base(ConfigurationManager.AppSettings["DbConnection"], throwIfV1Schema: false)
@@ -37,16 +38,22 @@ namespace DeerflyPatches.Models
             return new ApplicationDbContext();
         }
 
-        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        public DbSet<ShipToAddress> Addresses { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<PromoCode> PromoCodes { get; set; }
-        public DbSet<Retailer> Retailers { get; set; }
-        public DbSet<LatLng> LatLngs { get; set; }
-        public DbSet<Testimonial> Testimonials { get; set; }
-        public DbSet<WebImage> WebImages { get; set; }
+        public IDbSet<Store> Stores { get; set; }
+        public IDbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public IDbSet<Address> Addresses { get; set; }
+        public IDbSet<Customer> Customers { get; set; }
+        public IDbSet<Order> Orders { get; set; }
+        public IDbSet<OrderDetail> OrderDetails { get; set; }
+        public IDbSet<Product> Products { get; set; }
+        public IDbSet<PromoCode> PromoCodes { get; set; }
+        public IDbSet<PromoCodeAdded> PromoCodesAdded { get; set; }
+        public IDbSet<Retailer> Retailers { get; set; }
+        public IDbSet<LatLng> LatLngs { get; set; }
+        public IDbSet<Testimonial> Testimonials { get; set; }
+        public IDbSet<WebImage> WebImages { get; set; }
+        public IDbSet<Cstieg.Sales.Models.Country> Countries { get; set; }
+        public IDbSet<ShippingCountry> ShippingCountries { get; set; }
+        public IDbSet<ShippingScheme> ShippingSchemes { get; set; }
+
     }
 }

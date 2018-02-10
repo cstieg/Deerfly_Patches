@@ -41,7 +41,7 @@ namespace DeerflyPatches.Controllers
         [Route("")]
         public async Task<ActionResult> Index()
         {
-            var products = await db.Products.ToListAsync();
+            var products = await db.Products.Include(p => p.ShippingScheme).ToListAsync();
             foreach (var product in products)
             {
                 product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
@@ -56,7 +56,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -77,6 +77,7 @@ namespace DeerflyPatches.Controllers
                 await db.SaveChangesAsync();
             }
 
+            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name");
             return View();
         }
 
@@ -88,7 +89,7 @@ namespace DeerflyPatches.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
+        public async Task<ActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +107,7 @@ namespace DeerflyPatches.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
             return View(product);
         }
 
@@ -116,7 +118,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -126,6 +128,7 @@ namespace DeerflyPatches.Controllers
             product.WebImages = product.WebImages ?? new List<WebImage>();
             product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
 
+            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name");
             return View(product);
         }
 
@@ -137,7 +140,7 @@ namespace DeerflyPatches.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Price,Shipping,DisplayOnFrontPage,DoNotDisplay,ProductInfo")] Product product)
+        public async Task<ActionResult> Edit(Product product)
         {
             if (ModelState.IsValid)
             {
@@ -145,6 +148,8 @@ namespace DeerflyPatches.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
+            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
             return View(product);
         }
 
@@ -155,7 +160,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -173,7 +178,7 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
 
             // Delete images connected to this product
             foreach (var webImage in await db.WebImages.Where(w => w.ProductId == product.Id).ToListAsync())
@@ -196,17 +201,16 @@ namespace DeerflyPatches.Controllers
         /// <param name="id">Product id</param>
         /// <returns>Json result containing image id</returns>
         [HttpPost]
-        public async Task<JsonResult> AddImage(int? id)
+        public async Task<ActionResult> AddImage(int? id)
         {
             if (id != null)
             {
-                Product product = await db.Products.FindAsync(id);
+                Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
                 if (product == null)
                 {
                     return this.JError(404, "Can't find product " + id.ToString());
                 }
             }
-
 
             // Check file is exists and is valid image
             HttpPostedFileBase imageFile = _ModelControllersHelper.GetImageFile(ModelState, Request, "", "file");
@@ -223,14 +227,8 @@ namespace DeerflyPatches.Controllers
                 };
                 db.WebImages.Add(image);
                 await db.SaveChangesAsync();
-                return new JsonResult
-                {
-                    Data = new
-                    {
-                        success = "True",
-                        imageId = image.Id
-                    }
-                };
+
+                return PartialView("_ProductImagePartial", image);
             }
             catch (Exception e)
             {
@@ -246,14 +244,14 @@ namespace DeerflyPatches.Controllers
         [HttpPost]
         public async Task<JsonResult> DeleteImage(int id)
         {
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return this.JError(404, "Can't find product " + id.ToString());
             }
 
             int imageId = int.Parse(Request.Params.Get("imageId"));
-            WebImage image = await db.WebImages.FindAsync(imageId);
+            WebImage image = await db.WebImages.FirstOrDefaultAsync(w => w.Id == imageId);
             if (image == null)
             {
                 return this.JError(404, "Can't find image " + imageId.ToString());
@@ -278,12 +276,13 @@ namespace DeerflyPatches.Controllers
         /// Updates the model from the Index table using EditIndex.js
         /// </summary>
         /// <param name="id">The Id of the model to update</param>
-        /// <returns>A Json object indicating success status.  In case of error, returns object with data member containing the old product model,
+        /// <returns>A Json object indicating success status.  
+        /// In case of error, returns object with data member containing the old product model,
         /// and the field causing the error if possible</returns>
         [HttpPost]
         public async Task<JsonResult> Update(int id)
         {
-            Product existingProduct = await db.Products.FindAsync(id);
+            Product existingProduct = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (existingProduct == null)
             {
                 return this.JError(404, "Can't find this product to update!");
@@ -325,7 +324,7 @@ namespace DeerflyPatches.Controllers
             for (int i = 0; i < imageOrder.Count(); i++)
             {
                 string imageId = imageOrder[i];
-                WebImage webImage = await db.WebImages.FindAsync(int.Parse(imageId));
+                WebImage webImage = await db.WebImages.FirstOrDefaultAsync(w => w.Id == int.Parse(imageId));
                 webImage.Order = i;
                 db.Entry(webImage).State = EntityState.Modified;
                 await db.SaveChangesAsync();

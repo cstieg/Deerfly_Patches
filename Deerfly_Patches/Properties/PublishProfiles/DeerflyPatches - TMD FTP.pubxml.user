@@ -71,10 +71,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/DeerflyPatches.dll">
-      <publishTime>01/20/2018 14:03:34</publishTime>
+      <publishTime>01/25/2018 17:03:52</publishTime>
     </File>
     <File Include="bin/DeerflyPatches.pdb">
-      <publishTime>01/20/2018 14:03:34</publishTime>
+      <publishTime>01/25/2018 17:03:52</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
       <publishTime>12/27/2017 20:38:58</publishTime>
@@ -262,6 +262,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Owin.dll">
       <publishTime>11/27/2012 12:00:52</publishTime>
     </File>
+    <File Include="bin/RazorEngine.dll">
+      <publishTime>06/16/2017 17:11:22</publishTime>
+    </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>06/27/2016 14:50:24</publishTime>
     </File>
@@ -353,22 +356,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/Sales.dll">
-      <publishTime>01/20/2018 13:26:36</publishTime>
+      <publishTime>01/25/2018 17:03:29</publishTime>
     </File>
     <File Include="bin/Sales.dll.config">
       <publishTime>11/10/2017 13:41:04</publishTime>
     </File>
     <File Include="bin/Sales.PayPal.dll">
-      <publishTime>01/20/2018 13:26:39</publishTime>
+      <publishTime>01/25/2018 17:03:31</publishTime>
     </File>
     <File Include="bin/Sales.PayPal.dll.config">
       <publishTime>01/20/2018 10:56:12</publishTime>
     </File>
     <File Include="bin/Sales.PayPal.pdb">
-      <publishTime>01/20/2018 13:26:39</publishTime>
+      <publishTime>01/25/2018 17:03:31</publishTime>
     </File>
     <File Include="bin/Sales.pdb">
-      <publishTime>01/20/2018 13:26:36</publishTime>
+      <publishTime>01/25/2018 17:03:29</publishTime>
     </File>
     <File Include="bin/StringHelper.dll">
       <publishTime>01/20/2018 10:56:58</publishTime>
@@ -572,7 +575,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/18/2018 14:25:17</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>01/18/2018 15:41:00</publishTime>
+      <publishTime>01/20/2018 14:13:02</publishTime>
     </File>
     <File Include="PayPal.json">
       <publishTime>12/07/2017 14:19:37</publishTime>
@@ -680,7 +683,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/20/2018 14:02:12</publishTime>
     </File>
     <File Include="Scripts/Site/ShoppingCart.js">
-      <publishTime>01/20/2018 13:34:06</publishTime>
+      <publishTime>01/25/2018 16:08:36</publishTime>
     </File>
     <File Include="Scripts/Site/site.js">
       <publishTime>11/30/2017 09:34:50</publishTime>
@@ -759,6 +762,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Views/Home/Testimonials.cshtml">
       <publishTime>01/18/2018 14:25:25</publishTime>
+    </File>
+    <File Include="Views/Mail/OrderSuccessEmail.cshtml">
+      <publishTime>01/20/2018 14:10:52</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>01/18/2018 14:25:26</publishTime>
@@ -983,7 +989,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/20/2018 13:53:17</publishTime>
     </File>
     <File Include="Views/ShoppingCart/OrderSuccess.cshtml">
-      <publishTime>01/18/2018 15:39:19</publishTime>
+      <publishTime>01/20/2018 14:07:03</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>01/18/2018 14:25:29</publishTime>
@@ -992,7 +998,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/20/2018 13:27:11</publishTime>
+      <publishTime>01/25/2018 17:04:49</publishTime>
     </File>
   </ItemGroup>
 </Project>

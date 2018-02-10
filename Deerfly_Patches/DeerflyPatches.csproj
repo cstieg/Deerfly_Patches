@@ -62,6 +62,20 @@
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Geography, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0d74d8b38c9a201f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Reusables\C#\Geography.GoogleMaps\Geography.GoogleMaps\bin\Release\Geography.dll</HintPath>
+    </Reference>
+    <Reference Include="Geography.GoogleMaps, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e91a23c0e67cf8a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Reusables\C#\Geography.GoogleMaps\Geography.GoogleMaps\bin\Release\Geography.GoogleMaps.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -104,6 +118,10 @@
     </Reference>
     <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <HintPath>..\packages\RazorEngine.3.10.0\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="StringHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8945154232ca6a33, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Reusables\C#\Geography.GoogleMaps\Geography.GoogleMaps\bin\Release\StringHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -164,6 +182,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telephony, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6522f4c2df62aeb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Reusables\C#\Telephony\Telephony\bin\Release\Telephony.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -174,12 +196,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -231,13 +247,18 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ModelControllers\CountriesController.cs" />
     <Compile Include="Controllers\ModelControllers\RetailersController.cs" />
+    <Compile Include="Controllers\ModelControllers\ShippingCountriesController.cs" />
+    <Compile Include="Controllers\ModelControllers\ShippingSchemesController.cs" />
+    <Compile Include="Controllers\ModelControllers\StoreController.cs" />
     <Compile Include="Controllers\ModelControllers\TestimonialsController.cs" />
     <Compile Include="Controllers\ModelControllers\OrdersController.cs" />
     <Compile Include="Controllers\PayPalController.cs" />
     <Compile Include="Controllers\ModelControllers\ProductsController.cs" />
     <Compile Include="Controllers\ModelControllers\PromoCodesController.cs" />
     <Compile Include="Controllers\RetailerMapController.cs" />
+    <Compile Include="Controllers\RssController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -362,11 +383,54 @@
     <Compile Include="Migrations\201801182108397_ToModular.Designer.cs">
       <DependentUpon>201801182108397_ToModular.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801251949224_cartIndex.cs" />
+    <Compile Include="Migrations\201801251949224_cartIndex.Designer.cs">
+      <DependentUpon>201801251949224_cartIndex.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802021931234_NewShoppingCart.cs" />
+    <Compile Include="Migrations\201802021931234_NewShoppingCart.Designer.cs">
+      <DependentUpon>201802021931234_NewShoppingCart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802040157192_AddressPayPal.cs" />
+    <Compile Include="Migrations\201802040157192_AddressPayPal.Designer.cs">
+      <DependentUpon>201802040157192_AddressPayPal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802040326507_AddressPayPal1.cs" />
+    <Compile Include="Migrations\201802040326507_AddressPayPal1.Designer.cs">
+      <DependentUpon>201802040326507_AddressPayPal1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802051758162_test.cs" />
+    <Compile Include="Migrations\201802051758162_test.Designer.cs">
+      <DependentUpon>201802051758162_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802062130193_PromoCodeAdded.cs" />
+    <Compile Include="Migrations\201802062130193_PromoCodeAdded.Designer.cs">
+      <DependentUpon>201802062130193_PromoCodeAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802072217065_ProductSku.cs" />
+    <Compile Include="Migrations\201802072217065_ProductSku.Designer.cs">
+      <DependentUpon>201802072217065_ProductSku.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802072305090_ProductSku1.cs" />
+    <Compile Include="Migrations\201802072305090_ProductSku1.Designer.cs">
+      <DependentUpon>201802072305090_ProductSku1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802080259056_LimitMetaDescription.cs" />
+    <Compile Include="Migrations\201802080259056_LimitMetaDescription.Designer.cs">
+      <DependentUpon>201802080259056_LimitMetaDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802081800452_GTIN.cs" />
+    <Compile Include="Migrations\201802081800452_GTIN.Designer.cs">
+      <DependentUpon>201802081800452_GTIN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802091902139_Store.cs" />
+    <Compile Include="Migrations\201802091902139_Store.Designer.cs">
+      <DependentUpon>201802091902139_Store.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Retailer.cs" />
     <Compile Include="Models\Testimonial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -411,6 +475,7 @@
     <Content Include="Content\images\ImageUnavailable.png" />
     <Content Include="Content\images\slantbox-info.png" />
     <Content Include="Content\images\starburst-box-dfp.png" />
+    <Content Include="Content\LightboxMessage.css" />
     <Content Include="Content\NicEdit\nicEditorIcons.gif" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -421,10 +486,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PayPal.sandbox.json" />
     <Content Include="Content\images\favicon\manifest.json" />
     <Content Include="dfp.pfx" />
-    <Content Include="PayPal.json" />
     <None Include="Properties\PublishProfiles\christopherstieg.com - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - TMD FTP.pubxml" />
@@ -437,6 +500,7 @@
     <Content Include="Scripts\Site\paypal.js" />
     <Content Include="Scripts\Site\RandomId.js" />
     <Content Include="Scripts\Site\ShoppingCart.js" />
+    <Content Include="Scripts\Site\ShoppingCartCountry.js" />
     <Content Include="Scripts\Site\site.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
@@ -537,12 +601,29 @@
     <Content Include="Views\ShoppingCart\OrderSuccess.cshtml" />
     <Content Include="Views\Home\Product.cshtml" />
     <Content Include="Views\Mail\OrderSuccessEmail.cshtml" />
+    <Content Include="Views\ModelViews\Products\_ProductImagePartial.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\Create.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\Delete.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\Details.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\Edit.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\Index.cshtml" />
+    <Content Include="Views\ModelViews\Countries\Create.cshtml" />
+    <Content Include="Views\ModelViews\Countries\Delete.cshtml" />
+    <Content Include="Views\ModelViews\Countries\Details.cshtml" />
+    <Content Include="Views\ModelViews\Countries\Edit.cshtml" />
+    <Content Include="Views\ModelViews\Countries\Index.cshtml" />
+    <Content Include="Views\ModelViews\ShippingCountries\Create.cshtml" />
+    <Content Include="Views\ModelViews\ShippingCountries\Delete.cshtml" />
+    <Content Include="Views\ModelViews\ShippingCountries\Details.cshtml" />
+    <Content Include="Views\ModelViews\ShippingCountries\Edit.cshtml" />
+    <Content Include="Views\ModelViews\ShippingCountries\Index.cshtml" />
+    <Content Include="Views\ModelViews\ShippingSchemes\_ShippingCountriesIndexPartial.cshtml" />
+    <Content Include="Views\ModelViews\Store\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\products\" />
     <Folder Include="Content\images\testimonials\" />
-    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -647,6 +728,39 @@
     <EmbeddedResource Include="Migrations\201801182108397_ToModular.resx">
       <DependentUpon>201801182108397_ToModular.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251949224_cartIndex.resx">
+      <DependentUpon>201801251949224_cartIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802021931234_NewShoppingCart.resx">
+      <DependentUpon>201802021931234_NewShoppingCart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802040157192_AddressPayPal.resx">
+      <DependentUpon>201802040157192_AddressPayPal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802040326507_AddressPayPal1.resx">
+      <DependentUpon>201802040326507_AddressPayPal1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802051758162_test.resx">
+      <DependentUpon>201802051758162_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802062130193_PromoCodeAdded.resx">
+      <DependentUpon>201802062130193_PromoCodeAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802072217065_ProductSku.resx">
+      <DependentUpon>201802072217065_ProductSku.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802072305090_ProductSku1.resx">
+      <DependentUpon>201802072305090_ProductSku1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802080259056_LimitMetaDescription.resx">
+      <DependentUpon>201802080259056_LimitMetaDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802081800452_GTIN.resx">
+      <DependentUpon>201802081800452_GTIN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802091902139_Store.resx">
+      <DependentUpon>201802091902139_Store.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -660,33 +774,17 @@
       <Project>{c8db3f11-651c-4a00-b2d6-650700d0007f}</Project>
       <Name>ControllerHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\_Reusables\C#\Geography.GoogleMaps\Geography.GoogleMaps\Geography.GoogleMaps.csproj">
-      <Project>{1927921d-7cd7-49f9-8e48-3a5df1abc898}</Project>
-      <Name>Geography.GoogleMaps</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\_Reusables\C#\Geography\Geography\Geography.csproj">
-      <Project>{c68013c0-5ecd-4c34-ae72-07f6742efb70}</Project>
-      <Name>Geography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\_Reusables\C#\Image\Image.csproj">
-      <Project>{ea5294a7-7f80-4da0-960b-0ae3d376c841}</Project>
-      <Name>Image</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\_Reusables\C#\Sales.PayPal\Sales.PayPal\Sales.PayPal.csproj">
-      <Project>{601225f6-0d4d-41ae-89ba-5677d1354bfb}</Project>
+      <Project>{fd833e40-981e-494f-af45-048f9a2714ee}</Project>
       <Name>Sales.PayPal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\Sales\Sales.RSS\Sales.RSS.csproj">
+      <Project>{0251c200-62b2-4e2f-824a-aa927f0bb48b}</Project>
+      <Name>Sales.RSS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\_Reusables\C#\Sales\Sales\Sales.csproj">
-      <Project>{db2b6bdc-fae9-4263-8b08-94fbee9a3850}</Project>
+      <Project>{af7878a0-2385-4d93-9d5e-06fad9982ca2}</Project>
       <Name>Sales</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\_Reusables\C#\StringHelper\StringHelper.csproj">
-      <Project>{dff3ef94-9144-45eb-be2d-9bde93671212}</Project>
-      <Name>StringHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\_Reusables\C#\Telephony\Telephony\Telephony.csproj">
-      <Project>{67784c04-8a88-430b-83be-ee3a52ce0677}</Project>
-      <Name>Telephony</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\_Reusables\C#\WebFiles\WebFiles\WebFiles.csproj">
       <Project>{5612c6e4-f55c-4120-b33d-bcfcc2bda4bd}</Project>

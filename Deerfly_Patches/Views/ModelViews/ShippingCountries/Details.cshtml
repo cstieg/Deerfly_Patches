@@ -1,0 +1,82 @@
+﻿@model Cstieg.Sales.Models.ShippingCountry
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ShippingCountry</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Country.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShippingScheme.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShippingScheme.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AdditionalShipping)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AdditionalShipping)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BaseShippingIsPerItem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BaseShippingIsPerItem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AdditionalShippingIsPerItem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AdditionalShippingIsPerItem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FreeShipping)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FreeShipping)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

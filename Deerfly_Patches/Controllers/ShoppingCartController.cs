@@ -1,12 +1,16 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Cstieg.ControllerHelper;
+﻿using Cstieg.ControllerHelper;
+using Cstieg.Sales;
+using Cstieg.Sales.Exceptions;
 using Cstieg.Sales.Models;
 using Cstieg.Sales.PayPal;
+using Cstieg.Sales.PayPal.Models;
 using DeerflyPatches.Models;
+using System;
+using System.Configuration;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace DeerflyPatches.Controllers
 {
@@ -15,15 +19,34 @@ namespace DeerflyPatches.Controllers
     /// </summary>
     public class ShoppingCartController : BaseController
     {
-       ClientInfo ClientInfo = new PayPalApiClient().GetClientSecrets();
+        private ApplicationDbContext db = new ApplicationDbContext();
+        private ShoppingCartService _shoppingCartService;
+        private PayPalClientInfoService _payPalClientInfoService;
+        private PayPalClientAccount _clientAccount;
+
+        public ShoppingCartController()
+        {
+            string payPalSettingsJson = ConfigurationManager.AppSettings["PayPalSettingsJson"];
+            _payPalClientInfoService = new PayPalClientInfoService(payPalSettingsJson);
+            _clientAccount = _payPalClientInfoService.GetClientAccount();
+        }
+
+        /// <summary>
+        /// Initialize settings that are unabled to be initialized in constructor
+        /// </summary>
+        protected override void Initialize(RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+
+            _shoppingCartService = new ShoppingCartService(db, Request.AnonymousID);
+        }
 
         // GET: ShoppingCart
         public async Task<ActionResult> Index()
         {
-            var db = new ApplicationDbContext();
-            ViewBag.ClientInfo = ClientInfo;
+            ViewBag.ClientInfo = _clientAccount;
             //ViewBag.Countries = await db.Countries.ToListAsync();
-            ShoppingCart shoppingCart = await GetShoppingCart(db);
+            ShoppingCart shoppingCart = await _shoppingCartService.GetShoppingCartAsync();
             return View(shoppingCart);
         }
 
@@ -32,30 +55,26 @@ namespace DeerflyPatches.Controllers
         /// Displays confirmation for completed order
         /// </summary>
         /// <param name="cart">Alphanumeric cart id assigned to order by PayPal</param>
-        public async Task<ActionResult> OrderSuccess()
+        public async Task<ActionResult> OrderSuccess(string cart)
         {
-            var db = new ApplicationDbContext();
-            string id = Request.Params.Get("cart");
-            Order order = await db.Orders.Include(o => o.Customer).Where(o => o.Cart == id).SingleOrDefaultAsync();
+            Order order = await db.Orders.Include(o => o.Customer).SingleOrDefaultAsync(o => o.Cart == cart);
             if (order == null)
             {
                 return HttpNotFound();
             }
-            int addressId = (int) order.ShipToAddressId;
-            ShipToAddress address = await db.Addresses.FindAsync(addressId);
-            order.ShipToAddress = address;
+
+            order.ShipToAddress = await db.Addresses.FirstAsync(a => a.Id == order.ShipToAddressId);
             return View(order);
         }
-        
+
         /// <summary>
         /// Gets the number of items in the shopping cart
         /// </summary>
         /// <returns>A JSON object containing the number of items in the shopping cart in the field shoppingCartCount</returns>
         public async Task<JsonResult> ShoppingCartCount()
         {
-            var db = new ApplicationDbContext();
-            ShoppingCart shoppingCart = await GetShoppingCart(db);
-            return Json(new { shoppingCartCount = shoppingCart.Order.OrderDetails.Count }, JsonRequestBehavior.AllowGet);
+            ShoppingCart shoppingCart = await _shoppingCartService.GetShoppingCartAsync();
+            return Json(new { shoppingCartCount = shoppingCart.GetOrderDetails().Count }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -64,23 +83,43 @@ namespace DeerflyPatches.Controllers
         /// <param name="id">ID of Product model to add</param>
         /// <returns>JSON success response if successful, error response if product already exists</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItem(int id)
         {
-            var db = new ApplicationDbContext();
-            // look up product entity
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-
             try
             {
-                ShoppingCart shoppingCart = await GetShoppingCart(db);
-                shoppingCart.AddProduct(product);
-                await SaveShoppingCart(shoppingCart, db);
-                return this.JOk();
+                var orderDetail = await _shoppingCartService.AddProductAsync(id);
+            }
+            catch (ProductAlreadyInShoppingCartException) { }
+            catch (NotFoundException e)
+            {
+                return HttpNotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
+            }
+            return this.JOk();
+        }
+
+        /// <summary>
+        /// Removes a Product from the shopping cart
+        /// </summary>
+        /// <param name="id">ID of Product model to remove</param>
+        /// <returns>JSON success response</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveItem(int id)
+        {
+            try
+            {
+                await _shoppingCartService.RemoveProductAsync(id);
+                var shoppingCart = await _shoppingCartService.GetShoppingCartAsync();
+                return this.JOk(new { needsRefresh = shoppingCart.NeedsRefresh });
+            }
+            catch (NotFoundException e)
+            {
+                return HttpNotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -97,21 +136,14 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> IncrementItem(int id)
         {
-            var db = new ApplicationDbContext();
-            // look up product entity
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Increment quantity and save shopping cart
             try
             {
-                ShoppingCart shoppingCart = await GetShoppingCart(db);
-                var orderDetail = shoppingCart.IncrementProduct(product);
-                await SaveShoppingCart(shoppingCart, db);
-                return this.JOk(orderDetail);
+                var orderDetail = await _shoppingCartService.IncrementProductAsync(id);
+                return this.JOk(new { orderDetail = orderDetail });
+            }
+            catch (NotFoundException e)
+            {
+                return HttpNotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -128,21 +160,14 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DecrementItem(int id)
         {
-            var db = new ApplicationDbContext();
-            // look up product entity
-            Product product = await db.Products.FindAsync(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Decrement qty and update shopping cart
             try
             {
-                ShoppingCart shoppingCart = await GetShoppingCart(db);
-                var orderDetail = shoppingCart.DecrementProduct(product);
-                await SaveShoppingCart(shoppingCart, db);
-                return this.JOk(orderDetail);
+                var orderDetail = await _shoppingCartService.DecrementProductAsync(id);
+                return this.JOk(new { orderDetail = orderDetail } );
+            }
+            catch (NotFoundException e)
+            {
+                return HttpNotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -151,93 +176,57 @@ namespace DeerflyPatches.Controllers
         }
 
         /// <summary>
-        /// Removes a Product from the shopping cart
+        /// Sets the country and updates shipping charges accordingly
         /// </summary>
-        /// <param name="id">ID of Product model to remove</param>
-        /// <returns>JSON success response</returns>
+        /// <param name="country">The 2 digit country code where the order will be shipped</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveItem(int id)
+        public async Task<ActionResult> SetCountry(string country)
         {
-            var db = new ApplicationDbContext();
             try
             {
-                ShoppingCart shoppingCart = await GetShoppingCart(db);
-                OrderDetail orderDetail = shoppingCart.Order.OrderDetails.Find(o => o.ProductId == id);
-                if (orderDetail == null)
-                {
-                    return HttpNotFound();
-                }
-
-                db.OrderDetails.Remove(orderDetail);
-                await db.SaveChangesAsync();
-
-                return this.JOk();
-            }
-            catch (Exception e)
-            {
-                return this.JError(403, e.Message);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SetCountry()
-        {
-            var db = new ApplicationDbContext();
-            string country = Request.Params.Get("country");
-            ShoppingCart shoppingCart = await GetShoppingCart(db);
-
-            shoppingCart.Country = country;
-            //shoppingCart.UpdateShippingCharges();
-            // ************************************* Deerflypatches.com specific ***********************************
-            if (country == "US")
-            {
-                shoppingCart.RemoveAllShippingCharges();
-            }
-            else
-            {
-                shoppingCart.ResetShippingCharges();
-            }
-
-
-            try
-            {
-                await SaveShoppingCart(shoppingCart, db);
+                var shoppingCart = await _shoppingCartService.SetCountryAsync(country);
+                return this.JOk(shoppingCart);
             }
             catch (Exception e)
             {
                 return this.JError(400, e.Message);
             }
-            return this.JOk(shoppingCart);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddPromoCode()
+        public async Task<ActionResult> AddPromoCode(string promoCode)
         {
-            var db = new ApplicationDbContext();
-            ShoppingCart shoppingCart = await GetShoppingCart(db);
             try
             {
-                string pc = Request.Params.Get("PromoCode");
-                PromoCode promoCode = await db.PromoCodes.Where(p => p.Code.ToLower() == pc.ToLower()).SingleAsync();
-                
-                shoppingCart.AddPromoCode(promoCode);
-
-                await SaveShoppingCart(shoppingCart, db);
+                var shoppingCart = await _shoppingCartService.AddPromoCodeAsync(promoCode);
                 return Redirect("Index");
             }
-            catch (InvalidOperationException e)
+            catch (InvalidPromoCodeException e)
             {
-                ModelState.AddModelError("PromoCodes", "Failed to add promocode: Invalid promo code - " + e.Message);
-                ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
-                return View("Index", shoppingCart);
+                ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: Invalid promo code - " + e.Message);
+                ViewBag.ClientInfo = _clientAccount;
+                return View("Index", await _shoppingCartService.GetShoppingCartAsync());
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("PromoCodes", "Failed to add promocode: " + e.Message);
-                ViewBag.ClientInfo = new PayPalApiClient().GetClientSecrets();
-                return View("Index", shoppingCart);
+                ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: " + e.Message);
+                ViewBag.ClientInfo = _clientAccount;
+                return View("Index", await _shoppingCartService.GetShoppingCartAsync());
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> RemovePromoCode(string promoCode)
+        {
+            try
+            {
+                var shoppingCart = await _shoppingCartService.RemovePromoCodeAsync(promoCode);
+                return this.JOk();
+            }
+            catch (Exception e)
+            {
+                return this.JError(400, e.Message);
             }
         }
 

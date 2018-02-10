@@ -18,9 +18,9 @@
         <div class="col-xs-1"></div>
     </div>
     <hr />
-    @if (Model != null && Model.GetItems().Count != 0)
+    @if (Model != null && Model.GetOrderDetails().Count > 0)
     {
-        foreach (var item in Model.GetItems())
+        foreach (var item in Model.GetOrderDetails())
         {
             <div class="row item-detail-line" id="item-@item.Product.Id">
                 @if (item.Product.WebImages != null && item.Product.WebImages.Count > 0)
@@ -38,12 +38,12 @@
                 <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2 item-quantity">
                     @if (!item.IsPromotionalItem)
                     {
-                        <button onclick="decrementItem(@item.Product.Id)">-</button>
+                        <button onclick="shoppingCart.decrementItem(@item.Product.Id)">-</button>
                     }
                     <span class="item-qty-ct" id="qty-@item.Product.Id">@item.Quantity</span>
                     @if (!item.IsPromotionalItem)
                     {
-                        <button onclick="incrementItem(@item.Product.Id)">+</button>
+                        <button onclick="shoppingCart.incrementItem(@item.Product.Id)">+</button>
                     }
                 </div>
                 <div class="hidden-xs hidden-sm col-md-1 col-lg-1 item-extended-price">$@item.ExtendedPrice</div>
@@ -51,7 +51,10 @@
                 <div class="item-shipping-saved hidden">@item.Shipping</div>
                 <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 item-total-price">$@item.TotalPrice</div>
                 <div class="col-xs-1">
-                    <button onclick="removeItem(@item.Product.Id)">x</button>
+                    @if (!item.IsPromotionalItem)
+                    {
+                        <button onclick="shoppingCart.removeItem(@item.Product.Id)">x</button>
+                    }
                 </div>
             </div>
         }
@@ -72,7 +75,7 @@
 
 
         <div id="country-select" class="row">
-            <form onchange="countryChange()">
+            <form onchange="shoppingCartCountry.changeCountry()">
                 <input type="radio" name="country" value="US" checked />US
                 <input type="radio" name="country" value="--" />International
             </form>
@@ -84,23 +87,23 @@
                 <input name="promocode" type="text" />
                 <input type="submit" value="Apply" />
             </form>
-            @if (Model.PromoCodes.Count > 0)
+            @Html.ValidationMessageFor(model => model.PromoCodesAdded, "", new { @class = "text-danger" })
+            @if (Model.PromoCodesAdded.Count > 0)
             {
                 <div id="promo-codes-applied">
                     <p>Promocodes applied: </p>
-                    <ul>
-                        @foreach (var promoCode in Model.PromoCodes)
+                    <ul class="col-xs-8 col-sm-6">
+                        @foreach (var promoCodeAdded in Model.PromoCodesAdded)
                         {
                             <li>
-                                <span>@promoCode.Code</span>
+                                <span>@promoCodeAdded.PromoCode.Code</span> <button class="pull-right" onclick="shoppingCart.removePromoCode('@promoCodeAdded.PromoCode.Code')">x</button>
                                 <br />
-                                @promoCode.Description
+                                @promoCodeAdded.PromoCode.Description
                             </li>
                         }
                     </ul>
                 </div>
             }
-            @Html.ValidationMessageFor(model => model.PromoCodes, "", new { @class = "text-danger" })
         </div>
 
         <div class="clearfix"></div>

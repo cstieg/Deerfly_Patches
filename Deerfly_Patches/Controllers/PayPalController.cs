@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using Cstieg.ControllerHelper;
+using Cstieg.Sales;
+using Cstieg.Sales.Models;
+using Cstieg.Sales.PayPal;
+using Cstieg.Sales.Repositories;
+using DeerflyPatches.Models;
 using System;
-using System.Data.Entity;
-using System.Linq;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Cstieg.Geography;
-using Cstieg.ControllerHelper;
-using Cstieg.Sales.PayPal;
-using Cstieg.Sales.Models;
-using DeerflyPatches.Models;
+using System.Web.Routing;
 
 namespace DeerflyPatches.Controllers
 {
@@ -17,36 +17,39 @@ namespace DeerflyPatches.Controllers
     /// </summary>
     public class PayPalController : BaseController
     {
-        private PayPalApiClient _paypalClient = new PayPalApiClient();
+        private ISalesDbContext _context = new ApplicationDbContext();
+        private IShoppingCartService _shoppingCartService;
+        private PayPalClientInfoService _payPalClientInfoService;
+        private PayPalPaymentProviderService _payPalService;
+
+        public PayPalController() : base()
+        {
+            _payPalClientInfoService = new PayPalClientInfoService(ConfigurationManager.AppSettings["PayPalSettingsJson"]);
+            _payPalService = new PayPalPaymentProviderService(_payPalClientInfoService);
+        }
+
+        /// <summary>
+        /// Initialize settings that are unabled to be initialized in constructor
+        /// </summary>
+        protected override void Initialize(RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+
+            // Get anonymous ID for user from cookie to identify shopping cart that may have been saved previously
+            _shoppingCartService = new ShoppingCartService(_context, Request.AnonymousID);
+        }
 
         /// <summary>
         /// Gets a PayPal object representation of the order in the shopping cart
         /// </summary>
-        /// <returns>A JSON object in PayPal order format</returns>
-        public async Task<JsonResult> GetOrderJson()
+        /// <param name="country">2-digit country code of the country selected in the shopping cart</param>
+        /// <returns>A JSON object in PayPal order format describing payment details</returns>
+        public async Task<JsonResult> GetOrderJson(string country)
         {
-            var db = new ApplicationDbContext();
-            string country = Request.Params.Get("country");
             try
             {
-                ShoppingCart shoppingCart = await GetShoppingCart(db);
-                
-                // apply country-specific charges
-                shoppingCart.Country = country;
-                //shoppingCart.UpdateShippingCharges();
-                // ************************************* Deerflypatches.com specific ***********************************
-                if (country == "US")
-                {
-                    shoppingCart.RemoveAllShippingCharges();
-                }
-                else
-                {
-                    shoppingCart.ResetShippingCharges();
-                }
-
-                await SaveShoppingCart(shoppingCart, db);
-
-                string orderJson = _paypalClient.CreateOrder(shoppingCart);
+                ShoppingCart shoppingCart = await _shoppingCartService.SetCountryAsync(country);
+                string orderJson = _payPalService.CreatePaymentDetails(shoppingCart);
                 return Json(orderJson, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -62,135 +65,25 @@ namespace DeerflyPatches.Controllers
         /// <param name="paymentDetails">The payment details object created by PayPal create order API call</param>
         /// <returns>Json success</returns>
         [HttpPost]
-        public async Task<JsonResult> VerifyAndSave()
+        public async Task<JsonResult> VerifyAndSave(string paymentDetails)
         {
-            var db = new ApplicationDbContext();
-            PaymentDetails paymentDetails = JsonConvert.DeserializeObject<PaymentDetails>(Request.Params.Get("paymentDetails"));
-            ShoppingCart shoppingCart = await GetShoppingCart(db);
-
-            // get address and add to shopping cart
-            AddressBase shippingAddress = paymentDetails.Payer.PayerInfo.ShippingAddress;
-            if (shoppingCart.Order.ShipToAddress == null)
-            {
-                shoppingCart.Order.ShipToAddress = new ShipToAddress();
-            }
-            shippingAddress.CopyTo(shoppingCart.Order.ShipToAddress);
-
             try
             {
-                // verify payment details
-                paymentDetails.VerifyShoppingCart(shoppingCart);
-                //paymentDetails.VerifyCountry(shoppingCart, await db.Countries.ToListAsync());
+                _payPalService.SetPaymentResponse(paymentDetails);
+                var shipToAddress = _payPalService.GetShippingAddress();
+                var customer = _payPalService.GetCustomer();
+                var cartId = _payPalService.GetCartId();
+                var order = await _shoppingCartService.CheckoutAsync(shipToAddress, shipToAddress, customer, cartId);
+
+                // On success, front end will execute payment with PayPal
+                return this.JOk(order);
             }
+            
             catch (Exception e)
             {
                 return this.JError(400, e.Message);
             }
-            
-            try
-            { 
-                // save order info to db
-                await SaveShoppingCartToDbAsync(shoppingCart, paymentDetails, db);
-
-                // clear shopping cart
-                await DeleteShoppingCart(shoppingCart, db);
-            }
-            catch (Exception e)
-            {
-                return this.JError(500, "Database error");
-            }
-
-            // On success, front end will execute payment with PayPal
-            return this.JOk();
         }
-
-        /// <summary>
-        /// Saves the shopping cart to the database.
-        /// </summary>
-        /// <param name="shoppingCart">Shopping cart stored in session</param>
-        /// <param name="paymentDetails">Payment details received from PayPal API</param>
-        /// <param name="db">Database context to which shopping cart belongs</param>
-        private async Task SaveShoppingCartToDbAsync(ShoppingCart shoppingCart, PaymentDetails paymentDetails, ApplicationDbContext db)
-        {
-            // update customer ------------------------------------------------------
-            DateTime currentTime = DateTime.Now;
-            PayerInfo payerInfo = paymentDetails.Payer.PayerInfo;
-            Customer customer = await db.Customers.SingleOrDefaultAsync(c => c.EmailAddress == payerInfo.Email);
-            bool isNewCustomer = customer == null;
-            if (isNewCustomer)
-            {
-                customer = new Customer()
-                {
-                    Registered = currentTime,
-                    LastVisited = currentTime,
-                    EmailAddress = payerInfo.Email,
-                    FirstName = payerInfo.FirstName,
-                    LastName = payerInfo.LastName
-                };
-                db.Customers.Add(customer);
-            }
-            else
-            {
-                shoppingCart.Order.Customer = customer;
-                shoppingCart.Order.CustomerId = customer.Id;
-                customer.LastVisited = currentTime;
-                db.Entry(customer).State = EntityState.Modified;
-            }
-
-            // update address ----------------------------------------------------------
-            bool isNewAddress = true;
-            if (!isNewCustomer)
-            {
-                AddressBase newAddress = payerInfo.ShippingAddress;
-                newAddress.SetNullStringsToEmpty();
-                ShipToAddress addressOnFile = await db.Addresses.Where(a => a.Address1 == newAddress.Address1
-                                                            && a.Address2 == newAddress.Address2
-                                                            && a.City == newAddress.City
-                                                            && a.State == newAddress.State
-                                                            && a.PostalCode == newAddress.PostalCode
-                                                            && a.Phone == newAddress.Phone
-                                                            && a.Recipient == newAddress.Recipient
-                                                            && a.CustomerId == customer.Id).FirstOrDefaultAsync();
-                isNewAddress = addressOnFile == null;
-
-                // don't add new address if already in database
-                if (!isNewAddress)
-                {
-                    shoppingCart.Order.ShipToAddressId = addressOnFile.Id;
-                    if (shoppingCart.Order.ShipToAddress != null)
-                    {
-                        db.Entry(shoppingCart.Order.ShipToAddress).State = EntityState.Detached;
-                    }
-                    if (shoppingCart.Order.BillToAddress != null)
-                    {
-                        db.Entry(shoppingCart.Order.BillToAddress).State = EntityState.Detached;
-                    }
-                }
-            }
-
-            shoppingCart.Order.ShipToAddress.SetNullStringsToEmpty();
-
-            // Add new address to database
-            if (isNewAddress)
-            { 
-                shoppingCart.Order.ShipToAddress.Customer = customer;
-                db.Addresses.Add(shoppingCart.Order.ShipToAddress);
-            }
-
-            // bill to address the same as shipping address
-            if (shoppingCart.Order.BillToAddress == null || shoppingCart.Order.BillToAddress.Address1 == "")
-            {
-                shoppingCart.Order.BillToAddressId = shoppingCart.Order.ShipToAddressId;
-            }
-
-            // add order to database --------------------------------------------------
-            shoppingCart.Order.Cart = paymentDetails.Cart;
-            shoppingCart.Order.DateOrdered = currentTime;
-            db.Entry(shoppingCart.Order).State = EntityState.Modified;
-            // order details are already in db as part of shopping cart
-
-            await db.SaveChangesAsync();
-        }
-
+        
     }
 }

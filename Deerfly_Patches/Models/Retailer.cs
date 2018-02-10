@@ -7,7 +7,7 @@ namespace DeerflyPatches.Models
     public class Retailer
     {
         [Key]
-        public int RetailerId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 2)]

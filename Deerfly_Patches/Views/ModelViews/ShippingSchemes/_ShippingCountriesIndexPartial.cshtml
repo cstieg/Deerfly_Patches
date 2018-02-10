@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Cstieg.Sales.Models.ShippingCountry>
+
+<p>
+    @Html.ActionLink("Create New", "Create", "ShippingCountries", new { id = ViewBag.ShippingSchemeId }, new { })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdditionalShipping)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BaseShippingIsPerItem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdditionalShippingIsPerItem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FreeShipping)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinQty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxQty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalShipping)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseShippingIsPerItem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalShippingIsPerItem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FreeShipping)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "ShippingCountries", new { id = item.Id }, new { }) |
+                @Html.ActionLink("Details", "Details", "ShippingCountries", new { id = item.Id }, new { }) |
+                @Html.ActionLink("Delete", "Delete", "ShippingCountries", new { id = item.Id }, new { })
+            </td>
+        </tr>
+    }
+
+</table>
+

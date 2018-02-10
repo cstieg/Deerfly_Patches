@@ -32,9 +32,9 @@ paypal.Button.render({
     commit: true,
 
     // payment() is called when the button is clicked
-    payment: function (data, actions) {
+    payment: function (data, actions) {     
         // Get JSON order information from server
-        return $.get('/paypal/GetOrderJson?country=' + getCountry())
+        return $.get('/paypal/GetOrderJson?country=' + shoppingCartCountry.getCountry())
             .then(function (data) {
                 var payment = JSON.parse(data);
 
@@ -43,11 +43,11 @@ paypal.Button.render({
             },
             // on error
             function (data) {
-                alert('Error processing order: \n' + data.responseJSON.message);
+                alert('Error processing order: \n' + data.responseJSON.Message);
                 window.location.href = "/ShoppingCart";
             })
             .fail(function (data) {
-                alert('Error processing PayPal order: \n' + data.responseJSON.message);
+                alert('Error processing PayPal order: \n' + data.responseJSON.Message);
                 window.location.href = "/ShoppingCart";
             });
     },
@@ -72,19 +72,19 @@ paypal.Button.render({
                         return actions.payment.execute()
                             .then(function (data) {
                                 // Email an order confirmation page to the buyer
-                                $.post('/Mail/ConfirmOrder?cart=' + data.cart);
+                                $.post('/Mail/ConfirmOrder?cart=' + data.id);
 
                                 // Show a success page to the buyer
-                                window.location.href = '/ShoppingCart/OrderSuccess?cart=' + data.cart;
+                                window.location.href = '/ShoppingCart/OrderSuccess?cart=' + data.id;
                             },
                             function (data) {
-                                alert('Error in PayPal processing order: \n' + data.responseJSON.message);
+                                alert('Error in PayPal processing order: \n' + data.responseJSON.Message);
                                 lightbox.destroy();
                             });
                     },
                     error: function (data) {
                         if (data.responseJSON) {
-                            alert('Error processing order: ' + data.responseJSON.message);
+                            alert('Error processing order: ' + data.responseJSON.Message);
                         }
                         else {
                             alert('Error processing order.');

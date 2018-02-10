@@ -1,0 +1,31 @@
+﻿/* LightBoxMessage.css */
+
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: black;
+    filter: alpha(opacity=50);
+    opacity: 0.8;
+    z-index: 100;
+}
+
+.lightbox-message {
+    padding: 30px;
+    border: gray outset 3px;
+    border-radius: 14px;
+    color: black;
+    background-color: white;
+    position: fixed;
+    top: 30%;
+    left: 30%;
+    width: 40vw;
+    min-height: 20vh;
+    max-height: 50vh;
+    overflow: auto;
+    z-index: 1000;
+    font-size: 18pt;
+}

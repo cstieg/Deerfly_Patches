@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.WebFiles;
+using Cstieg.WebFiles.Controllers;
+using DeerflyPatches.Models;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Cstieg.ControllerHelper.ActionFilters;
-using Cstieg.WebFiles;
-using Cstieg.WebFiles.Controllers;
-using DeerflyPatches.Models;
 
 namespace DeerflyPatches.Controllers
 {
@@ -36,7 +36,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Testimonial testimonial = await db.Testimonials.FindAsync(id);
+            Testimonial testimonial = await db.Testimonials.FirstOrDefaultAsync(x => x.Id == id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -94,7 +94,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Testimonial testimonial = await db.Testimonials.FindAsync(id);
+            Testimonial testimonial = await db.Testimonials.FirstOrDefaultAsync(x => x.Id == id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -152,7 +152,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Testimonial testimonial = await db.Testimonials.FindAsync(id);
+            Testimonial testimonial = await db.Testimonials.FirstOrDefaultAsync(x => x.Id == id);
             if (testimonial == null)
             {
                 return HttpNotFound();
@@ -170,7 +170,7 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Testimonial testimonial = await db.Testimonials.FindAsync(id);
+            Testimonial testimonial = await db.Testimonials.FirstOrDefaultAsync(x => x.Id == id);
 
             // Remove old image when deleting
             imageSaver.DeleteImageWithMultipleSizes(testimonial.ImageUrl);

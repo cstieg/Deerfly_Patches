@@ -26,13 +26,13 @@
             @foreach (var testimonial in Model)
             {
                 <li class="testimonial-item"
-                    onmouseover="displayTestimonial(@testimonial.TestimonialId, '@testimonial.ImageUrl',
+                    onmouseover="displayTestimonial(@testimonial.Id, '@testimonial.ImageUrl',
                     '@testimonial.ImageSrcSet')">
                     <a href="@testimonial.ImageUrl">
-                        <p class="testimonial-label" id="@testimonial.TestimonialId">@testimonial.Label</p>
+                        <p class="testimonial-label" id="@testimonial.Id">@testimonial.Label</p>
                     </a>
                     <hr />
-                    <div id="testimonial-display-inline-@testimonial.TestimonialId"></div>
+                    <div id="testimonial-display-inline-@testimonial.Id"></div>
                 </li>
             }
         </ul>

@@ -7,7 +7,7 @@ namespace DeerflyPatches.Models
     public class Testimonial
     {
         [Key]
-        public int TestimonialId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

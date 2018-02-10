@@ -1,5 +1,6 @@
 ﻿using Cstieg.ControllerHelper;
 using Cstieg.Sales.Models;
+using DeerflyPatches.Models;
 using RazorEngine;
 using RazorEngine.Templating;
 using System.Data.Entity;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using DeerflyPatches.Models;
 
 namespace DeerflyPatches.Controllers
 {
@@ -32,7 +32,7 @@ namespace DeerflyPatches.Controllers
             {
                 return HttpNotFound();
             }
-            order.ShipToAddress = await db.Addresses.FindAsync(order.ShipToAddressId);
+            order.ShipToAddress = await db.Addresses.FirstOrDefaultAsync(o => o.Id == order.ShipToAddressId);
 
             // Add baseURL for images to viewBag
             var viewBag = new DynamicViewBag();

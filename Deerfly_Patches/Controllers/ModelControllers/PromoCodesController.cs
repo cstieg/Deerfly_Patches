@@ -1,9 +1,9 @@
-﻿using System.Data.Entity;
-using System.Web.Mvc;
-using DeerflyPatches.Models;
-using System.Threading.Tasks;
-using Cstieg.ControllerHelper.ActionFilters;
+﻿using Cstieg.ControllerHelper.ActionFilters;
 using Cstieg.Sales.Models;
+using DeerflyPatches.Models;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace DeerflyPatches.Controllers
 {
@@ -33,7 +33,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
+            PromoCode promoCode = await db.PromoCodes.FirstOrDefaultAsync(p => p.Id == id);
             if (promoCode == null)
             {
                 return HttpNotFound();
@@ -44,9 +44,9 @@ namespace DeerflyPatches.Controllers
         // GET: PromoCodes/Create
         public ActionResult Create()
         {
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "Id", "Name");
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "Id", "Name");
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "Id", "Name");
+            ViewBag.PromotionalItemList = new SelectList(db.Products, "Id", "Name");
+            ViewBag.WithPurchaseOfList = new SelectList(db.Products, "Id", "Name");
+            ViewBag.SpecialPriceItemList = new SelectList(db.Products, "Id", "Name");
             return View();
         }
 
@@ -62,9 +62,9 @@ namespace DeerflyPatches.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PromotionalItemId = new SelectList(db.Products, "Id", "Name", promoCode.PromotionalItemId);
-            ViewBag.WithPurchaseOfId = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemId = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.PromotionalItemList = new SelectList(db.Products, "Id", "Name", promoCode.PromotionalItemId);
+            ViewBag.WithPurchaseOfList = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemList = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -75,14 +75,14 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
+            PromoCode promoCode = await db.PromoCodes.FirstOrDefaultAsync(p => p.Id == id);
             if (promoCode == null)
             {
                 return HttpNotFound();
             }
             ViewBag.PromotionalItemList = new SelectList(db.Products, "Id", "Name", promoCode.PromotionalItemId);
-            ViewBag.WithPurchaseOfIdList = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
-            ViewBag.SpecialPriceItemIdList = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
+            ViewBag.WithPurchaseOfList = new SelectList(db.Products, "Id", "Name", promoCode.WithPurchaseOfId);
+            ViewBag.SpecialPriceItemList = new SelectList(db.Products, "Id", "Name", promoCode.SpecialPriceItemId);
             return View(promoCode);
         }
 
@@ -110,7 +110,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
+            PromoCode promoCode = await db.PromoCodes.FirstOrDefaultAsync(p => p.Id == id);
             if (promoCode == null)
             {
                 return HttpNotFound();
@@ -123,7 +123,7 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            PromoCode promoCode = await db.PromoCodes.FindAsync(id);
+            PromoCode promoCode = await db.PromoCodes.FirstOrDefaultAsync(p => p.Id == id);
             db.PromoCodes.Remove(promoCode);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

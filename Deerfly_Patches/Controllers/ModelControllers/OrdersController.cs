@@ -38,7 +38,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -46,7 +46,7 @@ namespace DeerflyPatches.Controllers
            
             foreach (var orderDetail in order.OrderDetails)
             {
-                orderDetail.Product = await db.Products.FindAsync(orderDetail.ProductId);
+                orderDetail.Product = await db.Products.FirstOrDefaultAsync(o => o.Id == orderDetail.ProductId);
             }
             return View(order);
         }
@@ -58,7 +58,7 @@ namespace DeerflyPatches.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -66,7 +66,7 @@ namespace DeerflyPatches.Controllers
 
             foreach (var orderDetail in order.OrderDetails)
             {
-                orderDetail.Product = await db.Products.FindAsync(orderDetail.ProductId);
+                orderDetail.Product = await db.Products.FirstOrDefaultAsync(o => o.Id == orderDetail.ProductId);
             }
 
             return View(order);
@@ -77,7 +77,7 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.FirstOrDefaultAsync(o => o.Id == id);
             db.Orders.Remove(order);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

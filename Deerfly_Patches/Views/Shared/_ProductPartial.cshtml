@@ -1,9 +1,13 @@
-﻿@model DeerflyPatches.Models.Product
+﻿@model Cstieg.Sales.Models.Product
+
+@{ 
+    string urlName = Model.UrlName ?? Model.Id.ToString();
+}
 
 <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item" 
          onmouseover="$(this).addClass('selected');" 
          onmouseout="$(this).removeClass('selected');">
-    <a href="/Home/Product/@Model.Id">
+    <a href="/Product/@urlName">
         <div class="image-wrapper">
             @if (Model.WebImages != null && Model.WebImages.Count() > 0)
             {
@@ -23,10 +27,10 @@
     <p class="product-price">$@Model.Price</p>
     <div class="button-container centered">
 
-        <button class="btn buy-now" onclick="buyNow(@Model.Id)">Add to Shopping Cart</button>
+        <button class="btn buy-now" onclick="shoppingCart.buyNow(@Model.Id)">Add to Shopping Cart</button>
         <!--
     <br />
-    <button class="btn add-to-shopping-cart" onclick="addToShoppingCart(@Model.Id)">Add to Shopping Cart</button>
+    <button class="btn add-to-shopping-cart" onclick="shoppingCart.addToShoppingCart(@Model.Id)">Add to Shopping Cart</button>
         -->
     </div>
 </article>

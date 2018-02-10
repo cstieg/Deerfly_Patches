@@ -9,7 +9,7 @@
 
 */
 
-// REQUIRES: RandomID.js
+// REQUIRES: RandomID.js, LightboxMessage.css
 var LightboxMessage = function (message) {
     "use strict";
     this.message = message || '';

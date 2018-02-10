@@ -1,4 +1,5 @@
-﻿using DeerflyPatches.Models;
+﻿using Cstieg.Sales.Models;
+using DeerflyPatches.Models;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
@@ -27,7 +28,10 @@ namespace DeerflyPatches.Controllers
             var products = await db.Products.Where(p => p.DisplayOnFrontPage).ToListAsync();
             foreach (var product in products)
             {
-                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+                if (product.WebImages != null)
+                {
+                    product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+                }
             }
             return View(products);
         }
@@ -39,7 +43,10 @@ namespace DeerflyPatches.Controllers
             var products = await db.Products.Where(p => !p.DoNotDisplay).ToListAsync();
             foreach (var product in products)
             {
-                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+                if (product.WebImages != null)
+                {
+                    product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+                }
             }
             return View(products);
         }
@@ -58,7 +65,7 @@ namespace DeerflyPatches.Controllers
             }
             catch
             {
-                return await ProductByProductName(id);
+                return await ProductByName(id);
             }
         }
         
@@ -67,7 +74,7 @@ namespace DeerflyPatches.Controllers
         {
             string circumferenceParam = Request.Params.Get("circumference");
             string unit = Request.Params.Get("unit");
-            var product = await db.Products.FindAsync(id);
+            var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -78,15 +85,18 @@ namespace DeerflyPatches.Controllers
         }
 
         // GET: ProductById/Product Name
-        public async Task<ActionResult> ProductByProductName(string productName)
+        public async Task<ActionResult> ProductByName(string urlName)
         {
-            Product product = await db.Products.Where(p => p.Name.ToLower() == productName.ToLower()).SingleOrDefaultAsync();
+            Product product = await db.Products.Where(p => p.UrlName != null && p.UrlName.ToLower() == urlName.ToLower()).SingleOrDefaultAsync();
             if (product == null)
             {
                 return HttpNotFound();
             }
 
-            product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+            if (product.WebImages != null)
+            {
+                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
+            }
             return View("Product", product);
         }
 

@@ -1,4 +1,11 @@
-﻿using System;
+﻿using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.Geography;
+using Cstieg.Geography.GoogleMaps;
+using Cstieg.Telephony;
+using Cstieg.WebFiles.Controllers;
+using CsvHelper;
+using DeerflyPatches.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
@@ -6,13 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CsvHelper;
-using Cstieg.Telephony;
-using Cstieg.WebFiles.Controllers;
-using DeerflyPatches.Models;
-using Cstieg.ControllerHelper.ActionFilters;
-using Cstieg.Geography.GoogleMaps;
-using Cstieg.Geography;
 
 namespace DeerflyPatches.Controllers
 {
@@ -42,7 +42,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Retailer retailer = await db.Retailers.FindAsync(id);
+            Retailer retailer = await db.Retailers.FirstOrDefaultAsync(r => r.Id == id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -81,7 +81,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Retailer retailer = await db.Retailers.FindAsync(id);
+            Retailer retailer = await db.Retailers.FirstOrDefaultAsync(r => r.Id == id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -115,7 +115,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Retailer retailer = await db.Retailers.FindAsync(id);
+            Retailer retailer = await db.Retailers.FirstOrDefaultAsync(r => r.Id == id);
             if (retailer == null)
             {
                 return HttpNotFound();
@@ -128,7 +128,7 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Retailer retailer = await db.Retailers.FindAsync(id);
+            Retailer retailer = await db.Retailers.FirstOrDefaultAsync(r => r.Id == id);
             db.Retailers.Remove(retailer);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -171,7 +171,7 @@ namespace DeerflyPatches.Controllers
             bool deleteCurrent = Request.Params.Get("deleteCurrent") == "on";
             if (deleteCurrent)
             {
-                db.Retailers.RemoveRange(await db.Retailers.ToListAsync());
+                await db.Database.ExecuteSqlCommandAsync("DELETE FROM Retailers;");
             }
 
             // List of errors
@@ -287,7 +287,7 @@ namespace DeerflyPatches.Controllers
                 db.Retailers.Add(retailer);
                 await db.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ErrorList.Add(string.Join(",", dataRow));
             }

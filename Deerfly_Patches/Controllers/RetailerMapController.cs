@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Cstieg.ControllerHelper;
+using Cstieg.Geography;
+using Cstieg.Geography.GoogleMaps;
+using DeerflyPatches.Models;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-using DeerflyPatches.Models;
-using Cstieg.ControllerHelper;
-using Cstieg.Geography;
-using Cstieg.Geography.GoogleMaps;
 
 namespace DeerflyPatches.Controllers
 {
