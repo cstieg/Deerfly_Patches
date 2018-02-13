@@ -14,7 +14,10 @@
         @Html.DisplayFor(model => model.DateOrdered)
     </dd>
 
-    @Html.Partial("_AddressDetailPartial", Model.ShipToAddress)
+    @if (Model.ShipToAddress != null)
+    {
+        @Html.Partial("_AddressDetailPartial", Model.ShipToAddress)
+    }
 
     <dt>
         @Html.DisplayNameFor(model => model.Subtotal)
