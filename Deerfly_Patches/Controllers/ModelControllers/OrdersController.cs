@@ -22,7 +22,9 @@ namespace DeerflyPatches.Controllers
         [Route("")]
         public async Task<ActionResult> Index()
         {
-            var orders = db.Orders.Include(o => o.Customer).OrderByDescending(o => o.DateOrdered);
+            var orders = db.Orders.Where(o => o.CustomerId != null)
+                .Include(o => o.Customer).Include(o => o.ShipToAddress)
+                .OrderByDescending(o => o.DateOrdered).Take(100);
             var orderList = await orders.ToListAsync();
             foreach (var order in orderList)
             {
