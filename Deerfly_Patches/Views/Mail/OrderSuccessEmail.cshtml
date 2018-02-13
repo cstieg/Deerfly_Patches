@@ -2,29 +2,49 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Order Success - @Model.ToString()</title>
-    </head>
-    <body>
+<head>
+    <meta charset="utf-8" />
+    <title>Order Success - @Model.ToString()</title>
+</head>
+<body style="background-color:#225F22;margin:0;padding:0;font-family:arial">
+    <div style="width:800px;margin:auto;padding:15px;height:100vh;background-color:white;display:table">
+        <div>
+            <img src="https://www.deerflypatches.com\Content\images\deerflypatches-logo.png" style="max-width:300px">
+        </div>
         <h1>Thank you for your order, @Model.Customer.FirstName!</h1>
         <br />
         <p>You have successfully placed your order.  We will ship to @Model.ShipToAddress via US Postal Service.</p>
         <br />
-        <h2>Order Details</h2>
-        <hr />
-        @foreach (var orderDetails in Model.OrderDetails)
+        <h2 style="background-color:#B2FF76;border:#225F22 solid medium;padding:5px;border-radius:7px;">Order Details</h2>
+        @foreach (var orderDetail in Model.OrderDetails)
         {
-            if (orderDetails.Product.WebImages.Count > 0)
+            if (orderDetail.Product.WebImages.Count > 0)
             {
-                <img src="@ViewBag.baseURL@orderDetails.Product.WebImages.First().ImageUrl" />
+                <img src="@ViewBag.baseURL@orderDetail.Product.WebImages.First().ImageUrl" />
             }
-            <p>Item: @orderDetails.Product.Name</p>
-            <p>Quantity: @orderDetails.Quantity</p>
-            <p>Paid: $@orderDetails.TotalPrice</p>
+            <p style="font-weight:bold">Item: @orderDetail.Product.Name</p>
+            <p>Quantity: @orderDetail.Quantity</p>
+            <p>Paid: $@orderDetail.TotalPrice</p>
             <br />
         }
-        <hr />
-        <p>Total: $@Model.Total</p>
-    </body>
+        <hr style="color: green;" />
+        <p style="font-weight:bold">Total: $@Model.Total</p>
+
+        <div style="margin-top:100px;">
+            <h4 style="color:#555;">You may also be interested in this website:</h4>
+                <div style="margin:10px 0;padding:5px;border:lightgray 2px outset;border-radius:10px;max-width:350px;background:linear-gradient(#FEE, #FDD)">
+                    <a href="https://www.stovepipeheatsaver.com" style="text-decoration:none;color:black;display:flex">
+                        <div>
+                            <img src="https://www.StovepipeHeatSaver.com\Content\images\StovepipeHeatSaverLogo-small.png"
+                                 style="max-width:100px">
+                        </div>
+                        <div style="margin:5px;padding:10px;font-family:Tahoma">
+                            Reclaim heat from your furnace or woodstove by attaching snap-on radiator bands to your stove pipe
+                        </div>
+                    </a>
+                </div>
+
+        </div>
+    </div>
+</body>
 </html>
