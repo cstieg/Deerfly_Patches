@@ -427,6 +427,18 @@
     <Compile Include="Migrations\201802091902139_Store.Designer.cs">
       <DependentUpon>201802091902139_Store.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802122212331_PromoCodeNullable.cs" />
+    <Compile Include="Migrations\201802122212331_PromoCodeNullable.Designer.cs">
+      <DependentUpon>201802122212331_PromoCodeNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802131825146_FixNullable.cs" />
+    <Compile Include="Migrations\201802131825146_FixNullable.Designer.cs">
+      <DependentUpon>201802131825146_FixNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802131830315_FixNullable1.cs" />
+    <Compile Include="Migrations\201802131830315_FixNullable1.Designer.cs">
+      <DependentUpon>201802131830315_FixNullable1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -760,6 +772,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802091902139_Store.resx">
       <DependentUpon>201802091902139_Store.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802122212331_PromoCodeNullable.resx">
+      <DependentUpon>201802122212331_PromoCodeNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802131825146_FixNullable.resx">
+      <DependentUpon>201802131825146_FixNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802131830315_FixNullable1.resx">
+      <DependentUpon>201802131830315_FixNullable1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

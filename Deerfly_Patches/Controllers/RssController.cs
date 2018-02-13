@@ -23,7 +23,7 @@ namespace DeerflyPatches.Controllers
         /// Gets an RSS file containing product information to be consumed by Google Shopping
         /// </summary>
         /// <returns>A text file containing all of the product information in RSS XML format</returns>
-        public async Task<FileStreamResult> Products()
+        public async Task<FileResult> Products()
         {
             var rssStream = await _rssService.GetRssAsync();
 
