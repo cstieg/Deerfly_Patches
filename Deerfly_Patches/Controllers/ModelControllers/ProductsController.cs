@@ -299,12 +299,12 @@ namespace DeerflyPatches.Controllers
             }
             catch (JsonReaderException e)
             {
-                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message, field = e.Path});
+                var returnData = JsonConvert.SerializeObject(new { item = existingProduct, error = e.Message, field = e.Path});
                 return this.JError(400, "Invalid data!", returnData);
             }
             catch (Exception e)
             {
-                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message });
+                var returnData = JsonConvert.SerializeObject(new { item = existingProduct, error = e.Message });
                 return this.JError(400, "Unable to save!", returnData);
             }
             return this.JOk();

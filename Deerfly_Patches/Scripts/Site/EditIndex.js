@@ -20,7 +20,7 @@
 
 // HTML should also have the following button to toggle edit mode
 /*
-<button onclick="editIndex.toggleEditable(this, '/Products/Update');">Edit Values As Table</button>
+<button onclick="editIndex.toggleEditable(this, '/Edit/Products/Update');">Edit Values As Table</button>
 */
 
 // Controller should look something like this:
@@ -51,12 +51,12 @@
             }
             catch (JsonReaderException e)
             {
-                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message, field = e.Path});
+                var returnData = JsonConvert.SerializeObject(new { item = existingProduct, error = e.Message, field = e.Path});
                 return this.JError(400, "Invalid data!", returnData);
             }
             catch (Exception e)
             {
-                var returnData = JsonConvert.SerializeObject(new { product = existingProduct, error = e.Message });
+                var returnData = JsonConvert.SerializeObject(new { item = existingProduct, error = e.Message });
                 return this.JError(400, "Unable to save!", returnData);
             }
             return this.JOk();
@@ -227,12 +227,17 @@ var editIndex = {
                 setTimeout(self.clearColorBorderClasses, 5000, $target);
             }, 10);
         }).fail(function (xhr, status, error) {
+            if (!xhr.responseJSON) {
+                alert("Failure to post data: " + xhr.status);
+            }
+
             // get error data from response
-            var returnData = JSON.parse(xhr.responseJSON.data);
+            var returnData = JSON.parse(xhr.responseJSON.Data);
             var errorField = returnData.field;
-            var errorMessage = xhr.responseJSON.message;
-            var product = returnData.product;
-            var target = $('tr[model-id="' + product.ProductId + '"]');
+            var errorMessage = xhr.responseJSON.Message;
+            var item = returnData.item;
+            debugger;
+            var target = $('tr[model-id="' + item.Id + '"]');
 
             // add red border on row or field to indicate failure
             var $errorField;
