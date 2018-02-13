@@ -9,7 +9,7 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-<button class="pull-right" onclick="editIndex.toggleEditable(this, '/Products/Update');">Edit Values As Table</button>
+<button class="pull-right" onclick="editIndex.toggleEditable(this, '/Edit/Products/Update');">Edit Values As Table</button>
 <table class="table">
     <tr>
         <th>
@@ -76,10 +76,13 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
 
 </table>
+
+<div>
+    @Html.ActionLink("Back to Edit", "Index", "edit")
+</div>

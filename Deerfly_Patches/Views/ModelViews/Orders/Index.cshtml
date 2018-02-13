@@ -41,7 +41,10 @@
             @Html.DisplayFor(modelItem => item.Customer.CustomerName)
         </td>
         <td>
-            @item.ShipToAddress.ToString();
+            @if(item.ShipToAddress != null)
+            {
+                <span>@item.ShipToAddress.ToString()</span>
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -63,3 +66,7 @@
 }
 
 </table>
+
+<div>
+    @Html.ActionLink("Back to Edit", "Index", "edit")
+</div>
