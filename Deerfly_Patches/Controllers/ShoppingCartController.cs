@@ -1,4 +1,5 @@
 ﻿using Cstieg.ControllerHelper;
+using Cstieg.FileHelper;
 using Cstieg.Sales;
 using Cstieg.Sales.Exceptions;
 using Cstieg.Sales.Models;
@@ -6,9 +7,9 @@ using Cstieg.Sales.PayPal;
 using Cstieg.Sales.PayPal.Models;
 using DeerflyPatches.Models;
 using System;
-using System.Configuration;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -19,22 +20,15 @@ namespace DeerflyPatches.Controllers
     /// </summary>
     public class ShoppingCartController : BaseController
     {
+        private string _paypalConfigFilePath = HostingEnvironment.MapPath("/paypal.json");
+
         private ApplicationDbContext db = new ApplicationDbContext();
         private ShoppingCartService _shoppingCartService;
-        private PayPalClientInfoService _payPalClientInfoService;
-        private PayPalClientAccount _clientAccount;
-
-        public ShoppingCartController()
-        {
-            string payPalSettingsJson = ConfigurationManager.AppSettings["PayPalSettingsJson"];
-            _payPalClientInfoService = new PayPalClientInfoService(payPalSettingsJson);
-            _clientAccount = _payPalClientInfoService.GetClientAccount();
-        }
 
         /// <summary>
         /// Initialize settings that are unabled to be initialized in constructor
         /// </summary>
-        protected override void Initialize(RequestContext requestContext)
+        protected async override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
 
@@ -44,7 +38,7 @@ namespace DeerflyPatches.Controllers
         // GET: ShoppingCart
         public async Task<ActionResult> Index()
         {
-            ViewBag.ClientInfo = _clientAccount;
+            ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
             //ViewBag.Countries = await db.Countries.ToListAsync();
             ShoppingCart shoppingCart = await _shoppingCartService.GetShoppingCartAsync();
             return View(shoppingCart);
@@ -205,13 +199,13 @@ namespace DeerflyPatches.Controllers
             catch (InvalidPromoCodeException e)
             {
                 ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: Invalid promo code - " + e.Message);
-                ViewBag.ClientInfo = _clientAccount;
+                ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
                 return View("Index", await _shoppingCartService.GetShoppingCartAsync());
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: " + e.Message);
-                ViewBag.ClientInfo = _clientAccount;
+                ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
                 return View("Index", await _shoppingCartService.GetShoppingCartAsync());
             }
         }

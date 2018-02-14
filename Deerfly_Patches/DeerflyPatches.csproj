@@ -59,6 +59,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cstieg.FileHelper">
+      <HintPath>..\..\_Reusables\C#\FileHelper\FileHelper\bin\Release\Cstieg.FileHelper.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
@@ -500,6 +503,7 @@
     </Content>
     <Content Include="Content\images\favicon\manifest.json" />
     <Content Include="dfp.pfx" />
+    <Content Include="PayPal.json" />
     <None Include="Properties\PublishProfiles\christopherstieg.com - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\DeerflyPatches - TMD FTP.pubxml" />
@@ -794,6 +798,10 @@
     <ProjectReference Include="..\..\_Reusables\C#\ControllerHelper\ControllerHelper\ControllerHelper.csproj">
       <Project>{c8db3f11-651c-4a00-b2d6-650700d0007f}</Project>
       <Name>ControllerHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\_Reusables\C#\ObjectHelper\ObjectHelper.csproj">
+      <Project>{6e7fcfb9-5536-4418-ac96-60ff5972b9d2}</Project>
+      <Name>ObjectHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\_Reusables\C#\Sales.PayPal\Sales.PayPal\Sales.PayPal.csproj">
       <Project>{fd833e40-981e-494f-af45-048f9a2714ee}</Project>

@@ -1,11 +1,9 @@
 ﻿using Cstieg.ControllerHelper;
 using Cstieg.Sales;
 using Cstieg.Sales.Models;
-using Cstieg.Sales.PayPal;
 using Cstieg.Sales.Repositories;
 using DeerflyPatches.Models;
 using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -19,18 +17,8 @@ namespace DeerflyPatches.Controllers
     {
         private ISalesDbContext _context = new ApplicationDbContext();
         private IShoppingCartService _shoppingCartService;
-        private PayPalClientInfoService _payPalClientInfoService;
-        private PayPalPaymentProviderService _payPalService;
-
-        public PayPalController() : base()
-        {
-            _payPalClientInfoService = new PayPalClientInfoService(ConfigurationManager.AppSettings["PayPalSettingsJson"]);
-            _payPalService = new PayPalPaymentProviderService(_payPalClientInfoService);
-        }
-
-        /// <summary>
-        /// Initialize settings that are unabled to be initialized in constructor
-        /// </summary>
+    
+        // Initialize variables needing requestContext, unable to initialize in controller
         protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
@@ -49,7 +37,7 @@ namespace DeerflyPatches.Controllers
             try
             {
                 ShoppingCart shoppingCart = await _shoppingCartService.SetCountryAsync(country);
-                string orderJson = _payPalService.CreatePaymentDetails(shoppingCart);
+                string orderJson = (await GetPayPalService()).CreatePaymentDetails(shoppingCart);
                 return Json(orderJson, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -69,6 +57,7 @@ namespace DeerflyPatches.Controllers
         {
             try
             {
+                var _payPalService = await GetPayPalService();
                 _payPalService.SetPaymentResponse(paymentDetails);
                 var shipToAddress = _payPalService.GetShippingAddress();
                 var customer = _payPalService.GetCustomer();
