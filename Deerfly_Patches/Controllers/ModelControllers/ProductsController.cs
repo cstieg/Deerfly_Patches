@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Cstieg.ControllerHelper;
+using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.ObjectHelpers;
+using Cstieg.Sales.Models;
+using Cstieg.WebFiles;
+using Cstieg.WebFiles.Controllers;
+using DeerflyPatches.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Cstieg.ControllerHelper;
-using Cstieg.WebFiles.Controllers;
-using Cstieg.WebFiles;
-using DeerflyPatches.Models;
-using Newtonsoft.Json;
-using Cstieg.ControllerHelper.ActionFilters;
-using Cstieg.Sales.Models;
 
 namespace DeerflyPatches.Controllers
 {
@@ -291,10 +292,9 @@ namespace DeerflyPatches.Controllers
             try
             {
                 Product newProduct = JsonConvert.DeserializeObject<Product>(Request.Params.Get("data"));
-                newProduct.Id = id;
+                ObjectHelper.CopyProperties(newProduct, existingProduct, new List<string>() { "Id" }, true);
 
-                db.Entry(existingProduct).State = EntityState.Detached;
-                db.Entry(newProduct).State = EntityState.Modified;
+                db.Entry(existingProduct).State = EntityState.Modified;
                 await db.SaveChangesAsync();
             }
             catch (JsonReaderException e)
