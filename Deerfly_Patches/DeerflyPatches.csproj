@@ -442,6 +442,26 @@
     <Compile Include="Migrations\201802131830315_FixNullable1.Designer.cs">
       <DependentUpon>201802131830315_FixNullable1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802151711048_ShoppingCartOrderCreateDate.cs" />
+    <Compile Include="Migrations\201802151711048_ShoppingCartOrderCreateDate.Designer.cs">
+      <DependentUpon>201802151711048_ShoppingCartOrderCreateDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802151817539_CreatedNonNullable.cs" />
+    <Compile Include="Migrations\201802151817539_CreatedNonNullable.Designer.cs">
+      <DependentUpon>201802151817539_CreatedNonNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802151849545_FixCreated.cs" />
+    <Compile Include="Migrations\201802151849545_FixCreated.Designer.cs">
+      <DependentUpon>201802151849545_FixCreated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802151852228_FixCreated1.cs" />
+    <Compile Include="Migrations\201802151852228_FixCreated1.Designer.cs">
+      <DependentUpon>201802151852228_FixCreated1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802151858140_FixCreated2.cs" />
+    <Compile Include="Migrations\201802151858140_FixCreated2.Designer.cs">
+      <DependentUpon>201802151858140_FixCreated2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -785,6 +805,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802131830315_FixNullable1.resx">
       <DependentUpon>201802131830315_FixNullable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151711048_ShoppingCartOrderCreateDate.resx">
+      <DependentUpon>201802151711048_ShoppingCartOrderCreateDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151817539_CreatedNonNullable.resx">
+      <DependentUpon>201802151817539_CreatedNonNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151849545_FixCreated.resx">
+      <DependentUpon>201802151849545_FixCreated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151852228_FixCreated1.resx">
+      <DependentUpon>201802151852228_FixCreated1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151858140_FixCreated2.resx">
+      <DependentUpon>201802151858140_FixCreated2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
