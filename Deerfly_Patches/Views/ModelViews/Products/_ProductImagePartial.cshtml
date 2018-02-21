@@ -3,7 +3,7 @@
 <picture id="image-@Model.Id">
     <img src="@Model.ImageUrl" class="thumbnail" />
     <p>@Model.Caption</p>
-    <button onclick="ImageUpload.deleteImage('/Edit/Products/DeleteImage/@Model.ProductId', @Model.Id); return false;">
+    <button type="button" onclick="ImageUpload.deleteImage('/Edit/Products/DeleteImage/@Model.ProductId', @Model.Id); return false;">
         Delete Image
     </button>
 </picture>
