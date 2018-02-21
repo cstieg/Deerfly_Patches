@@ -15,23 +15,13 @@ namespace DeerflyPatches.Controllers
     [OutputCache(CacheProfile = "CacheForAWeek")]
     public class HomeController : BaseController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-            filterContext.HttpContext.Response.AddCacheItemDependency("Pages");
-        }
-
+        // GET: /
         public async Task<ActionResult> Index()
         {
-            var products = await db.Products.Where(p => p.DisplayOnFrontPage).ToListAsync();
+            var products = await _context.Products.Where(p => p.DisplayOnFrontPage).ToListAsync();
             foreach (var product in products)
             {
-                if (product.WebImages != null)
-                {
-                    product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
-                }
+                product.WebImages = product.WebImages?.OrderBy(w => w.Order).ToList();
             }
             return View(products);
         }
@@ -74,7 +64,7 @@ namespace DeerflyPatches.Controllers
         {
             string circumferenceParam = Request.Params.Get("circumference");
             string unit = Request.Params.Get("unit");
-            var product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -87,7 +77,7 @@ namespace DeerflyPatches.Controllers
         // GET: ProductById/Product Name
         public async Task<ActionResult> ProductByName(string urlName)
         {
-            Product product = await db.Products.Where(p => p.UrlName != null && p.UrlName.ToLower() == urlName.ToLower()).SingleOrDefaultAsync();
+            Product product = await _context.Products.Where(p => p.UrlName != null && p.UrlName.ToLower() == urlName.ToLower()).SingleOrDefaultAsync();
             if (product == null)
             {
                 return HttpNotFound();
@@ -107,8 +97,8 @@ namespace DeerflyPatches.Controllers
 
         public async Task<ActionResult> Testimonials()
         {
-            var testimonials = await db.Testimonials.ToListAsync();
-            return View(await db.Testimonials.ToListAsync());
+            var testimonials = await _context.Testimonials.ToListAsync();
+            return View(await _context.Testimonials.ToListAsync());
         }
 
         public ActionResult Faq()

@@ -28,7 +28,7 @@ namespace DeerflyPatches.Controllers
         /// <summary>
         /// Initialize settings that are unabled to be initialized in constructor
         /// </summary>
-        protected async override void Initialize(RequestContext requestContext)
+        protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
 
@@ -38,7 +38,7 @@ namespace DeerflyPatches.Controllers
         // GET: ShoppingCart
         public async Task<ActionResult> Index()
         {
-            ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
+            ViewBag.ClientInfo = await GetActivePayPalClientAccountAsync();
             //ViewBag.Countries = await db.Countries.ToListAsync();
             ShoppingCart shoppingCart = await _shoppingCartService.GetShoppingCartAsync();
             return View(shoppingCart);
@@ -199,13 +199,13 @@ namespace DeerflyPatches.Controllers
             catch (InvalidPromoCodeException e)
             {
                 ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: Invalid promo code - " + e.Message);
-                ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
+                ViewBag.ClientInfo = await GetActivePayPalClientAccountAsync();
                 return View("Index", await _shoppingCartService.GetShoppingCartAsync());
             }
             catch (Exception e)
             {
                 ModelState.AddModelError("PromoCodesAdded", "Failed to add promocode: " + e.Message);
-                ViewBag.ClientInfo = await GetPayPalClientAccountAsync();
+                ViewBag.ClientInfo = await GetActivePayPalClientAccountAsync();
                 return View("Index", await _shoppingCartService.GetShoppingCartAsync());
             }
         }

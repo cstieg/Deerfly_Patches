@@ -68,31 +68,31 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2018 15:20:02</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.dll">
-      <publishTime>02/14/2018 15:20:04</publishTime>
+      <publishTime>02/21/2018 14:32:14</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.dll.config">
-      <publishTime>01/26/2018 09:39:30</publishTime>
+      <publishTime>02/21/2018 11:59:26</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.PayPal.dll">
-      <publishTime>02/14/2018 15:20:02</publishTime>
+      <publishTime>02/21/2018 14:32:15</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.PayPal.dll.config">
       <publishTime>01/31/2018 15:31:24</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.PayPal.pdb">
-      <publishTime>02/14/2018 15:20:02</publishTime>
+      <publishTime>02/21/2018 14:32:15</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.pdb">
-      <publishTime>02/14/2018 15:20:04</publishTime>
+      <publishTime>02/21/2018 14:32:14</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.RSS.dll">
-      <publishTime>02/14/2018 15:20:05</publishTime>
+      <publishTime>02/21/2018 14:32:16</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.RSS.dll.config">
       <publishTime>02/07/2018 22:46:44</publishTime>
     </File>
     <File Include="bin/Cstieg.Sales.RSS.pdb">
-      <publishTime>02/14/2018 15:20:05</publishTime>
+      <publishTime>02/21/2018 14:32:16</publishTime>
     </File>
     <File Include="bin/CsvHelper.dll">
       <publishTime>09/09/2016 14:59:46</publishTime>
@@ -110,10 +110,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/01/2017 14:00:14</publishTime>
     </File>
     <File Include="bin/DeerflyPatches.dll">
-      <publishTime>02/14/2018 15:20:23</publishTime>
+      <publishTime>02/21/2018 14:32:39</publishTime>
     </File>
     <File Include="bin/DeerflyPatches.pdb">
-      <publishTime>02/14/2018 15:20:23</publishTime>
+      <publishTime>02/21/2018 14:32:39</publishTime>
     </File>
     <File Include="bin/Deerfly_Patches.dll">
       <publishTime>12/27/2017 20:38:58</publishTime>
@@ -620,7 +620,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/05/2018 12:55:19</publishTime>
     </File>
     <File Include="PayPal.json">
-      <publishTime>02/14/2018 15:23:25</publishTime>
+      <publishTime>02/21/2018 14:31:37</publishTime>
     </File>
     <File Include="PayPal.live.json">
       <publishTime>11/21/2017 11:04:42</publishTime>
@@ -953,10 +953,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 15:04:54</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/ModifyPartial.cshtml">
-      <publishTime>02/09/2018 14:49:48</publishTime>
+      <publishTime>02/14/2018 17:51:04</publishTime>
     </File>
     <File Include="Views/ModelViews/Products/_ProductImagePartial.cshtml">
-      <publishTime>02/04/2018 23:07:38</publishTime>
+      <publishTime>02/14/2018 17:37:24</publishTime>
     </File>
     <File Include="Views/ModelViews/PromoCodes/Create.cshtml">
       <publishTime>01/18/2018 15:18:16</publishTime>
@@ -1097,7 +1097,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/14/2017 22:10:39</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/14/2018 15:20:27</publishTime>
+      <publishTime>02/21/2018 14:32:47</publishTime>
     </File>
   </ItemGroup>
 </Project>

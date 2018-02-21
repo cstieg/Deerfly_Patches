@@ -2,6 +2,7 @@
 using DeerflyPatches.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace DeerflyPatches.Controllers
 {
@@ -26,11 +27,11 @@ namespace DeerflyPatches.Controllers
         public async Task<FileResult> Products()
         {
             var rssStream = await _rssService.GetRssAsync();
-
             return new FileStreamResult(rssStream, "application/rss+xml")
             {
                  FileDownloadName = "products.txt"
             };
+
         }
     }
 }

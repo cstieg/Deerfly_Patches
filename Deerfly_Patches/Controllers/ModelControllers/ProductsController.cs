@@ -1,6 +1,7 @@
 ﻿using Cstieg.ControllerHelper;
 using Cstieg.ControllerHelper.ActionFilters;
 using Cstieg.ObjectHelpers;
+using Cstieg.Sales;
 using Cstieg.Sales.Models;
 using Cstieg.WebFiles;
 using Cstieg.WebFiles.Controllers;
@@ -24,61 +25,51 @@ namespace DeerflyPatches.Controllers
     [RoutePrefix("edit/products")]
     [Route("{action}/{id?}")]
     [ValidateInput(false)]
-    public class ProductsController : Controller
+    public class ProductsController : BaseController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-        public static string contentFolder = "/content";
-
-        protected IFileService storageService;
-        protected ImageManager imageManager;
+        private ProductService _productService;
 
         public ProductsController()
         {
-            storageService = new FileSystemService(contentFolder);
-            imageManager = new ImageManager("images/products", storageService);
+            _productService = new ProductService(_context);
         }
 
         // GET: Products
         [Route("")]
         public async Task<ActionResult> Index()
         {
-            var products = await db.Products.Include(p => p.ShippingScheme).ToListAsync();
-            foreach (var product in products)
-            {
-                product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
-            }
+            List<Product> products = await _productService.GetProductsAsync();
             return View(products);
         }
 
         // GET: Products/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<ActionResult> Details(int id)
         {
-            if (id == null)
+            try
             {
-                return RedirectToAction("Index");
+                Product product = await _productService.GetProductAsync(id);
+                return View(product);
             }
-            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
-            if (product == null)
+            catch
             {
                 return HttpNotFound();
             }
-            return View(product);
         }
 
         // GET: Products/Create
         public async Task<ActionResult> Create()
         {
             // delete images that were previously saved to newly created product that was not ultimately saved
-            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == null).ToListAsync())
+            foreach (var webImage in await _context.WebImages.Where(w => w.ProductId == null).ToListAsync())
             {
                 // remove image files used by product
-                imageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
+                _productImageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
 
-                db.WebImages.Remove(webImage);
-                await db.SaveChangesAsync();
+                _context.WebImages.Remove(webImage);
+                await _context.SaveChangesAsync();
             }
 
-            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name");
+            ViewBag.ShippingSchemeId = new SelectList(_context.ShippingSchemes, "Id", "Name");
             return View();
         }
 
@@ -94,21 +85,21 @@ namespace DeerflyPatches.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
-                await db.SaveChangesAsync();
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
 
                 // connect images that were previously saved to product (id = null)
-                foreach (var webImage in await db.WebImages.Where(w => w.ProductId == null).ToListAsync())
+                foreach (var webImage in await _context.WebImages.Where(w => w.ProductId == null).ToListAsync())
                 {
                     webImage.ProductId = product.Id;
-                    db.Entry(webImage).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                    _context.Entry(webImage).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
                 }
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
+            ViewBag.ShippingSchemeId = new SelectList(_context.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
             return View(product);
         }
 
@@ -119,7 +110,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -129,7 +120,7 @@ namespace DeerflyPatches.Controllers
             product.WebImages = product.WebImages ?? new List<WebImage>();
             product.WebImages = product.WebImages.OrderBy(w => w.Order).ToList();
 
-            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name");
+            ViewBag.ShippingSchemeId = new SelectList(_context.ShippingSchemes, "Id", "Name");
             return View(product);
         }
 
@@ -145,12 +136,12 @@ namespace DeerflyPatches.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _context.Entry(product).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ShippingSchemeId = new SelectList(db.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
+            ViewBag.ShippingSchemeId = new SelectList(_context.ShippingSchemes, "Id", "Name", product.ShippingSchemeId);
             return View(product);
         }
 
@@ -161,7 +152,7 @@ namespace DeerflyPatches.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -179,20 +170,20 @@ namespace DeerflyPatches.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
 
             // Delete images connected to this product
-            foreach (var webImage in await db.WebImages.Where(w => w.ProductId == product.Id).ToListAsync())
+            foreach (var webImage in await _context.WebImages.Where(w => w.ProductId == product.Id).ToListAsync())
             {
                 // remove image files used by product
-                imageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
+                _productImageManager.DeleteImageWithMultipleSizes(webImage.ImageUrl);
 
-                db.WebImages.Remove(webImage);
-                await db.SaveChangesAsync();
+                _context.WebImages.Remove(webImage);
+                await _context.SaveChangesAsync();
             }
 
-            db.Products.Remove(product);
-            await db.SaveChangesAsync();
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -206,7 +197,7 @@ namespace DeerflyPatches.Controllers
         {
             if (id != null)
             {
-                Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+                Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
                 if (product == null)
                 {
                     return this.JError(404, "Can't find product " + id.ToString());
@@ -223,11 +214,11 @@ namespace DeerflyPatches.Controllers
                 WebImage image = new WebImage
                 {
                     ProductId = id,
-                    ImageUrl = await imageManager.SaveFile(imageFile, 200, timeStamp),
-                    ImageSrcSet = await imageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200 }, timeStamp)
+                    ImageUrl = await _productImageManager.SaveFile(imageFile, 200, timeStamp),
+                    ImageSrcSet = await _productImageManager.SaveImageMultipleSizes(imageFile, new List<int>() { 1600, 800, 400, 200 }, timeStamp)
                 };
-                db.WebImages.Add(image);
-                await db.SaveChangesAsync();
+                _context.WebImages.Add(image);
+                await _context.SaveChangesAsync();
 
                 return PartialView("_ProductImagePartial", image);
             }
@@ -245,24 +236,24 @@ namespace DeerflyPatches.Controllers
         [HttpPost]
         public async Task<JsonResult> DeleteImage(int id)
         {
-            Product product = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return this.JError(404, "Can't find product " + id.ToString());
             }
 
             int imageId = int.Parse(Request.Params.Get("imageId"));
-            WebImage image = await db.WebImages.FirstOrDefaultAsync(w => w.Id == imageId);
+            WebImage image = await _context.WebImages.FirstOrDefaultAsync(w => w.Id == imageId);
             if (image == null)
             {
                 return this.JError(404, "Can't find image " + imageId.ToString());
             }
 
             // remove image files used by product
-            imageManager.DeleteImageWithMultipleSizes(image.ImageUrl);
+            _productImageManager.DeleteImageWithMultipleSizes(image.ImageUrl);
 
-            db.WebImages.Remove(image);
-            await db.SaveChangesAsync();
+            _context.WebImages.Remove(image);
+            await _context.SaveChangesAsync();
             return new JsonResult
             {
                 Data = new
@@ -283,7 +274,7 @@ namespace DeerflyPatches.Controllers
         [HttpPost]
         public async Task<JsonResult> Update(int id)
         {
-            Product existingProduct = await db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (existingProduct == null)
             {
                 return this.JError(404, "Can't find this product to update!");
@@ -294,8 +285,8 @@ namespace DeerflyPatches.Controllers
                 Product newProduct = JsonConvert.DeserializeObject<Product>(Request.Params.Get("data"));
                 ObjectHelper.CopyProperties(newProduct, existingProduct, new List<string>() { "Id" }, true);
 
-                db.Entry(existingProduct).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _context.Entry(existingProduct).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             catch (JsonReaderException e)
             {
@@ -318,16 +309,16 @@ namespace DeerflyPatches.Controllers
         [HttpPost]
         public async Task<JsonResult> OrderWebImages(int? id)
         {
-            List <WebImage> webImages= await db.WebImages.Where(w => w.ProductId == id).ToListAsync();
+            List <WebImage> webImages= await _context.WebImages.Where(w => w.ProductId == id).ToListAsync();
 
             List<string> imageOrder = JsonConvert.DeserializeObject<List<string>>(Request.Params.Get("imageOrder"));
             for (int i = 0; i < imageOrder.Count(); i++)
             {
                 string imageId = imageOrder[i];
-                WebImage webImage = await db.WebImages.FirstOrDefaultAsync(w => w.Id == int.Parse(imageId));
+                WebImage webImage = await _context.WebImages.FirstOrDefaultAsync(w => w.Id == int.Parse(imageId));
                 webImage.Order = i;
-                db.Entry(webImage).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _context.Entry(webImage).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             return this.JOk();
         }
@@ -336,7 +327,7 @@ namespace DeerflyPatches.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
