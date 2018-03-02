@@ -1,13 +1,7 @@
 ﻿using Cstieg.ControllerHelper;
+using Cstieg.Sales;
 using Cstieg.Sales.Models;
-using DeerflyPatches.Models;
-using RazorEngine;
-using RazorEngine.Templating;
 using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -15,10 +9,12 @@ namespace DeerflyPatches.Controllers
 {
     public class MailController : BaseController
     {
-        public async Task Test()
+        private ShoppingCartService _shoppingCartService;
+
+        public async Task<ActionResult> Test()
         {
-            string cart = "PAY-8279066855591091LLJ7BRAA";
-            await ConfirmOrder(cart);
+            string cart = "PAY-TEST";
+            return await ConfirmOrder(cart);
         }
 
         // POST: Mail/ConfirmOrder?cart=DF39FEI314040
@@ -30,45 +26,18 @@ namespace DeerflyPatches.Controllers
         [HttpPost]
         public async Task<ActionResult> ConfirmOrder(string cart)
         {
-            ApplicationDbContext db = new ApplicationDbContext();
-
             // find order
-            Order order = await db.Orders.Include(o => o.Customer).Where(o => o.Cart == cart).SingleOrDefaultAsync();
+            Order order = await _context.Orders.Include(o => o.Customer).Include(o => o.ShipToAddress)
+                .SingleOrDefaultAsync(o => o.Cart == cart);
             if (order == null)
             {
                 return HttpNotFound();
             }
-            var a = order.OrderDetails.First().Product.WebImages.First().ImageUrl;
-            order.ShipToAddress = await db.Addresses.FirstOrDefaultAsync(o => o.Id == order.ShipToAddressId);
-            
-            // Add baseURL for images to viewBag
-            var viewBag = new DynamicViewBag();
-            string baseUrl = ControllerHelper.GetBaseUrl(Request);
-            viewBag.AddValue("baseURL", baseUrl);
+            _shoppingCartService = new ShoppingCartService(_context, Request.AnonymousID);
 
-            // render email body
             string templatePath = Server.MapPath("~/Views/Mail/OrderSuccessEmail.cshtml");
-            var sr = new StreamReader(templatePath);
-            string body = Engine.Razor.RunCompile(await sr.ReadToEndAsync(), "OrderSuccessEmail", null, order, viewBag);
+            await _shoppingCartService.SendConfirmationEmailAsync(order, ControllerHelper.GetBaseUrl(Request), templatePath);
 
-            // create email message
-            var message = new MailMessage
-            {
-                Subject = "Order confirmation - " + order.Description,
-                Body = body,
-                IsBodyHtml = true
-            };
-            message.To.Add(new MailAddress(order.Customer.EmailAddress));
-
-            // send email
-            using (var smtp = new SmtpClient())
-            {
-                // get sender account from web.config - system.net
-                string from = ((NetworkCredential)smtp.Credentials).UserName;
-                message.From = new MailAddress(from);
-               
-                await smtp.SendMailAsync(message);
-            }
             return this.JOk();
         }
     }
