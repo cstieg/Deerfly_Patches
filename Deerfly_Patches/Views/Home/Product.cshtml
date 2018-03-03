@@ -89,6 +89,11 @@
 
     <section id="product-page-description" class="col-md-6">
         <meta itemprop="priceCurrency" content="USD" />
+        <meta itemprop="condition" content="@Model.Condition" />
+        <meta itemprop="brand" content="@Model.Brand" />
+        <meta itemprop="sku" content="@Model.Sku" />
+        <meta itemprop="category" content="@Model.GoogleProductCategory" />
+        <meta itemprop="description" content="@Model.MetaDescription" />
         <dl class="dl-horizontal">
             <dt>
                 @Html.LabelFor(model => model.Name)
