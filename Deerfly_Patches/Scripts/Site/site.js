@@ -1,4 +1,10 @@
 
+/* ******************************* Index ******************************************************** */
+$(document).ready(function () {
+    $('[data-toggle="popover"]').popover({ html: true, container: 'body' });
+});
+
+
 /* ******************************* Testimonials ************************************************* */
 function displayTestimonial(id, url, srcset) {
     $('#testimonial-display').html(`

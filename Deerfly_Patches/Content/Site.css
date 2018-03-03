@@ -93,7 +93,6 @@ textarea {
     height: 10em;
 }
 
-
 /* ****************************** Navbar ****************************************** */
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-nav li a {
@@ -182,7 +181,7 @@ textarea {
     margin: auto;
     padding: 0;
     /* 100% divided by number of items */
-    width: 50%;
+    width: 33%;
 }
         
 #navbar-bottom .navbar-nav li a {
@@ -252,6 +251,31 @@ textarea {
 
 .image-wrapper {
     width: 100%;
+}
+
+/* ************************* Promo *************************** */
+.facebook-icon {
+    width: 50px;
+    height: 50px;
+    margin: 4px;
+}
+
+.dfp-xs {
+    float: right;
+    margin: 4px;
+}
+
+.promo-text {
+    text-align: left;
+}
+
+.dfp-promo .panel-body {
+    padding: 5px;
+}
+
+.dfp-promo .popover-content {
+    border-color: green;
+    max-width: 400px;
 }
 
 /* ************************* Product page ******************** */

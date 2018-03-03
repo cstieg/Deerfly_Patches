@@ -8,7 +8,7 @@
 }
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Deerfly Patches Stop Biting Deer Flies - Home";
 }
 
 <div class="container main-page">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 front-display-item">
-            <h2>How Can I Protect Against Deerflies?</h2>
+            <h2>Stop Deerflies. Wear the Patch!</h2>
             <p>
                 Deerfly Patches are odorless hat strips that stop deerflies from biting!
             </p>
@@ -37,8 +37,6 @@
             </p>
         </div>
 
-
-
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 front-display-item">
             <img class="image-square-rounded centered" alt="Deerfly Patches are the best deerfly bite prevention!"
                  src="~/content/images/starburst-box-dfp.png" />
@@ -48,9 +46,9 @@
         <div class="product-display">
             <h2 class="text-center">@Html.ActionLink("Buy Here", "Index", "Order")</h2>
             @foreach (var item in Model)
-            {
-                @Html.Partial("_ProductPartial", item)
-            }
+    {
+        @Html.Partial("_ProductPartial", item)
+}
 
             <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 product-item">
                 <div class="image-wrapper">
@@ -72,9 +70,39 @@
                     <address><a href="mailto:stieg_d@yahoo.com">stieg_d@yahoo.com</a></address>
                 </p>
             </article>
+
+            <article class="col-xs-12 col-sm-4 col-md-3 col-lg-3 dfp-promo">
+                <div class="panel panel-primary">
+                    <p class="panel-heading text-center">Promotion Special</p>
+                    <p class="panel-body larger-text">Receive a FREE 4 / pk with every order !</p>
+                    <p class="panel-body promo-text">
+                        <a href="https://www.facebook.com/DeerflyPatches"><img class="dfp-xs" src="~/Content/images/DFP1-xs.jpg" /></a>
+                        Simply like our <a href="https://www.facebook.com/DeerflyPatches"><span class="text-primary">Facebook Page</span></a>,
+                        get the PROMO CODE, add it at checkout.
+                        <br />
+
+                        <a href="https://www.facebook.com/DeerflyPatches">
+                            <img class="facebook-icon" src="~/Content/images/FacebookIcon.svg" />
+                        </a>
+                    </p>
+                    <p class="panel-body">
+                        <a data-toggle="popover" title="INSTRUCTIONS:" 
+                           data-content="1.  Go to our Facebook Business Page, LIKE our Page, Get the PROMO CODE.
+                            <br /><br />
+                            2.    Use the PROMO CODE when placing an order.
+                            <br /><br />
+                            We will add a free 4/pack to your order.
+                            <br /><br />
+                            If you have any trouble with the promo code
+                            or the order, <a href='/contact'>contact us.</a>">
+                            More Info
+                        </a>
+                    </p>
+
+                </div>
+
+            </article>
         </div>
-
-
 
     </div>
 
