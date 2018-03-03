@@ -1,4 +1,5 @@
-﻿using Cstieg.Sales.Models;
+﻿using Cstieg.ControllerHelper.ActionFilters;
+using Cstieg.Sales.Models;
 using DeerflyPatches.Models;
 using System.Collections.Generic;
 using System.Configuration;
@@ -111,6 +112,11 @@ namespace DeerflyPatches.Controllers
             return View();
         }
 
+        public ActionResult Returns()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Displays list of links to model edit pages
         /// </summary>
@@ -121,6 +127,12 @@ namespace DeerflyPatches.Controllers
             string[] controllersArray = modelControllers.Split(delimiters);
             List<string> controllers = new List<string>(controllersArray);
             return View(controllers);
+        }
+
+        [ClearCache]
+        public ActionResult ClearCache()
+        {
+            return RedirectToActionPermanent("Index");
         }
     }
 }

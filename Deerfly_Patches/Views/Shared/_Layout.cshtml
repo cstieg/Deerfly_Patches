@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @RenderSection("AdditionalMeta", false)
-    <title>Deerfly Patches Stop Biting Deer Flies - @ViewBag.Title</title>
+    <title>@ViewBag.Title</title>
     @Styles.RenderFormat("<link rel='stylesheet' href='{0}' async />", "~/Content/css")
 
     <!-- Favicon links-->
@@ -73,6 +73,7 @@
                 <ul class="nav navbar-nav mynav">
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Privacy Policy", "Privacy", "Home")</li>
+                    <li>@Html.ActionLink("Return Policy", "Returns", "Home")</li>
                 </ul>
             </div>
         </div>
