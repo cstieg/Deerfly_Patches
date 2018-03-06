@@ -1,10 +1,7 @@
 ﻿using Cstieg.ControllerHelper;
-using Cstieg.FileHelper;
 using Cstieg.Sales;
 using Cstieg.Sales.Exceptions;
 using Cstieg.Sales.Models;
-using Cstieg.Sales.PayPal;
-using Cstieg.Sales.PayPal.Models;
 using DeerflyPatches.Models;
 using System;
 using System.Data.Entity;
@@ -77,7 +74,7 @@ namespace DeerflyPatches.Controllers
         /// <param name="id">ID of Product model to add</param>
         /// <returns>JSON success response if successful, error response if product already exists</returns>
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddItem(int id)
         {
             try
