@@ -88,7 +88,6 @@
 
 
     <section id="product-page-description" class="col-md-6">
-        <meta itemprop="priceCurrency" content="USD" />
         <meta itemprop="condition" content="@Model.Condition" />
         <meta itemprop="brand" content="@Model.Brand" />
         <meta itemprop="sku" content="@Model.Sku" />
@@ -106,14 +105,14 @@
                 @Html.LabelFor(model => model.Price)
             </dt>
             <dd itemprop="price">
-                $@Html.DisplayFor(model => model.Price)
+                $@Html.DisplayFor(model => model.Price) <span itemprop="priceCurrency">USD</span>
             </dd>
 
             <dt>
                 @Html.LabelFor(model => model.Shipping)
             </dt>
             <dd>
-                $@Html.DisplayFor(model => model.Shipping)
+                $@Html.DisplayFor(model => model.Shipping) USD
             </dd>
 
             <dt>
@@ -140,10 +139,6 @@
         </dl>
         <div class="button-container">
             <button class="btn buy-now centered" onclick="shoppingCart.buyNow(@Model.Id)">Add to Shopping Cart</button>
-            <!--
-        <br />
-        <button class="btn add-to-shopping-cart centered" onclick="shoppingCart.addToShoppingCart(@Model.Id)">Add to Shopping Cart</button>
-    -->
         </div>
         </section>
     </div>
