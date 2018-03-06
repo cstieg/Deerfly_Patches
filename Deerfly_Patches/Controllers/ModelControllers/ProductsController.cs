@@ -5,7 +5,6 @@ using Cstieg.Sales;
 using Cstieg.Sales.Models;
 using Cstieg.WebFiles;
 using Cstieg.WebFiles.Controllers;
-using DeerflyPatches.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace DeerflyPatches.Controllers
         [Route("")]
         public async Task<ActionResult> Index()
         {
-            List<Product> products = await _productService.GetProductsAsync();
+            List<Product> products = await _productService.GetAllAsync();
             return View(products);
         }
 
@@ -47,7 +46,7 @@ namespace DeerflyPatches.Controllers
         {
             try
             {
-                Product product = await _productService.GetProductAsync(id);
+                Product product = await _productService.GetAsync(id);
                 return View(product);
             }
             catch
@@ -323,13 +322,5 @@ namespace DeerflyPatches.Controllers
             return this.JOk();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

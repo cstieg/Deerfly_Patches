@@ -56,7 +56,7 @@ namespace DeerflyPatches.Controllers
             }
             catch
             {
-                return await ProductByName(id);
+                return await ProductByUrlName(id);
             }
         }
         
@@ -76,7 +76,7 @@ namespace DeerflyPatches.Controllers
         }
 
         // GET: ProductById/Product Name
-        public async Task<ActionResult> ProductByName(string urlName)
+        public async Task<ActionResult> ProductByUrlName(string urlName)
         {
             Product product = await _context.Products.Where(p => p.UrlName != null && p.UrlName.ToLower() == urlName.ToLower()).SingleOrDefaultAsync();
             if (product == null)
