@@ -32,17 +32,13 @@ namespace DeerflyPatches.Controllers
             // Set storage service for product images
             _storageService = new FileSystemService(_contentFolder);
             _productImageManager = new ImageManager(_productImagesFolder, _storageService);
+            _context = new ApplicationDbContext();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
             filterContext.HttpContext.Response.AddCacheItemDependency("Pages");
-
-            // provide a new db context for each action call
-            // controller-wide context is fine with HTTP because the controller is instantiated for each HTTP request,
-            // but if there were a situation in which the controller persisted in memory, it could cause problems.
-            _context = new ApplicationDbContext();
         }
 
         protected async Task<PayPalClientInfoService> GetPayPalClientInfoServiceAsync()
@@ -67,6 +63,15 @@ namespace DeerflyPatches.Controllers
 
             _payPalService = new PayPalPaymentProviderService(await GetPayPalClientInfoServiceAsync());
             return _payPalService;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
