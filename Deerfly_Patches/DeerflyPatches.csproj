@@ -462,6 +462,14 @@
     <Compile Include="Migrations\201802151858140_FixCreated2.Designer.cs">
       <DependentUpon>201802151858140_FixCreated2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803031421517_ProductExtension.cs" />
+    <Compile Include="Migrations\201803031421517_ProductExtension.Designer.cs">
+      <DependentUpon>201803031421517_ProductExtension.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803042145423_NoProductExtension.cs" />
+    <Compile Include="Migrations\201803042145423_NoProductExtension.Designer.cs">
+      <DependentUpon>201803042145423_NoProductExtension.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -473,6 +481,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -488,6 +501,7 @@
     <Content Include="Content\images\deerflypatches-logo.png" />
     <Content Include="Content\images\deerflypatchheader-small.jpg" />
     <Content Include="Content\images\deerflypatchheader.jpg" />
+    <Content Include="Content\images\DFP1-xs.jpg" />
     <Content Include="Content\images\favicon\android-icon-36x36.png" />
     <Content Include="Content\images\favicon\android-icon-48x48.png" />
     <Content Include="Content\images\favicon\android-icon-72x72.png" />
@@ -508,10 +522,12 @@
     <Content Include="Content\images\favicon\ms-icon-310x310.png" />
     <Content Include="Content\images\favicon\ms-icon-70x70.png" />
     <Content Include="Content\images\ImageUnavailable.png" />
+    <Content Include="Content\images\FacebookIcon.svg" />
     <Content Include="Content\images\slantbox-info.png" />
     <Content Include="Content\images\starburst-box-dfp.png" />
     <Content Include="Content\LightboxMessage.css" />
     <Content Include="Content\NicEdit\nicEditorIcons.gif" />
+    <Content Include="Content\ShoppingCart.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -531,13 +547,16 @@
     <Content Include="Scripts\Site\EditIndex.js" />
     <Content Include="Scripts\Site\gmaps.js" />
     <Content Include="Scripts\Site\ImageUpload.js" />
-    <Content Include="Scripts\Site\inputmask.js" />
     <Content Include="Scripts\Site\LightboxMessage.js" />
     <Content Include="Scripts\Site\paypal.js" />
     <Content Include="Scripts\Site\RandomId.js" />
     <Content Include="Scripts\Site\ShoppingCart.js" />
     <Content Include="Scripts\Site\ShoppingCartCountry.js" />
     <Content Include="Scripts\Site\site.js" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -655,6 +674,7 @@
     <Content Include="Views\ModelViews\ShippingCountries\Index.cshtml" />
     <Content Include="Views\ModelViews\ShippingSchemes\_ShippingCountriesIndexPartial.cshtml" />
     <Content Include="Views\ModelViews\Store\Edit.cshtml" />
+    <Content Include="Views\Home\Returns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -820,6 +840,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802151858140_FixCreated2.resx">
       <DependentUpon>201802151858140_FixCreated2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803031421517_ProductExtension.resx">
+      <DependentUpon>201803031421517_ProductExtension.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803042145423_NoProductExtension.resx">
+      <DependentUpon>201803042145423_NoProductExtension.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
