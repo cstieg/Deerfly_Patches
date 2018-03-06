@@ -27,7 +27,6 @@ namespace DeerflyPatches
 
             bundles.Add(new ScriptBundle("~/bundles/edit").Include(
                       "~/Scripts/NicEdit/nicEdit.js",
-                      "~/Scripts/Site/inputmask.js",
                       "~/Scripts/Site/ImageUpload.js",
                       "~/Scripts/Sortable/sortable.js",
                       "~/Scripts/Site/EditIndex.js"));
@@ -35,6 +34,7 @@ namespace DeerflyPatches
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
+                      "~/Content/ShoppingCart.css",
                       "~/Content/LightboxMessage.css"));
 
             BundleTable.EnableOptimizations = true;
