@@ -1,7 +1,6 @@
 ﻿/* **************************** SHOPPING CART ************************************************ 
 Requires: JQuery 3.1+
 */
-
 var shoppingCart = (function () {
     "use strict";
 

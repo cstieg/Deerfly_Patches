@@ -29,10 +29,11 @@ namespace DeerflyPatches.Controllers
         /// </summary>
         /// <param name="country">2-digit country code of the country selected in the shopping cart</param>
         /// <returns>A JSON object in PayPal order format describing payment details</returns>
-        public async Task<JsonResult> GetOrderJson(string country)
+        public async Task<JsonResult> GetOrderJson(string country, string messageToSeller)
         {
             try
             {
+                await _shoppingCartService.SetMessageToSellerAsync(messageToSeller);
                 ShoppingCart shoppingCart = await _shoppingCartService.SetCountryAsync(country);
                 string orderJson = (await GetPayPalServiceAsync()).CreatePaymentDetails(shoppingCart);
                 return Json(orderJson, JsonRequestBehavior.AllowGet);

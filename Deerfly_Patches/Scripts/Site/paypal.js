@@ -33,8 +33,11 @@ paypal.Button.render({
 
     // payment() is called when the button is clicked
     payment: function (data, actions) {     
+        var messageToSeller = $('#note-to-seller textarea').val();
+
         // Get JSON order information from server
-        return $.get('/paypal/GetOrderJson?country=' + shoppingCartCountry.getCountry())
+        return $.get('/paypal/GetOrderJson?country=' + shoppingCartCountry.getCountry()
+                            + '&messageToSeller=' + messageToSeller )
             .then(function (data) {
                 var payment = JSON.parse(data);
 
