@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<Cstieg.Sales.Models.Product>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Edit Products";
 }
 
-<h2>Index</h2>
+<h2>Edit Products</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-
+<div>
+    @Html.ActionLink("Back to Edit", "Index", "edit")
+</div>
 <button class="pull-right" onclick="editIndex.toggleEditable(this, '/Edit/Products/Update');">Edit Values As Table</button>
 <table class="table">
     <tr>
