@@ -34,7 +34,7 @@ paypal.Button.render({
     // payment() is called when the button is clicked
     payment: function (data, actions) {     
         var messageToSeller = $('#note-to-seller textarea').val();
-
+        
         // Get JSON order information from server
         return $.get('/paypal/GetOrderJson?country=' + shoppingCartCountry.getCountry()
                             + '&messageToSeller=' + messageToSeller )
@@ -46,12 +46,13 @@ paypal.Button.render({
             },
             // on error
             function (data) {
-                alert('Error processing order: \n' + data.responseJSON.Message);
-                window.location.href = "/ShoppingCart";
-            })
-            .fail(function (data) {
-                alert('Error processing PayPal order: \n' + data.responseJSON.Message);
-                window.location.href = "/ShoppingCart";
+                if (data.responseJSON && data.responseJSON.Message) {
+                    alert('Error processing order: \n' + data.responseJSON.Message);
+                }
+                else {
+                    alert('Error processing order.');   
+                }
+                window.location.href = '/ShoppingCart';
             });
     },
 
