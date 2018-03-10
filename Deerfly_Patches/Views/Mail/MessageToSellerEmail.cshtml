@@ -1,0 +1,36 @@
+﻿@model Cstieg.Sales.Models.Order
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Message to Seller</title>
+</head>
+<body>
+    <h1>Message To Seller</h1>
+    <h2>Message Content:</h2>
+    <div style="background-color:lightgoldenrodyellow;border:solid thin gray;border-radius:5px;padding:5px">
+        <p>@Model.NoteToPayee</p>
+    </div>
+    <h2>Customer Info:</h2>
+    <p>@Model.Customer.CustomerName</p>
+    <p>@Model.ShipToAddress.ToString()</p>
+    <h2><a href="@ViewBag.baseUrl/edit/orders/details/@Model.Id">Order Details:</a></h2>
+    <div>
+        @foreach (var orderDetail in Model.OrderDetails)
+        {
+            if (orderDetail.Product.WebImages.Count > 0)
+            {
+                <img src="@ViewBag.baseURL@orderDetail.Product.WebImages.First().ImageUrl" />
+            }
+            <p style="font-weight:bold">Item: @orderDetail.Product.Name</p>
+            <p>Quantity: @orderDetail.Quantity</p>
+            <p>Paid: $@orderDetail.TotalPrice</p>
+            <br />
+        }
+        <hr />
+        <p style="font-weight:bold">Total: $@Model.Total</p>
+    </div>
+</body>
+
+</html>

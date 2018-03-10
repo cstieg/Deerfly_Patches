@@ -573,6 +573,7 @@
     <Content Include="Scripts\NicEdit\nicEditorIcons.gif" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Site\TextareaPattern.js" />
     <Content Include="Scripts\Sortable\Sortable.js" />
     <Content Include="Scripts\Sortable\Sortable.min.js" />
     <Content Include="Web.config">
@@ -675,6 +676,7 @@
     <Content Include="Views\ModelViews\ShippingSchemes\_ShippingCountriesIndexPartial.cshtml" />
     <Content Include="Views\ModelViews\Store\Edit.cshtml" />
     <Content Include="Views\Home\Returns.cshtml" />
+    <Content Include="Views\Mail\MessageToSellerEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

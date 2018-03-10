@@ -1,6 +1,7 @@
 ﻿using Cstieg.ControllerHelper;
 using Cstieg.Sales;
 using Cstieg.Sales.Models;
+using System.Configuration;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -36,7 +37,17 @@ namespace DeerflyPatches.Controllers
             _shoppingCartService = new ShoppingCartService(_context, Request.AnonymousID);
 
             string templatePath = Server.MapPath("~/Views/Mail/OrderSuccessEmail.cshtml");
-            await _shoppingCartService.SendConfirmationEmailAsync(order, ControllerHelper.GetBaseUrl(Request), templatePath);
+            string baseUrl = ControllerHelper.GetBaseUrl(Request);
+            await _shoppingCartService.SendConfirmationEmailAsync(order, baseUrl, templatePath);
+
+            // Send message to seller if exists
+            if (order.NoteToPayee != null && order.NoteToPayee != "")
+            {
+                templatePath = Server.MapPath("~/Views/Mail/MessageToSellerEmail.cshtml");
+                string sellerEmail = ConfigurationManager.AppSettings.Get("OwnerEmail");
+                await _shoppingCartService.SendMessageToSellerAsync(order, baseUrl, templatePath, sellerEmail);
+            }
+
 
             return this.JOk();
         }

@@ -20,7 +20,8 @@ namespace DeerflyPatches
 
             bundles.Add(new ScriptBundle("~/bundles/shoppingCart").Include(
                       "~/Scripts/Site/ShoppingCartCountry.js",
-                      "~/Scripts/Site/PayPal.js"));
+                      "~/Scripts/Site/PayPal.js",
+                      "~/Scripts/Site/TextareaPattern.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/retailers").Include(
                       "~/Scripts/Site/gmaps.js"));
